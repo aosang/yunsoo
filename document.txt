@@ -1,0 +1,32 @@
+supabase document for chinese : https://document.memfiredb.com/docs
+
+{
+      // title: 'Status',
+      // dataIndex: 'product_status',
+      // key: 'product_status',
+      // render: (text: string) => {
+      //   return (
+      //     <div>
+      //       {text === 'Putaway' && <Tag color='success'>{text}</Tag>}
+      //       {text === 'Checkout' && <Tag color='processing'>{text}</Tag>}
+      //       {text === 'Under maintenance' && <Tag color='warning'>{text}</Tag>}
+      //       {text === 'Decommission' && <Tag color='error'>{text}</Tag>}
+      //     </div>
+      //   )
+      // }
+    },
+
+    {
+      title: 'User',
+      dataIndex: 'product_username',
+      key: 'product_username',
+      render: (text: string) => {
+        return (
+          <div>
+            {text? text : '-'}
+          </div>
+        )
+      }
+    },
+
+

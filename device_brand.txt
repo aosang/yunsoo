@@ -1,0 +1,10 @@
+computer: acer,apple,asus,dell,hp,lenovo
+server: aliyun,aws,azure,digitalocean,linode,microsoft,oracle,salesforce,vultr
+switch:cisco,hirschmann,moxa,netgear,qnap,siemens,trendnet,hpe
+router:buffalo,juniper,linksys,tp-link,asus,netgear
+printer:brother,canon,epson,hp,kyocera,minolta,ricoh,xerox,zebra
+laptop:apple,asus,dell,hp,huawei,ibm,lenovo,samsung,sony
+mobile:huawei,nokia,oneplus,samsung,sony,xiaomi
+monitor:acer,samsung,dell,asus,lg,benq
+keyboard/mouse:Corsair,ducky,hyperx,logitech,razer,steel,microsoft
+other:other
