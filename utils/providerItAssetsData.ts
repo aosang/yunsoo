@@ -6,7 +6,7 @@ export const getItAssetsTabbleData = async (id?: string) => {
   try {
     if(id) {
       const [ deviceData ] = await Promise.all([
-        supabase.from("it_assets")
+        supabase.from("it_assets_cn")
         .select('*')
         .eq('id', id)
         .order('product_time', { ascending: false }),
@@ -17,7 +17,7 @@ export const getItAssetsTabbleData = async (id?: string) => {
 
     }else {
       const { data, error } = await supabase
-      .from("it_assets")
+      .from("it_assets_cn")
       .select('*')
       .order('product_time', { ascending: false })
   
@@ -69,7 +69,8 @@ export const insertItAssets = async ({
   product_remark,
   value
 }) => {
-  const { data, error } = await supabase.from('it_assets')
+  // console.log(product_time, product_update)
+  const { data, error } = await supabase.from('it_assets_cn')
   .insert({
     // product_id: getTimeNumber()[1],
     product_name,
@@ -98,7 +99,7 @@ export const insertItAssets = async ({
 // delete
 export const deleteItAssets = async (id: string[]) => {
   const { error } = await supabase
-    .from('it_assets')
+    .from('it_assets_cn')
     .delete()
     .in('id', id)
   try {
@@ -114,7 +115,7 @@ export const searchItAssetsData = async (
 ) => {
   if (type && !startTime) {
     const { data, error } = await supabase.
-      from('it_assets')
+      from('it_assets_cn')
       .select('*')
       .eq('product_type', type)
 
@@ -126,7 +127,7 @@ export const searchItAssetsData = async (
     }
   } else if (!type && startTime) {
     const { data, error } = await supabase
-      .from('it_assets')
+      .from('it_assets_cn')
       .select('*')
       .gte('product_time', startTime)
       .lte('product_time', endTime)
@@ -140,7 +141,7 @@ export const searchItAssetsData = async (
 
   } else if (type && startTime) {
     const { data, error } = await supabase
-     .from('it_assets')
+     .from('it_assets_cn')
      .select('*')
      .eq('product_type', type)
      .gte('product_time', startTime)
@@ -155,7 +156,7 @@ export const searchItAssetsData = async (
 
   } else {
     const { data, error } = await supabase.
-      from('it_assets')
+      from('it_assets_cn')
       .select('*')
 
     try {
@@ -170,7 +171,7 @@ export const searchItAssetsData = async (
 // update
 export const editItAssetsData = async (assetsId: string, assetsOrderForm: productItem) => {
   const { error } = await supabase
-  .from('it_assets')
+  .from('it_assets_cn')
   .update(assetsOrderForm)
   .eq('id', assetsId)
 
@@ -184,7 +185,7 @@ export const editItAssetsData = async (assetsId: string, assetsOrderForm: produc
 
 export const uploadExcelItAssetsData = async (jsonData: productItem[]) => {
   const {data: insertedData, error} = await supabase
-  .from('it_assets')
+  .from('it_assets_cn')
   .upsert(jsonData)
 
   if(error) return useMessage(2, error.message, 'error')

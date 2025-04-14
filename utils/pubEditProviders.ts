@@ -6,7 +6,7 @@ import useMessage from "@/utils/message"
 
 export const editWorkOrderData = async (orderId: string, workOrderForm: workOrderFormProps) => {
   const { error } = await supabase
-  .from('work_order')
+  .from('work_order_cn')
   .update(workOrderForm)
   .eq('created_id', orderId)
 

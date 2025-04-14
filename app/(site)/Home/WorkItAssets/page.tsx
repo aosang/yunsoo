@@ -4,11 +4,11 @@ import { Card } from "antd"
 import WorkItAssetsTable from "../../components/WorkItAssetsTable"
 const WorkItAssets = () => {
   useEffect(() => {
-    document.title = 'IT Assets'
+    document.title = 'IT设备'
   }, [])
   return (
     <div className="p-3">
-      <Card title="IT Assets">
+      <Card title="IT设备">
         <WorkItAssetsTable />
       </Card>
     </div>

@@ -11,6 +11,10 @@ import { InboxOutlined } from '@ant-design/icons'
 import useMessage from '@/utils/message'
 import * as XLSX from 'xlsx'
 
+import locale from 'antd/es/date-picker/locale/zh_CN'
+import 'dayjs/locale/zh-cn'
+dayjs.locale('zh-cn')
+
 const { Dragger } = Upload
 
 type asstesDataProps = productItem[]
@@ -41,8 +45,8 @@ const WorkItAssetsTable: React.FC = () => {
     id: '',
     product_number: 0,
     product_name: '',
-    product_time: getTimeNumber()[0],
-    product_update: getTimeNumber()[0],
+    product_time: '',
+    product_update: '',
     product_type: null,
     product_brand: null,
     product_username: '',
@@ -53,44 +57,49 @@ const WorkItAssetsTable: React.FC = () => {
 
   const [columns, setColumns] = useState([
     {
-      title: 'Type',
+      title: '类型',
       dataIndex: 'product_type',
       key: 'product_type',
       width: 150
     }, {
-      title: 'Brand',
+      title: '品牌',
       dataIndex: 'product_brand',
       key: 'product_brand',
     }, {
-      title: 'Product',
+      title: '产品名称',
       dataIndex: 'product_name',
       key: 'product_name'
     }, {
-      title: 'Created time',
+      title: '创建时间',
       dataIndex: 'product_time',
       key: 'product_time',
-      width: 230
+      width: 230,
+      render: (record: string) => {
+        return (
+          <div>{record}</div>
+        )
+      }
     }, {
-      title: 'Number',
+      title: '数量',
       dataIndex: 'product_number',
       key: 'product_number'
     }, {
-      title: 'Total Price',
+      title: '总价',
       width: 150,
       dataIndex: 'product_price',
       render: (record: number) => {
         return (
           <div>
-            {'$' + record}
+            {'CNY' + ' ' + record}
           </div>
         )
       }
     }, {
-      title: 'Remark',
+      title: '备注',
       dataIndex: 'product_remark',
       key: 'product_remark'
     }, {
-      title: 'Other',
+      title: '操作',
       render: (record: productItem) => {
         return (
           <div>
@@ -101,7 +110,7 @@ const WorkItAssetsTable: React.FC = () => {
               onClick={() => onRowData.onClick(record)}
               style={{ fontSize: '13px' }}
             >
-              Edit
+              编辑
             </Button>
           </div>
         )
@@ -140,12 +149,7 @@ const WorkItAssetsTable: React.FC = () => {
   const getMyItAssetsData = () => {
     getItAssetsTabbleData()
     .then(res => {
-      const formatData = (res as asstesDataProps).map(item => ({
-        ...item,
-        product_time: dayjs(item.product_time).format('MMM D, YYYY h:mm a'),
-        product_update: dayjs(item.product_update).format('MMM D, YYYY h:mm a'),
-      }))
-      setAssetsData(formatData)
+      setAssetsData(res as asstesDataProps)
       setIsLoading(false)
     })
   }
@@ -197,7 +201,7 @@ const WorkItAssetsTable: React.FC = () => {
     if (keys) {
       getWorkBrand(keys)
         .then(res => {
-          let brandData = res![0].product_brand.reverse() as typeDataBrandProps
+          let brandData = res![0].product_brand_cn.reverse() as typeDataBrandProps
           brandData = brandData.sort((a, b) => {
             return Number(a.brand_id) - Number(b.brand_id)
           })
@@ -265,7 +269,7 @@ const WorkItAssetsTable: React.FC = () => {
   // Delete data
   const deleteAssetsDataIdHandler = () => {
     if (deleteAssetsDataId.length > 0) return setIsModalDelete(true)
-    useMessage(2, 'Please select the data you want to delete', 'error')
+    useMessage(2, '请选择你要删除的数据', 'error')
   }
 
   // Confirm delete data
@@ -288,8 +292,8 @@ const WorkItAssetsTable: React.FC = () => {
   const getTimeFilterData = (dateString: any) => {
     let startTime = dateString ? dateString[0].$d : ''
     let endTime = dateString ? dateString[1].$d : ''
-    startTime = startTime ? dayjs(startTime).format('MMM D, YYYY h:mm a') : ''
-    endTime = endTime ? dayjs(endTime).format('MMM D, YYYY h:mm a') : ''
+    startTime = startTime ? dayjs(startTime).format('YYYY-MM-DD HH:mm:ss') : ''
+    endTime = endTime ? dayjs(endTime).format('YYYY-MM-DD HH:mm:ss') : ''
     setFilterStartTime(startTime)
     setFilterEndTime(endTime)
   }
@@ -359,7 +363,7 @@ const WorkItAssetsTable: React.FC = () => {
     <div>
       {/* import modal */}
       <Modal
-        title="Excel template import"
+        title="Excel模板导入"
         open={isImportModalShow}
         onCancel={() => setIsImportModalShow(false)}
         footer={false}
@@ -375,11 +379,11 @@ const WorkItAssetsTable: React.FC = () => {
                 variant='solid'
                 onClick={downLoadExcelTemplate}
               >
-                Download Excel
+                下载Excel模板
               </Button>
             </Col>
             <Col span={4}>
-              <Button color='cyan' variant='solid'>Download Documentation</Button>
+              <Button color='cyan' variant='solid'>下载说明文档</Button>
             </Col>
           </Space>
         </Row>
@@ -391,9 +395,9 @@ const WorkItAssetsTable: React.FC = () => {
           <p className="ant-upload-drag-icon">
             <InboxOutlined />
           </p>
-          <p className="ant-upload-text">Click or drag Excel file to this area to upload</p>
+          <p className="ant-upload-text">单击或拖动Excel文件到此区域进行上传</p>
           <p className="ant-upload-hint">
-            Support for a single upload. Strictly prohibited from uploading business data or sensitive information
+            支持单次上传。严禁上传业务数据或敏感信息
           </p>
         </Dragger>
       </Modal>
@@ -403,16 +407,20 @@ const WorkItAssetsTable: React.FC = () => {
         open={isModalDelete}
         onCancel={() => setIsModalDelete(false)}
         onOk={confirmDeleteAssetsData}
+        okText="删除"
+        cancelText="取消"
       >
-        <p className="text-sm text-black">Are you sure you want to delete this data?</p>
+        <p className="text-sm text-black">确定要删除这条数据吗?</p>
       </Modal>
 
       {/* add modal */}
       <Modal
         open={addItAssetsShow}
-        title="Add an IT device"
+        title="添加IT设备"
         onCancel={() => setAddItAssetsShow(false)}
         onOk={onAddItAssets}
+        okText="确认添加"
+        cancelText="取消"
         afterClose={clearAssetsDataForm}
         maskClosable={false}
         width={1000}
@@ -424,11 +432,11 @@ const WorkItAssetsTable: React.FC = () => {
             <Col span={24}>
               <label htmlFor="Product" className='mb-1 flex items-center font-semibold'>
                 <span className='mr-1 text-red-600 font-thin'>*</span>
-                Product Name
+                产品名称
               </label>
               <Input
                 style={{ width: '100%' }}
-                placeholder='Product name'
+                placeholder='产品名称'
                 value={assetsDataForm.product_name}
                 onChange={e => {
                   setAssetsDataForm({
@@ -444,15 +452,15 @@ const WorkItAssetsTable: React.FC = () => {
             <Col span={layoutWidth}>
               {/* product type */}
               <label
-                htmlFor="Type"
+                htmlFor="产品类型"
                 className='mb-1 flex items-center font-semibold'
               >
                 <span className='mr-1 text-red-600 font-thin'>*</span>
-                Product Type
+                产品类型
               </label>
               <Select
                 style={{ width: '100%' }}
-                placeholder='Product type'
+                placeholder='产品类型'
                 allowClear
                 options={typeData}
                 onChange={selectProductType}
@@ -469,11 +477,11 @@ const WorkItAssetsTable: React.FC = () => {
                   className='mb-1 flex items-center font-semibold'
                 >
                   <span className='mr-1 text-red-600 font-thin'>*</span>
-                  Brand
+                  产品品牌
                 </label>
                 <Select
                   style={{ width: '100%' }}
-                  placeholder='Product brand'
+                  placeholder='产品品牌'
                   allowClear
                   onDropdownVisibleChange={onTriggerSelected}
                   value={assetsDataForm.product_brand}
@@ -498,12 +506,12 @@ const WorkItAssetsTable: React.FC = () => {
                 className='mb-1 flex items-center font-semibold'
               >
                 <span className='mr-1 text-red-600 font-thin'>*</span>
-                Number
+                产品数量
               </label>
               <InputNumber
                 min={0}
                 style={{ width: '100%' }}
-                placeholder='Product number'
+                placeholder='产品数量'
                 value={assetsDataForm.product_number}
                 onChange={e => {
                   setAssetsDataForm({
@@ -517,13 +525,13 @@ const WorkItAssetsTable: React.FC = () => {
             <Col span={layoutWidth}>
               <label htmlFor="Price" className='mb-1 flex items-center font-semibold'>
                 <span className='mr-1 text-red-600 font-thin'>*</span>
-                Total Price <i className='text-xs text-gray-500 not-italic ml-2'>(Unit Price * Quantity)</i>
+                产品总价 <i className='text-xs text-gray-500 not-italic ml-2'>(单价 * 数量)</i>
               </label>
               <InputNumber
                 min={0}
                 style={{ width: '100%' }}
-                placeholder='Product price'
-                addonAfter="USD"
+                placeholder='产品总价'
+                addonAfter="CNY"
                 value={assetsDataForm.product_price}
                 onChange={e => {
                   setAssetsDataForm({
@@ -539,11 +547,11 @@ const WorkItAssetsTable: React.FC = () => {
             {/* create time */}
             <Col span={12}>
               <label
-                htmlFor="Create_"
+                htmlFor="Create_Time"
                 className='mb-1 flex items-center font-semibold'
               >
                 <span className='mr-1 text-red-600  font-thin'>*</span>
-                Created time
+                创建时间
               </label>
               <Input
                 style={{ width: '100%' }}
@@ -553,11 +561,11 @@ const WorkItAssetsTable: React.FC = () => {
             </Col>
             <Col span={12}>
               <label
-                htmlFor="Create_"
+                htmlFor="Update_Time"
                 className='mb-1 flex items-center font-semibold'
               >
                 <span className='mr-1 text-red-600  font-thin'>*</span>
-                Updated time
+                更新时间
               </label>
               <Input
                 style={{ width: '100%' }}
@@ -573,12 +581,12 @@ const WorkItAssetsTable: React.FC = () => {
                 htmlFor="Problem"
                 className='mb-1 flex items-center font-semibold'
               >
-                Remark
+                备注
               </label>
               <Input.TextArea
                 rows={5}
                 autoSize={{ minRows: 5, maxRows: 5 }}
-                placeholder='Remark'
+                placeholder='备注'
                 maxLength={260}
                 value={assetsDataForm.product_remark}
                 onChange={e => {
@@ -596,10 +604,12 @@ const WorkItAssetsTable: React.FC = () => {
 
       {/* edit modal */}
       <Modal
-        title="Edit Device"
+        title="编辑设备"
         open={isEditModalShow}
         onOk={onConfirmEditAssetsData}
         onCancel={() => setIsEditModalShow(false)}
+        okText="确认编辑"
+        cancelText="取消"
         afterClose={clearAssetsDataForm}
         maskClosable={false}
         width={1000}
@@ -611,11 +621,11 @@ const WorkItAssetsTable: React.FC = () => {
             <Col span={24}>
               <label htmlFor="Product" className='mb-1 flex items-center font-semibold'>
                 <span className='mr-1 text-red-600 font-thin'>*</span>
-                Product Name
+                产品名称
               </label>
               <Input
                 style={{ width: '100%' }}
-                placeholder='Product name'
+                placeholder='产品名称'
                 value={assetsDataForm.product_name}
                 onChange={e => {
                   setAssetsDataForm({
@@ -635,11 +645,11 @@ const WorkItAssetsTable: React.FC = () => {
                 className='mb-1 flex items-center font-semibold'
               >
                 <span className='mr-1 text-red-600 font-thin'>*</span>
-                Product Type
+                产品类型
               </label>
               <Select
                 style={{ width: '100%' }}
-                placeholder='Product type'
+                placeholder='产品类型'
                 allowClear
                 options={typeData}
                 onChange={selectProductType}
@@ -656,11 +666,11 @@ const WorkItAssetsTable: React.FC = () => {
                   className='mb-1 flex items-center font-semibold'
                 >
                   <span className='mr-1 text-red-600 font-thin'>*</span>
-                  Brand
+                  产品品牌
                 </label>
                 <Select
                   style={{ width: '100%' }}
-                  placeholder='Product brand'
+                  placeholder='产品品牌'
                   allowClear
                   onDropdownVisibleChange={onTriggerSelected}
                   value={assetsDataForm.product_brand}
@@ -682,12 +692,12 @@ const WorkItAssetsTable: React.FC = () => {
             <Col span={layoutWidth}>
               <label htmlFor="Price" className='mb-1 flex items-center font-semibold'>
                 <span className='mr-1 text-red-600 font-thin'>*</span>
-                Number
+                产品数量
               </label>
               <InputNumber
                 min={0}
                 style={{ width: '100%' }}
-                placeholder='Product price'
+                placeholder='产品数量'
                 addonAfter="USD"
                 value={assetsDataForm.product_number}
                 onChange={e => {
@@ -702,13 +712,13 @@ const WorkItAssetsTable: React.FC = () => {
             <Col span={layoutWidth}>
               <label htmlFor="Price" className='mb-1 flex items-center font-semibold'>
                 <span className='mr-1 text-red-600 font-thin'>*</span>
-                Total Price
+                产品总价
               </label>
               <InputNumber
                 min={0}
                 style={{ width: '100%' }}
-                placeholder='Product price'
-                addonAfter="USD"
+                placeholder='产品总价'
+                addonAfter="CNY"
                 value={assetsDataForm.product_price}
                 onChange={e => {
                   setAssetsDataForm({
@@ -726,7 +736,7 @@ const WorkItAssetsTable: React.FC = () => {
                 className='mb-1 flex items-center font-semibold'
               >
                 <span className='mr-1 text-red-600  font-thin'>*</span>
-                Created time
+                创建时间
               </label>
               <Input
                 style={{ width: '100%' }}
@@ -740,7 +750,7 @@ const WorkItAssetsTable: React.FC = () => {
                 className='mb-1 flex items-center font-semibold'
               >
                 <span className='mr-1 text-red-600  font-thin'>*</span>
-                Updated time
+                更新时间
               </label>
               <Input
                 style={{ width: '100%' }}
@@ -755,12 +765,12 @@ const WorkItAssetsTable: React.FC = () => {
                 htmlFor="Problem"
                 className='mb-1 flex items-center font-semibold'
               >
-                Remark
+                备注
               </label>
               <Input.TextArea
                 rows={5}
                 autoSize={{ minRows: 5, maxRows: 5 }}
-                placeholder='Remark'
+                placeholder='备注'
                 maxLength={260}
                 value={assetsDataForm.product_remark}
                 onChange={e => {
@@ -783,7 +793,7 @@ const WorkItAssetsTable: React.FC = () => {
               type='primary'
               onClick={modalAddDeviceHandler}
             >
-              Create
+              添加设备
             </Button>
           </Col>
 
@@ -793,7 +803,7 @@ const WorkItAssetsTable: React.FC = () => {
               danger
               onClick={deleteAssetsDataIdHandler}
             >
-              Delete
+              删除设备
             </Button>
           </Col>
 
@@ -803,13 +813,13 @@ const WorkItAssetsTable: React.FC = () => {
               variant="solid"
               onClick={() => setIsImportModalShow(true)}
             >
-              Import
+              导入设备
             </Button>
           </Col>
           <Col className='flex my-0 mr-0 ml-auto'>
             <Select
               className='w-40 mr-3'
-              placeholder="Type"
+              placeholder="设备类型"
               allowClear
               options={typeData}
               onChange={filterTypeDataText}
@@ -819,6 +829,7 @@ const WorkItAssetsTable: React.FC = () => {
               className='mr-3'
               format={'YYYY-MM-DD'}
               onChange={getTimeFilterData}
+              locale={locale}
             />
             <Button
               type='primary'

@@ -301,7 +301,7 @@ const Home = () => {
                       <Row gutter={15}>
                         <Col span={12}>
                           <div className='w-full h-full border-r border-slate-200'>
-                            <p className='text-2xl font-bold text-slate-500 mb-1'>USD {totalAssetsPrice}</p>
+                            <p className='text-2xl font-bold text-slate-500 mb-1'>CNY {totalAssetsPrice}</p>
                             <Tag color='green'>资产总价</Tag>
                           </div>
                         </Col>

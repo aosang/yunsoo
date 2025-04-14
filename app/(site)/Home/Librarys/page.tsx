@@ -103,17 +103,17 @@ const Librarys = () => {
             bg-blue-50"
           >
             <ImBooks style={{ color: '#4483f5', opacity: 0.65 }} className="text-4xl" />
-            <span className="text-base ml-6" style={{ color: '#00091a' }}>IT Equipment Knowledge Base</span>
+            <span className="text-base ml-6" style={{ color: '#00091a' }}>IT设备知识库</span>
           </div>
           <Skeleton active loading={isLoading} paragraph={{rows: 10}}>
           {(!editorModal && !updateEditorModal) &&
             <>
               <div className="flex mt-4 items-center">
-                <Button type="primary" onClick={() => { setEditorModal(true) }}>Create</Button>
+                <Button type="primary" onClick={() => { setEditorModal(true) }}>创建</Button>
                 <div className="mt-0 mb-0 mr-0 ml-auto">
                   <Select
                     className="w-40"
-                    placeholder="Select Type"
+                    placeholder="选择类型"
                     allowClear
                     options={LibrarysType}
                     onChange={(value) => {getLibraryListData(value)}}

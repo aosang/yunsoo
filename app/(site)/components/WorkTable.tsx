@@ -54,9 +54,9 @@ const WorkTable: React.FC<workTableProps> = ({ workInfo, onChangeSelectData, onG
     render: (text: string) => {
       return (
         <>
-          {text === 'Finished' && <Tag color="green">Finished</Tag>}
-          {text === 'Processing' && <Tag color="red">Processing</Tag>}
-          {text === 'Pending' && <Tag color="orange">Pending</Tag>}
+          {text === '已完成' && <Tag color="green">已完成</Tag>}
+          {text === '处理中' && <Tag color="red">处理中</Tag>}
+          {text === '待处理' && <Tag color="orange">待处理</Tag>}
         </>
       )
     }
@@ -72,7 +72,7 @@ const WorkTable: React.FC<workTableProps> = ({ workInfo, onChangeSelectData, onG
               type="primary"
               onClick={() => onRowData.onClick(record)}
             >
-              Detail/Edit
+              详情/编辑
             </Button>
           </div>   
         </>

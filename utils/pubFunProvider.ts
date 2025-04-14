@@ -26,17 +26,17 @@ export const getTimeNumber = () => {
   let s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
 
   let timeFilter = y + '-' + m + '-' + d + ' ' + h + ':' + mm + ':' + s
-  timeFilter = dayjs(timeFilter).format('MMM D, YYYY h:mm a')
+  timeFilter = dayjs(timeFilter).format('YYYY-MM-DD HH:mm:ss')
   let timeNumber = y + '' + m + '' + d + '' + h + '' + mm + '' + s + number
 
-  let currentTime = dayjs(timeFilter).format('MMM D, YYYY h:mm:ss a')
+  let currentTime = dayjs(timeFilter).format('YYYY-MM-DD HH:mm:ss')
   return [timeFilter, timeNumber, currentTime]
 }
 
 
 export const getDeviceData = async (query?: string) => {
   if(query === '') {
-    const { data, error } = await supabase.from('it_assets')
+    const { data, error } = await supabase.from('it_assets_cn')
     .select('*')
     .ilike('value', `%${query}%`)
     try {
@@ -47,7 +47,7 @@ export const getDeviceData = async (query?: string) => {
       throw error
     }
   }else {
-    const { data, error } = await supabase.from('it_assets').select('*')
+    const { data, error } = await supabase.from('it_assets_cn').select('*')
     try {
       if (data) return data || []
       useMessage(2, error?.message, 'error')

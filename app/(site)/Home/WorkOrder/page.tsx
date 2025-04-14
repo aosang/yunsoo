@@ -23,11 +23,13 @@ import { Card, Space, Button, Row, Col, Modal, Divider, Select, Input, DatePicke
 import { IoIosSearch } from "react-icons/io"
 import { useState, useEffect } from 'react'
 import { getTimeNumber, getDeviceData } from '@/utils/pubFunProvider'
-import WorkTable from '../../components/WorkTable'
+import WorkTable from '@components/WorkTable'
 import useMessage from '@/utils/message'
+
 import dayjs from 'dayjs'
 import locale from 'antd/es/date-picker/locale/zh_CN'
-
+import 'dayjs/locale/zh-cn'
+dayjs.locale('zh-cn')
 
 type tableData = tableItems[]
 type typeDataProps = typeDataName[]
@@ -88,7 +90,7 @@ const WorkOrder: React.FC = ({ }) => {
 
   const onDeleteModal = () => {
     if (deleteDataId.length !== 0) return setIsModalDelete(true)
-    useMessage(2, 'Please select delete data', 'error')
+    useMessage(2, '请选择你要删除的数据', 'error')
   }
 
   const onDeleteData = (selectData: tableItems[]) => {
@@ -219,7 +221,7 @@ const WorkOrder: React.FC = ({ }) => {
     setLayoutWidth(8)
     setWorkOrderForm({
       ...workOrderForm,
-      created_product: '',
+      created_product: null,
       created_text: '',
       created_solved: '',
       created_type: null,
@@ -246,7 +248,7 @@ const WorkOrder: React.FC = ({ }) => {
     if (keys) {
       getWorkBrand(keys)
         .then(res => {
-          let brandData = res![0].product_brand.reverse() as typeDataBrandProps
+          let brandData = res![0].product_brand_cn.reverse() as typeDataBrandProps
           brandData = brandData.sort((a, b) => {
             return Number(a.brand_id) - Number(b.brand_id)
           })
@@ -255,7 +257,7 @@ const WorkOrder: React.FC = ({ }) => {
           setTypeDataBrand(brandData)
           setWorkOrderForm({
             ...workOrderForm,
-            created_brand: res![0].product_brand[0].value,
+            created_brand: res![0].product_brand_cn[0].value,
             created_type: keys
           })
         })
@@ -273,7 +275,9 @@ const WorkOrder: React.FC = ({ }) => {
 
   // filter data
   const getFilterType = async () => {
-    getFilterWorkType().then(res => setTypeFilter(res as []))
+    getFilterWorkType().then(res => {
+      setTypeFilter(res as [])
+    })
   }
 
   const getFilterStatus = async () => {
@@ -309,7 +313,7 @@ const WorkOrder: React.FC = ({ }) => {
   }
 
   useEffect(() => {
-    document.title = 'WorkOrder'
+    document.title = '我的工单'
     getWorkOrderData()
   }, [])
 
@@ -363,7 +367,7 @@ const WorkOrder: React.FC = ({ }) => {
               onOk={onDeleteConfirm}
               onCancel={() => setIsModalDelete(false)}
             >
-              <p className="text-sm text-black">Are you sure you want to delete this data?</p>
+              <p className="text-sm text-black">确实要删除这条数据吗？</p>
             </Modal>
 
             {/* add */}
@@ -396,6 +400,7 @@ const WorkOrder: React.FC = ({ }) => {
                       showSearch
                       allowClear
                       onChange={e => setWorkOrderForm({ ...workOrderForm, created_product: e })}
+                      value={workOrderForm.created_product}
                     >
                     </Select>
                   </Col>

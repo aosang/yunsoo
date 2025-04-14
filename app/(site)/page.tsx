@@ -48,21 +48,21 @@ const Auth: React.FC = () => {
     const { email, password, company, username } = formState
     if (type === 1) {
       if (!emailRegFunc(email)) {
-        useMessage(2, 'Please enter your email address!', 'error')
+        useMessage(2, '请输入邮箱', 'error')
       } else if (!passwordRegFunc(password)) {
-        useMessage(2, 'Invalid password format. Please check requirements!', 'error')
+        useMessage(2, '请输入正确的密码', 'error')
       } else if (!company) {
-        useMessage(2, 'Please enter your company name!', 'error')
+        useMessage(2, '请输入公司名称', 'error')
       } else if (!username) {
-        useMessage(2, 'Please enter your username!', 'error')
+        useMessage(2, '请输入用户名', 'error')
       } else {
         const { data, error } = await supabase.from('profiles').select('username, email')
         if (data![0]?.username && username === data![0]?.username) {
-          useMessage(2, 'Username already exists!', 'error')
+          useMessage(2, '用户名已存在', 'error')
         } else if (data![0]?.email && email === data![0]?.email) {
-          useMessage(2, 'Email already exists!', 'error')
+          useMessage(2, '邮箱已存在', 'error')
         } else {
-          useMessage(2, 'Sign up successfully!', 'success')
+          useMessage(2, '注册成功', 'success')
           setIsVerify(true)
 
           window.localStorage.setItem('userRegister', JSON.stringify({
@@ -86,9 +86,9 @@ const Auth: React.FC = () => {
       }
     } else {
       if (!emailRegFunc(email)) {
-        useMessage(2, 'Please enter the correct Email.', 'error')
+        useMessage(2, '请输入正确的邮箱', 'error')
       } else if (!passwordRegFunc(password)) {
-        useMessage(2, 'Please enter the correct password.', 'error')
+        useMessage(2, '请输入正确的密码', 'error')
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({
           email,
@@ -96,11 +96,11 @@ const Auth: React.FC = () => {
         })
         try {
           if (data.session) {
-            useMessage(2, 'Login in successfully!', 'success')
+            useMessage(2, '登录成功', 'success')
             router.push('/Home')
           } else if (error) {
             if (error.message === 'Invalid login credentials')
-              useMessage(2, 'Incorrect email or password.', 'error')
+              useMessage(2, '邮箱或密码错误', 'error')
           }
         } catch (error) {
           throw error
@@ -145,9 +145,9 @@ const Auth: React.FC = () => {
     window.addEventListener('load', handleLoad)
 
 
-    // if (document.readyState === 'complete') {
-    //   setIsSpining(false)
-    // }
+    if (document.readyState === 'complete') {
+      setIsSpining(false)
+    }
 
     // 组件卸载时移除事件监听
     return () => {
@@ -174,51 +174,55 @@ const Auth: React.FC = () => {
                     <form>
                       <ul className={authScss.commitForm}>
                         <li className={authScss.commitFormItem}>
-                          <label htmlFor="Email">Email</label>
+                          <label htmlFor="Email" className='ml-1 mb-1'>电子邮箱</label>
                           <Input
-                            placeholder="Enter email"
+                            placeholder="请输入邮箱"
                             value={formState.email}
                             onChange={changeEmailValue}
                             onKeyDown={onPressEnterSigin}
                             allowClear
+                            className='h-9'
                           />
                         </li>
                         <li className={authScss.commitFormItem}>
                           <div className='flex items-center'>
-                            <label htmlFor="Email" className='mr-1'>Password</label>
+                            <label htmlFor="Email" className='ml-1 mr-1 mb-1'>密码</label>
                             <Tooltip
                               placement='right'
-                              title='Password must be 8-20 characters long and contain at least one uppercase letter, one lowercase letter, and one number'
+                              title='密码必须包含8-20个字符，至少包含一个大写字母、一个小写字母和一个数字'
                             >
                               <InfoCircleOutlined className='text-sm -mt-1 text-blue-700' />
                             </Tooltip>
                           </div>
                           <Input.Password
-                            placeholder="Enter password"
+                            placeholder="请输入密码"
                             value={formState.password}
                             onChange={changePasswordValue}
                             onKeyDown={onPressEnterSigin}
                             allowClear
+                            className='h-9'
                           />
                         </li>
                         <li className={authScss.commitFormItem}>
-                          <label htmlFor="Company">Company</label>
+                          <label htmlFor="Company" className='ml-1 mb-1'>公司名称</label>
                           <Input
-                            placeholder="Company name"
+                            placeholder="请输入公司名称"
                             value={formState.company}
                             onChange={changeCompanyValue}
                             onKeyDown={onPressEnterSigin}
                             allowClear
+                            className='h-9'
                           />
                         </li>
                         <li className={authScss.commitFormItem}>
-                          <label htmlFor="Username">Username</label>
+                          <label htmlFor="Username" className='ml-1 mb-1'>用户名</label>
                           <Input
-                            placeholder="Enter username"
+                            placeholder="请输入用户名"
                             value={formState.username}
                             onChange={changeUsernameValue}
                             onKeyDown={onPressEnterSigin}
                             allowClear
+                            className='h-9'
                           />
                         </li>
                       </ul>
@@ -232,12 +236,12 @@ const Auth: React.FC = () => {
                           border: 'none',
                         }}
                       >
-                        Create an account
+                        创建账号
                       </Button>
                     </form>
                     <p className={authScss.commitFormInfo}>
-                      Already have an account?
-                      <a onClick={() => changeFormVisible(false)}>Sign in</a>
+                      已有账号？
+                      <a onClick={() => changeFormVisible(false)}>立即登录</a>
                     </p>
                   </>
                 ) : (
@@ -246,23 +250,25 @@ const Auth: React.FC = () => {
                     <form>
                       <ul className={authScss.commitForm}>
                         <li className={authScss.commitFormItem}>
-                          <label htmlFor="Email">Email</label>
+                          <label htmlFor="Email" className='ml-1 mb-1'>电子邮箱</label>
                           <Input
-                            placeholder="Enter email"
+                            placeholder="请输入邮箱"
                             value={formState.email}
                             onChange={changeEmailValue}
                             onKeyDown={onPressEnterSigin}
                             allowClear
+                            className='h-9'
                           />
                         </li>
                         <li className={authScss.commitFormItem}>
-                          <label htmlFor="Password">Password</label>
+                          <label htmlFor="Password" className='ml-1 mb-1'>密码</label>
                           <Input.Password
-                            placeholder="Enter password"
+                            placeholder="请输入密码"
                             value={formState.password}
                             onChange={changePasswordValue}
                             onKeyDown={onPressEnterSigin}
                             allowClear
+                            className='h-9'
                           />
                         </li>
                         <div className='flex'>
@@ -270,7 +276,7 @@ const Auth: React.FC = () => {
                             className='text-xs ml-auto underline cursor-pointer -mt-1'
                             onClick={() => router.push('/ResetPassword')}
                           >
-                            Forget password?
+                            忘记密码？
                           </a>
                         </div>
                       </ul>
@@ -280,11 +286,11 @@ const Auth: React.FC = () => {
                         size="large"
                         onClick={() => validateSignUpForm(2)}
                       >
-                        Sign in
+                        立即登录
                       </Button>
                     </form>
                     <p className={authScss.commitFormInfo}>
-                      Don't have an account yet? <a onClick={() => changeFormVisible(true)}>Sign up</a>
+                      还没有账号？ <a onClick={() => changeFormVisible(true)}>立即注册</a>
                     </p>
                   </>
                 )}

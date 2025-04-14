@@ -53,7 +53,7 @@ export const updateProfiles = async (userId: string, updateForm: updateProfilesI
     .update(updateForm)
     .eq('id', userId)
   try{
-    if(error) return useMessage(2, 'update failed!', 'error')
+    if(error) return useMessage(2, '更新失败!', 'error')
   }catch (error) {
     throw error
   }
@@ -61,7 +61,7 @@ export const updateProfiles = async (userId: string, updateForm: updateProfilesI
 
 // get workOrder type
 export const getWorkOrderType = async () => {
-  const {data, error} = await supabase.from('product_type').select('*')
+  const {data, error} = await supabase.from('product_type_cn').select('*')
   try {
     if (data) return data.sort((a, b) => a.product_id.localeCompare(b.product_id))
     useMessage(2, error!.message, 'error')
@@ -74,8 +74,8 @@ export const getWorkOrderType = async () => {
 export const getWorkBrand = async (keys: string) => {
   let key = keys
   const {data, error} = await supabase
-  .from('product_type')
-  .select(`key, product_brand (value, brand_id, logo_url)`)
+  .from('product_type_cn')
+  .select(`key, product_brand_cn(value, brand_id, logo_url)`)
   .eq('key', key)
 
   try {
@@ -88,7 +88,7 @@ export const getWorkBrand = async (keys: string) => {
 
 // get workOrder status
 export const getWorkOrderStatus = async () => {
-  const {data, error} = await supabase.from('product_status').select('*')
+  const {data, error} = await supabase.from('product_status_cn').select('*')
   try {
     if(data) return data
     useMessage(2, error!.message, 'error')
@@ -100,7 +100,7 @@ export const getWorkOrderStatus = async () => {
 // get workOrder
 export const getWorkOrder = async (id?: string) => {
   const {data, error} = await supabase.
-    from('work_order')
+    from('work_order_cn')
     .select('*')
     .match({id: id})
   try {
@@ -119,9 +119,9 @@ export const getWorkOrder = async (id?: string) => {
 export const getWorkOrderCount = async () => {
   try {
     const [finishedData, processingData, pendingData] = await Promise.all([
-      supabase.from('work_order').select('*').eq('created_status', 'Finished'),
-      supabase.from('work_order').select('*').eq('created_status', 'Processing'),
-      supabase.from('work_order').select('*').eq('created_status', 'Pending'),
+      supabase.from('work_order_cn').select('*').eq('created_status', '已完成'),
+      supabase.from('work_order_cn').select('*').eq('created_status', '处理中'),
+      supabase.from('work_order_cn').select('*').eq('created_status', '待处理'),
     ])
 
     if (finishedData.error) throw finishedData.error
@@ -154,16 +154,16 @@ export const getAllAssetsCount = async () => {
       keyboardMouseNum, 
       othersNum
     ] = await Promise.all([
-      supabase.from('it_assets').select('product_number').eq('product_type', 'Computer'),
-      supabase.from('it_assets').select('product_number').eq('product_type', 'Laptop'),
-      supabase.from('it_assets').select('product_number').eq('product_type', 'Server'),
-      supabase.from('it_assets').select('product_number').eq('product_type', 'Switch'),
-      supabase.from('it_assets').select('product_number').eq('product_type', 'Printer'),
-      supabase.from('it_assets').select('product_number').eq('product_type', 'Router'),
-      supabase.from('it_assets').select('product_number').eq('product_type', 'Mobile'),
-      supabase.from('it_assets').select('product_number').eq('product_type', 'Monitor'),
-      supabase.from('it_assets').select('product_number').eq('product_type', 'Keyboard/Mouse'),
-      supabase.from('it_assets').select('product_number').eq('product_type', 'Others')
+      supabase.from('it_assets_cn').select('product_number').eq('product_type', '电脑'),
+      supabase.from('it_assets_cn').select('product_number').eq('product_type', '笔记本'),
+      supabase.from('it_assets_cn').select('product_number').eq('product_type', '服务器'),
+      supabase.from('it_assets_cn').select('product_number').eq('product_type', '交换机'),
+      supabase.from('it_assets_cn').select('product_number').eq('product_type', '打印机'),
+      supabase.from('it_assets_cn').select('product_number').eq('product_type', '路由器'),
+      supabase.from('it_assets_cn').select('product_number').eq('product_type', '手机'),
+      supabase.from('it_assets_cn').select('product_number').eq('product_type', '显示器'),
+      supabase.from('it_assets_cn').select('product_number').eq('product_type', '键盘/鼠标'),
+      supabase.from('it_assets_cn').select('product_number').eq('product_type', '其它')
     ])
     
     if (computerNum.error) throw computerNum.error
@@ -199,14 +199,14 @@ export const getAllAssetsCount = async () => {
 export const getTotalAssetsPrice = async () => {
   try {
     const {data, error} = await supabase
-    .from('it_assets')
+    .from('it_assets_cn')
     .select('product_price')
     
     if(data) return data.reduce((total, item) => total + (item.product_price || 0), 0)
     if(error) throw error
     return 0
   } catch (error) {
-    useMessage(2, 'Get Price Failed!' , 'error')
+    useMessage(2, '获取价格失败!' , 'error')
     throw error
   }
 }
@@ -225,7 +225,7 @@ export const insertUpdateWorkOrder = async ({
     created_remark
   }) => {
   const {data, error} = await supabase
-  .from('work_order')
+  .from('work_order_cn')
   .insert({
     created_id: getTimeNumber()[1],
     created_product,
@@ -243,7 +243,7 @@ export const insertUpdateWorkOrder = async ({
 
   try {
     if(data) {
-      useMessage(2, 'Create sucessful!','success')
+      useMessage(2, '创建成功!','success')
       return data
     }
     useMessage(2, error!.message, 'error')
@@ -255,13 +255,13 @@ export const insertUpdateWorkOrder = async ({
 // Delete workOrder
 export const deleteWorkOrder = async (deleteId: string[]) => {
   const { error } = await supabase
-    .from('work_order')
+    .from('work_order_cn')
     .delete()
     .in('created_id', deleteId)
 
   try {
     if(error) return useMessage(2, error.message, 'error')
-    useMessage(2, 'Delete success!','success')
+    useMessage(2, '删除成功!','success')
   }catch (error) {
     throw error
   }
