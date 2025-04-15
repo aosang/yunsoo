@@ -11,7 +11,6 @@ import { PiLaptopFill, PiMonitorPlayFill } from "react-icons/pi"
 import { MdOtherHouses, MdKeyboard } from "react-icons/md"
 import { BiSolidMobile } from "react-icons/bi"
 import { getLibraryTableData, deleteLibraryTableData, getLibrarysDataList } from "@/utils/provideLibraryData"
-import { useRouter } from "next/navigation"
 const ReactWEditor = dynamic(() => import('../../components/Editor'), {
   ssr: false,
   loading: () => <p className="text-base text-blue-950">Loading...</p>
@@ -23,7 +22,6 @@ const UpdateEditor = dynamic(() => import('../../components/EditorUpdate'), {
 })
 
 const Librarys = () => {
-  const router = useRouter()
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [libraryList, setLibraryList] = useState<knowledgeTypeItem[]>([])
   const [LibrarysType, setLibrarysType] = useState<typeDataName[]>([])
@@ -75,19 +73,19 @@ const Librarys = () => {
     getLibrarysType()
     getLibraryListData()
     
-    document.title = 'Librarys'
+    document.title = '知识库'
   }, [])
 
   return (
     <>
       {/* delete modal */}
       <Modal
-        title="Delete the library"
+        title="删除知识库"
         open={isDeleteModal}
         onCancel={() => setIsDeleteModal(false)}
         onOk={delteLibrarysList}
       >
-        <p>Are you sure you want to delete this Librarys?</p>
+        <p>确定要删除这条数据吗？</p>
       </Modal>
     
       <div style={{ width: '100%', padding: '12px', boxSizing: 'border-box', overflowY: 'visible' }}>
@@ -103,13 +101,13 @@ const Librarys = () => {
             bg-blue-50"
           >
             <ImBooks style={{ color: '#4483f5', opacity: 0.65 }} className="text-4xl" />
-            <span className="text-base ml-6" style={{ color: '#00091a' }}>IT设备知识库</span>
+            <span className="text-base ml-6" style={{ color: '#00091a' }}>IT设备运维知识库</span>
           </div>
           <Skeleton active loading={isLoading} paragraph={{rows: 10}}>
           {(!editorModal && !updateEditorModal) &&
             <>
               <div className="flex mt-4 items-center">
-                <Button type="primary" onClick={() => { setEditorModal(true) }}>创建</Button>
+                <Button type="primary" onClick={() => { setEditorModal(true) }}>新增</Button>
                 <div className="mt-0 mb-0 mr-0 ml-auto">
                   <Select
                     className="w-40"
@@ -126,29 +124,30 @@ const Librarys = () => {
                 maxHeight: '600px', 
                 overflowY: 'auto', 
                 scrollbarWidth: 'thin', 
-                scrollbarColor: '#80abf8 transparent'}}
+                scrollbarColor: '#80abf8 transparent'
+              }}
               >
                 <List
                   itemLayout="horizontal"
                   dataSource={libraryList}
                   renderItem={item => (
                     <List.Item actions={[
-                      <a className="text-blue-500" onClick={() => editLibraryModal(item.id)}>edit</a>,
-                      <a className="text-red-500" onClick={() => delteLibrarModal(item.id)}>delete</a>,
+                      <a className="text-blue-500" onClick={() => editLibraryModal(item.id)}>编辑</a>,
+                      <a className="text-red-500" onClick={() => delteLibrarModal(item.id)}>删除</a>,
                     ]}>
                       <List.Item.Meta
                         avatar={
                           <div className="w-9 h-9 bg-blue-600 rounded-full flex justify-center items-center text-base">
-                            {item.type == 'Computer' && <RiComputerFill className="text-white opacity-65" />}
-                            {item.type == 'Server' && <RiServerFill className="text-white opacity-65" />}
-                            {item.type == 'Switch' && <RiSwitchFill className="text-white opacity-65" />}
-                            {item.type == 'Router' && <RiRouterFill className="text-white opacity-65" />}
-                            {item.type == 'Printer' && <RiPrinterFill className="text-white opacity-65" />}
-                            {item.type == 'Laptop' && <PiLaptopFill className="text-white opacity-65" />}
-                            {item.type == 'Mobile' && <BiSolidMobile className="text-white opacity-65" />}
-                            {item.type == 'Monitor' && <PiMonitorPlayFill className="text-white opacity-65" />}
-                            {item.type == 'Keyboard/Mouse' && <MdKeyboard className="text-white opacity-65" />}
-                            {item.type == 'Other' && <MdOtherHouses className="text-white opacity-65" />}
+                            {item.type == '电脑' && <RiComputerFill className="text-white opacity-65" />}
+                            {item.type == '服务器' && <RiServerFill className="text-white opacity-65" />}
+                            {item.type == '交换机' && <RiSwitchFill className="text-white opacity-65" />}
+                            {item.type == '路由器' && <RiRouterFill className="text-white opacity-65" />}
+                            {item.type == '打印机' && <RiPrinterFill className="text-white opacity-65" />}
+                            {item.type == '笔记本' && <PiLaptopFill className="text-white opacity-65" />}
+                            {item.type == '手机' && <BiSolidMobile className="text-white opacity-65" />}
+                            {item.type == '显示器' && <PiMonitorPlayFill className="text-white opacity-65" />}
+                            {item.type == '键盘/鼠标' && <MdKeyboard className="text-white opacity-65" />}
+                            {item.type == '其它' && <MdOtherHouses className="text-white opacity-65" />}
                           </div>
                         }
                         title={
@@ -167,16 +166,16 @@ const Librarys = () => {
                       />
                       <div className="flex text-gray-400 text-sm ">
                         <p className="mb-0">{item.created_time}</p>
-                        {item.type == 'Computer' && <Tag color="magenta" className="ml-4">Computer</Tag>}
-                        {item.type == 'Server' && <Tag color="red" className="ml-3">Server</Tag>}
-                        {item.type == 'Switch' && <Tag color="volcano" className="ml-3">Switch</Tag>}
-                        {item.type == 'Router' && <Tag color="purple" className="ml-3">Router</Tag>}
-                        {item.type == 'Printer' && <Tag color="gold" className="ml-3">Printer</Tag>}
-                        {item.type == 'Laptop' && <Tag color="blue" className="ml-3">Laptop</Tag>}
-                        {item.type == 'Mobile' && <Tag color="green" className="ml-3">Mobile</Tag>}
-                        {item.type == 'Monitor' && <Tag color="geekblue" className="ml-3">Monitor</Tag>}
-                        {item.type == 'Keyboard/Mouse' && <Tag color="geekblue" className="ml-3">Keyboard/Mouse</Tag>}
-                        {item.type == 'Other' && <Tag color="cyan" className="ml-3">Other</Tag>}
+                        {item.type == '电脑' && <Tag color="magenta" className="ml-4">电脑</Tag>}
+                        {item.type == '服务器' && <Tag color="red" className="ml-3">服务器</Tag>}
+                        {item.type == '交换机' && <Tag color="volcano" className="ml-3">交换机</Tag>}
+                        {item.type == '路由器' && <Tag color="purple" className="ml-3">路由器</Tag>}
+                        {item.type == '打印机' && <Tag color="gold" className="ml-3">打印机</Tag>}
+                        {item.type == '笔记本' && <Tag color="blue" className="ml-3">笔记本</Tag>}
+                        {item.type == '手机' && <Tag color="green" className="ml-3">手机</Tag>}
+                        {item.type == '显示器' && <Tag color="geekblue" className="ml-3">显示器</Tag>}
+                        {item.type == '键盘/鼠标' && <Tag color="geekblue" className="ml-3">键盘/鼠标</Tag>}
+                        {item.type == '其它' && <Tag color="cyan" className="ml-3">其它</Tag>}
                       </div>
                     </List.Item>
                   )}

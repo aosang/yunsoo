@@ -119,7 +119,7 @@ const Home = () => {
     fetchWorkOrderCount()
     fetchITAssetsCount()
     fetchITAssetsPrice()
-    document.title = 'Home'
+    document.title = '综合信息'
   }, [])
 
   return (

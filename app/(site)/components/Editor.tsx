@@ -8,7 +8,7 @@ import { getWorkOrderType } from "@/utils/providerSelectData"
 import { insertLibraryData} from "@/utils/provideLibraryData"
 import useMessage from "@/utils/message"
 import { IDomEditor, IToolbarConfig, i18nChangeLanguage } from '@wangeditor/editor'
-i18nChangeLanguage('en')
+// i18nChangeLanguage('en')
 import '@wangeditor/editor/dist/css/style.css'
 
 const EditorPage = ({isEdit, setIsEdit, onSubmit}: {
@@ -30,7 +30,7 @@ const EditorPage = ({isEdit, setIsEdit, onSubmit}: {
   })
 
   const editorConfig = {
-    placeholder: "Write something...",
+    placeholder: "写点什么吧...",
     MENU_CONF: {
       uploadImage: {
         async customUpload(files: any, insertFn: (url: string) => void) {
@@ -189,26 +189,26 @@ const EditorPage = ({isEdit, setIsEdit, onSubmit}: {
           <Col span={12}>
             <label className="flex items-center font-semibold">
               <span className='mr-1 mb-1 text-red-600 font-thin'>*</span>
-              Title
+              标题
             </label>
             <Input
               showCount
               maxLength={70}
               value={knowledgeItem.title} 
-              placeholder="Enter knowledge title"
+              placeholder="请输入标题"
               onChange={changeTitleValue}
             />
           </Col>
           <Col span={12}>
             <label className="flex items-center font-semibold">
               <span className='mr-1 mb-1 text-red-600 font-thin'>*</span>
-              Description
+              描述
             </label>
             <Input
               showCount
               maxLength={70}
               value={knowledgeItem.description} 
-              placeholder="Enter knowledge title"
+              placeholder="请输入描述"
               onChange={changeDescriptionValue}
             />
           </Col>
@@ -217,26 +217,26 @@ const EditorPage = ({isEdit, setIsEdit, onSubmit}: {
           <Col span={8}>
             <label className="flex items-center font-semibold">
               <span className='mr-1 mb-1 text-red-600 font-thin'>*</span>
-              Time
+              时间
             </label>
             <Input value={knowledgeItem.created_time} readOnly />
           </Col>
           <Col span={8}>
             <label className="flex items-center font-semibold">
               <span className='mr-1 mb-1 text-red-600 font-thin'>*</span>
-              Author
+              作者
             </label>
             <Input value={knowledgeItem.author} readOnly />
           </Col>
           <Col span={8}>
             <label className="flex items-center font-semibold">
               <span className='mr-1 mb-1 text-red-600 font-thin'>*</span>
-              Type
+              类型
             </label>
             <Select 
               className="w-full"
               options={knowledgeType}
-              placeholder="Knowledge type"
+              placeholder="选择类型"
               allowClear
               onChange={changeTypeLibrary}
             />
@@ -265,12 +265,12 @@ const EditorPage = ({isEdit, setIsEdit, onSubmit}: {
         className="mr-3"
         onClick={() => {closeEditor()}}
       >
-          Close
+          取消
       </Button>
       <Button 
         type="primary" 
         onClick={addKnowledgeLibrarys}>
-          Confirm
+          确认
       </Button>
 
       {/* <div dangerouslySetInnerHTML={{__html: html}}></div> */}

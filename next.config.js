@@ -19,7 +19,7 @@ const nextConfig = {
   trailingSlash: true,
   output: 'export',
   // basePath: '/assetsManager',
-  // assetPrefix: '/assetsManager'
+  // assetPrefix: '/assetsManager',
   basePath: '',
   assetPrefix: '',
 

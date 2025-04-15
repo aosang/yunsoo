@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState, Suspense } from 'react'
-import { Divider, FloatButton, Skeleton } from 'antd'
+import { FloatButton, Skeleton } from 'antd'
 import { FilePptOutlined, PictureOutlined, VerticalAlignTopOutlined } from '@ant-design/icons'
 import { useSearchParams } from "next/navigation"
 import { getLibrarysDataList } from "@/utils/provideLibraryData"
@@ -16,6 +16,7 @@ const KnowledgeTemplate = () => {
       type: '',
       author: '',
       content: '',
+      description: '',
       created_time: '',
     }
   ])
@@ -77,7 +78,32 @@ const KnowledgeTemplate = () => {
 
   useEffect(() => {
     getLibrarysDataDtails()
-    document.title = 'Knowledge Document'
+    document.title = '知识库详情'
+    
+    // 添加自定义滚动条样式
+    const style = document.createElement('style')
+    style.textContent = `
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+    `
+    document.head.appendChild(style)
+    
+    return () => {
+      document.head.removeChild(style)
+    }
   }, [])
   return (
     <>
@@ -123,13 +149,14 @@ const KnowledgeTemplate = () => {
         >
             <div style={{backgroundColor: '#f0f5ff'}} className='w-full p-4'>
               <h3 className='text-xl font-semibold tracking-wider '>{librarysData[0].title}</h3>
+              <h4 className='text-sm text-gray-400'>{librarysData[0].description}</h4>
             </div>
-            <div className='flex text-sm pl-3 pt-3'>
-              <p className='mr-4 text-gray-400'>Author: {librarysData[0].author}</p>
-              <p className='mr-4 text-gray-400'>Time: {librarysData[0].created_time}</p>
-              <p className='mr-4 text-gray-400'>Type: {librarysData[0].type}</p>
+            <div className='flex text-sm pl-3 pt-2'>
+              <p className='mr-4 text-gray-400'>作者：{librarysData[0].author}</p>
+              <p className='mr-4 text-gray-400'>时间：{librarysData[0].created_time}</p>
+              <p className='mr-4 text-gray-400'>类型：{librarysData[0].type}</p>
             </div>
-            <Divider />
+            <span className='w-full h-[1px] bg-gray-200 block my-4'></span>
             <div
               dangerouslySetInnerHTML={{__html: librarysData[0].content}}
               className={`
@@ -137,7 +164,7 @@ const KnowledgeTemplate = () => {
                 text-sm
                 px-4
                 box-border
-                leading-7
+                leading-6
                 [&_img]:!w-[100%] 
                 [&_img]:!h-auto 
                 [&_img]:mb-5

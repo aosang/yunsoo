@@ -78,7 +78,7 @@ const Inventory = () => {
       loanout_name: deviceData![0].product_name,
       loanout_type: deviceData![0].product_type,
       loanout_brand: deviceData![0].product_brand,
-      loanout_time: dayjs().format('MMM D, YYYY h:mm a'),
+      loanout_time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
       value: deviceData![0].product_name
     })
 
@@ -103,7 +103,7 @@ const Inventory = () => {
       getLoanOutTableData().then(data => {
         const formatData = data?.map(item => ({
           ...item,
-          loanout_time: dayjs(item.loanout_time).format('MMM D, YYYY h:mm a')
+          loanout_time: dayjs(item.loanout_time).format('YYYY-MM-DD HH:mm:ss')
         }))
         setLoanOutData(formatData as inventoryItem[])
         setIsLoading(false)
@@ -144,7 +144,7 @@ const Inventory = () => {
       loanout_type: item.loanout_type,
       loanout_brand: item.loanout_brand,
       loanout_number: 0,
-      loanout_time: dayjs().format('MMM D, YYYY h:mm a'),
+      loanout_time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
       loanout_user: item.loanout_user,
       loanout_remark: item.loanout_remark,
     })
@@ -154,18 +154,18 @@ const Inventory = () => {
   const submitLoanoutDevice = () => {
     let { loanout_number, loanout_user } = loanoutForm
     if (loanout_number === 0 || loanout_number > stockQuantity) {
-      useMessage(2, 'Loan out quantity is invalid', 'error')
+      useMessage(2, '借出数量无效', 'error')
       return
     } else if (loanout_user === '') {
-      useMessage(2, 'Loan out user is invalid', 'error')
+      useMessage(2, '借出人无效', 'error')
       return
     } else {
       insertLoanOutTableData(loanoutForm).then(data => {
-        useMessage(2, 'Loan out device success', 'success')
+        useMessage(2, '借出成功', 'success')
         getLoanOutTableData().then(data => {
           const formatData = data?.map(item => ({
             ...item,
-            loanout_time: dayjs().format('MMM D, YYYY h:mm a')
+            loanout_time: dayjs().format('YYYY-MM-DD HH:mm:ss')
           }))
           setLoanOutData(formatData as inventoryItem[])
         })
@@ -189,17 +189,17 @@ const Inventory = () => {
   const returnDeviceLoanoutEvent = () => {
     const { loanout_number, loanout_id } = loanoutForm
     if (loanout_number === 0 || loanout_number > returnDeviceNum) {
-      useMessage(2, 'Return quantity is invalid', 'error')
+      useMessage(2, '归还数量无效!', 'error')
       return
     } else {
       let returnComputed = returnDeviceNum - loanout_number
       if (returnComputed > 0) {
         updateLoanOutTableData(loanoutForm).then(data => {
-          useMessage(2, 'Return device success!', 'success')
+          useMessage(2, '归还成功!', 'success')
           getLoanOutTableData().then(data => {
             const formatData = data?.map(item => ({
               ...item,
-              loanout_time: dayjs().format('MMM D, YYYY h:mm a')
+              loanout_time: dayjs().format('YYYY-MM-DD HH:mm:ss')
             }))
             setLoanOutData(formatData as inventoryItem[])
           })
@@ -210,16 +210,16 @@ const Inventory = () => {
           getLoanOutTableData().then(data => {
             const formatData = data?.map(item => ({
               ...item,
-              loanout_time: dayjs().format('MMM D, YYYY h:mm a')
+              loanout_time: dayjs().format('YYYY-MM-DD HH:mm:ss')
             }))
             setLoanOutData(formatData as inventoryItem[])
           })
           setIsShowReturn(false)
           clearloanoutDataForm(2)
-          useMessage(2, 'Return device success!', 'success')
+          useMessage(2, '归还成功!', 'success')
         })
       } else {
-        useMessage(2, 'Return quantity is invalid', 'error')
+        useMessage(2, '归还数量无效!', 'error')
         return
       }
     }
@@ -238,7 +238,7 @@ const Inventory = () => {
       getLoanOutTableData().then(() => {
         const formatData = data?.map(item => ({
           ...item,
-          loanout_time: dayjs().format('MMM D, YYYY h:mm a')
+          loanout_time: dayjs().format('YYYY-MM-DD HH:mm:ss')
         }))
         setLoanOutData(formatData as inventoryItem[])
       })
@@ -286,7 +286,7 @@ const Inventory = () => {
           className='mr-2 text-xs'
           onClick={() => getInventoryDetails(item.id)}
         >
-          loan out
+          借出
         </Button>
         {/* <Button size='small' className='bg-green-500 text-xs'>QR Code</Button> */}
       </div>
@@ -406,7 +406,7 @@ const Inventory = () => {
             }}
           />
           <Drawer
-            title="Loan Out"
+            title="借出"
             open={isShowDetails}
             onClose={() => clearloanoutDataForm(1)}
             maskClosable={false}
@@ -419,11 +419,11 @@ const Inventory = () => {
               <Spin spinning={loanoutSpin} tip='Loading...' className='bg-white'>
                 <div className='w-full'>
                   <Descriptions column={24}>
-                    <Descriptions.Item span={12} label="Stock quantity">
+                    <Descriptions.Item span={12} label="库存数量">
                       <div>{stockQuantity}</div>
                     </Descriptions.Item>
-                    <Descriptions.Item span={12} label="Status">
-                      {stockQuantity > 0 ? <Tag color='green'>In stock</Tag> : <Tag color='red'>Out of stock</Tag>}
+                    <Descriptions.Item span={12} label="状态">
+                      {stockQuantity > 0 ? <Tag color='green'>库存充足</Tag> : <Tag color='red'>库存不足</Tag>}
                     </Descriptions.Item>
                   </Descriptions>
                   {stockQuantity > 0 ? (
@@ -431,32 +431,32 @@ const Inventory = () => {
                       <Row gutter={15} className='mt-4'>
                         <Col span={24} className='mb-3'>
                           <label className='flex mb-1' htmlFor="Product Name">
-                            Product Name
+                            设备名称
                           </label>
                           <Input value={loanoutForm.loanout_name} readOnly />
                         </Col>
                         <Col span={24} className='mb-3'>
                           <label className='flex mb-1' htmlFor="Product Type">
-                            Product Type
+                            设备类型
                           </label>
                           <Input value={loanoutForm.loanout_type} readOnly />
                         </Col>
                         <Col span={24} className='mb-3'>
                           <label className='flex mb-1' htmlFor="Product Type">
-                            Product Brand
+                            设备品牌
                           </label>
-                          <Input placeholder="Product Brand" readOnly value={loanoutForm.loanout_brand} />
+                          <Input placeholder="设备品牌" readOnly value={loanoutForm.loanout_brand} />
                         </Col>
                         <Col span={24} className='mb-3'>
                           <label className='flex mb-1' htmlFor="Loan Out Quantity">
-                            Loan Out Time
+                            借出时间
                           </label>
-                          <Input placeholder="Loan Out Time" readOnly value={loanoutForm.loanout_time} />
+                          <Input placeholder="借出时间" readOnly value={loanoutForm.loanout_time} />
                         </Col>
                         <Col span={24} className='mb-3'>
                           <label className='flex mb-1' htmlFor="Loan Out Quantity">
                             <span className='text-red-500 text-sx mNumber mr-1'>*</span>
-                            Loan Out Quantity
+                            借出数量
                           </label>
                           <InputNumber
                             style={{ width: '100%' }}
@@ -470,7 +470,7 @@ const Inventory = () => {
                         <Col span={24} className='mb-3'>
                           <label className='flex mb-1' htmlFor="Loan Out Quantity">
                             <span className='text-red-500 text-sx mr-1'>*</span>
-                            Loan Out User
+                            借出人
                           </label>
                           <Input
                             placeholder="username"
@@ -480,7 +480,7 @@ const Inventory = () => {
                         </Col>
                         <Col span={24} className='mt-3'>
                           <Input.TextArea
-                            placeholder='Remark'
+                            placeholder='备注'
                             showCount
                             rows={5}
                             autoSize={{ minRows: 5, maxRows: 5 }}
@@ -489,13 +489,13 @@ const Inventory = () => {
                         </Col>
                       </Row>
                       <div className='flex mt-6'>
-                        <Button className='mr-4' onClick={() => setIsShowDetails(false)}>Cancel</Button>
-                        <Button type='primary' onClick={submitLoanoutDevice}>Confirm</Button>
+                        <Button className='mr-4' onClick={() => setIsShowDetails(false)}>取消</Button>
+                        <Button type='primary' onClick={submitLoanoutDevice}>确定</Button>
                       </div>
                     </>
                   ) : (
                     <div className='flex justify-center mt-16 flex-col'>
-                      <Empty description='Low Inventory' />
+                      <Empty description='库存不足' />
                     </div>
                   )}
                 </div>

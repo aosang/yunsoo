@@ -3,7 +3,7 @@ import { knowledgeTypeItem } from "@/utils/dbType"
 import useMessage from "@/utils/message"
 
 export const getLibraryTableData = async (type?: string) => {
-  const query = supabase.from('library_table')
+  const query = supabase.from('library_table_cn')
   const {data, error} = await(type ? query.select('*').eq('type', type) : query.select('*'))
   try {
     if(data) return data
@@ -14,7 +14,7 @@ export const getLibraryTableData = async (type?: string) => {
 }
 
 export const insertLibraryData = async ({title, author, type, created_time, content, description }: knowledgeTypeItem) => {
-  const {data, error} = await supabase.from('library_table')
+  const {data, error} = await supabase.from('library_table_cn')
   .insert({
     title,
     author,
@@ -33,7 +33,7 @@ export const insertLibraryData = async ({title, author, type, created_time, cont
 }
 
 export const updateLibraryTableData = async (id: string, form: knowledgeTypeItem) => {
-  const {data, error} = await supabase.from('library_table')
+  const {data, error} = await supabase.from('library_table_cn')
   .update(form)
   .eq('id', id)
   .select('*')
@@ -46,7 +46,7 @@ export const updateLibraryTableData = async (id: string, form: knowledgeTypeItem
 
 export const deleteLibraryTableData = async (id: string) => {
   const { error} = await supabase
-  .from('library_table')
+  .from('library_table_cn')
   .delete()
   .eq('id', id)
 
@@ -59,7 +59,7 @@ export const deleteLibraryTableData = async (id: string) => {
 
 export const getLibrarysDataList = async (id?: string) => {
   const {data, error} = await supabase
-  .from('library_table')
+  .from('library_table_cn')
   .select('*')
   .eq('id', id)
   return data

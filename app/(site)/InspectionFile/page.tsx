@@ -11,12 +11,12 @@ import jsPDF from "jspdf"
 
 const InspectionFile: React.FC = () => {
   const columns = [{
-      title: 'Device Name',
+      title: '设备名称',
       dataIndex: 'inspection_device',
       key: 'inspection_device',
     },
     {
-      title: 'Problem Description',
+      title: '问题描述',
       dataIndex: 'inspection_description',
       key: 'inspection_description',
     }]
@@ -94,7 +94,7 @@ const InspectionFile: React.FC = () => {
   }
 
   useEffect(() => {
-    document.title = 'Inspection File'
+    document.title = '巡检记录'
     getInspectioPdfData()
     getCompanyPdfName()
   }, [])
@@ -130,11 +130,11 @@ const InspectionFile: React.FC = () => {
         
         <Divider />
         <Descriptions>
-          <Descriptions.Item label="Insepector">{createPdfData.inspection_name}</Descriptions.Item>
-          <Descriptions.Item label="Time">{createPdfData.inspection_time}</Descriptions.Item>
-          <Descriptions.Item label="Status">{createPdfData.inspection_status}</Descriptions.Item>
-          <Descriptions.Item label="Telephone">{createPdfData.inspection_phone}</Descriptions.Item>
-          <Descriptions.Item label="Email">{createPdfData.inspection_email}</Descriptions.Item>
+          <Descriptions.Item label="巡检员">{createPdfData.inspection_name}</Descriptions.Item>
+          <Descriptions.Item label="巡检时间">{createPdfData.inspection_time}</Descriptions.Item>
+          <Descriptions.Item label="巡检状态">{createPdfData.inspection_status}</Descriptions.Item>
+          <Descriptions.Item label="联系电话">{createPdfData.inspection_phone}</Descriptions.Item>
+          <Descriptions.Item label="电子邮箱">{createPdfData.inspection_email}</Descriptions.Item>
         </Descriptions>
         <Divider></Divider>
 
@@ -153,16 +153,16 @@ const InspectionFile: React.FC = () => {
           createPdfData.inspection_deviceData?.length === 0 &&
             <Result
               status="success"
-              title="All the device is ok"
-              subTitle="No abnormalities were found during this inspection."
+              title="所有设备正常"
+              subTitle="本次巡检未发现异常"
           />
         }
 
         <div className="absolute bottom-7">
           <Divider />
           <div className="mt-3">
-            <span className="mb-4" style={{fontSize: '15px'}}>Signature of the inspector:</span>
-            <span style={{fontSize: '15px'}}>Signature of the responsible person:</span>
+            <span className="mb-8" style={{fontSize: '15px'}}>检查员签名:</span>
+            <span style={{fontSize: '15px'}}>责任人签名:</span>
           </div>
         </div>
       </div>

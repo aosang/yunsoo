@@ -10,6 +10,9 @@ import { getProfiles, getUser } from '@/utils/providerSelectData'
 import useMessage from '@/utils/message'
 import dayjs from 'dayjs'
 
+import locale from 'antd/es/date-picker/locale/zh_CN'
+dayjs.locale('zh-cn')
+
 type inspectionStatusProps = inspectionStatusItem[]
 
 const Inspection: React.FC = () => {
@@ -47,11 +50,11 @@ const Inspection: React.FC = () => {
   })
 
   const columns = [{
-    title: 'Device Name',
+    title: '设备名称',
     dataIndex: 'inspection_device',
     key: 'inspection_device',
   }, {
-    title: 'Problem Description',
+    title: '问题描述',
     dataIndex: 'inspection_description',
     key: 'inspection_description',
   }]
@@ -97,7 +100,7 @@ const Inspection: React.FC = () => {
       inspection_status: e
     })
 
-    if (e === 'Discovered problem') {
+    if (e === '发现问题') {
       setProblemNumberIsDisable(false)
       getDeviceData(e)
         .then(res => {
@@ -127,9 +130,9 @@ const Inspection: React.FC = () => {
   const confirmProblemDeviceName = () => {
     const { inspection_device, inspection_description } = inspectionItemForm
     if (!inspection_device) {
-      useMessage(2, 'Please enter the problem device', 'error')
+      useMessage(2, '请选择问题设备', 'error')
     } else if (!inspection_description) {
-      useMessage(2, 'Please enter the problem description', 'error')
+      useMessage(2, '请输入问题描述', 'error')
     } else {
       setInspectionDataForm({
         ...inspectionDataForm,
@@ -148,15 +151,15 @@ const Inspection: React.FC = () => {
   const insertInspectionRecordData = () => {
     const { inspection_status, inspection_phone, inspection_number, inspection_deviceData } = inspectionDataForm
     if (!inspection_status) {
-      useMessage(2, 'Please select the status', 'error')
+      useMessage(2, '请选择巡检状态', 'error')
     } else if (!inspection_phone) {
-      useMessage(2, 'Please enter phone number', 'error')
+      useMessage(2, '请输入手机号码', 'error')
     } else {
-      if (inspection_status === 'Discovered problem') {
+      if (inspection_status === '发现问题') {
         if (inspection_number === 0) {
-          useMessage(2, 'Please enter the number of problem devices', 'error')
+          useMessage(2, '请输入问题设备数量', 'error')
         } else if (inspection_number !== inspection_deviceData?.length) {
-          useMessage(2, 'The number of problem devices is not equal to the number of problem devices', 'error')
+          useMessage(2, '问题设备数量与问题设备数量不一致', 'error')
         } else {
           setCreateInspectionModal(false)
           insertInspectionDeviceData(inspectionDataForm)
@@ -181,6 +184,12 @@ const Inspection: React.FC = () => {
       inspection_deviceData: [],
       inspection_phone: '',
       inspection_number: 0,
+    })
+    setInspectionItemForm({
+      ...inspectionItemForm,
+      inspection_id: '',
+      inspection_device: null,
+      inspection_description: '',
     })
   }
 
@@ -259,8 +268,8 @@ const Inspection: React.FC = () => {
   const filterInspectionTimeData = (dateString: any) => {
     let startTime = dateString ? dateString[0].$d : ''
     let endTime = dateString ? dateString[1].$d : ''
-    startTime = startTime ? dayjs(startTime).format('MMM D, YYYY h:mm a') : ''
-    endTime = endTime ? dayjs(endTime).format('MMM D, YYYY h:mm a') : ''
+    startTime = startTime ? dayjs(startTime).format('YYYY-MM-DD') : ''
+    endTime = endTime ? dayjs(endTime).format('YYYY-MM-DD') : ''
     setInspectionSelectStartTime(startTime)
     setInspectionSelectEndTime(endTime)
   }
@@ -281,15 +290,15 @@ const Inspection: React.FC = () => {
     getInspectionRecordListData()
     getTypeStatusData()
 
-    document.title = 'Inspection'
+    document.title = '巡检记录'
   }, [])
 
   const addColumns = [{
-    title: 'Device Name',
+    title: '设备名称',
     dataIndex: 'inspection_device',
     key: 'inspection_device',
   }, {
-    title: 'Problem Description',
+    title: '问题描述',
     dataIndex: 'inspection_description',
     key: 'inspection_description',
   }, {
@@ -312,7 +321,7 @@ const Inspection: React.FC = () => {
     <>
       <div className="w-full p-3 box-border">
         <Space direction="vertical" size={16} className="w-full">
-          <Card title="Inspection Record" style={{ background: '#f0f2f5' }}>
+          <Card title="巡检记录" style={{ background: '#f0f2f5' }}>
             <Skeleton active loading={isLoading}>
               <div className="flex">
                 <Button
@@ -320,12 +329,12 @@ const Inspection: React.FC = () => {
                   className="mb-4"
                   onClick={createInspectionModalHandler}
                 >
-                  Create
+                  新增记录
                 </Button>
                 <div className="ml-auto">
                   <Select
                     className="w-[200px] mr-3"
-                    placeholder="Type"
+                    placeholder="巡检状态"
                     options={inspectionFilterStatus}
                     onChange={filterInspectionData}
                     allowClear
@@ -335,6 +344,7 @@ const Inspection: React.FC = () => {
                     className="mr-3"
                     format={'YYYY-MM-DD'}
                     onChange={filterInspectionTimeData}
+                    locale={locale}
                   />
                   <Button
                     type='primary'
@@ -354,19 +364,18 @@ const Inspection: React.FC = () => {
                           <Col span={6} key={item.inspection_id} className="mb-5">
                             <Card className="relative">
                               <Row className="mb-2">
-                                <Col span={24}><span className="text-sm">Time: {item.inspection_time}</span></Col>
+                                <Col span={24}><span className="text-sm">巡检时间：{item.inspection_time}</span></Col>
                               </Row>
                               <Row className="mb-2">
-                                <Col span={24}><span className="text-sm">Status: {item.inspection_status}</span></Col>
+                                <Col span={24}><span className="text-sm">巡检状态：{item.inspection_status}</span></Col>
                               </Row>
                               <Row className="mb-2">
-                                <Col span={12}><span className="text-sm">Inspector: {item.inspection_name}</span></Col>
-                                <Col span={12}><span className="text-sm">phone: {item.inspection_phone}</span></Col>
+                                <Col span={12}><span className="text-sm">巡检员：{item.inspection_name}</span></Col>
+                                <Col span={12}><span className="text-sm">手机号码：{item.inspection_phone}</span></Col>
                               </Row>
                               <Row className="mb-2">
-                                <Col span={24}><span className="text-sm">Email: {item.inspection_email}</span></Col>
+                                <Col span={24}><span className="text-sm">电子邮箱：{item.inspection_email}</span></Col>
                               </Row>
-
                               {
                                 Number(item.inspection_number) === 0 ? (
                                   <div className="w-7 h-7 bg-green-500 rounded-full absolute top-5 right-5">
@@ -388,7 +397,7 @@ const Inspection: React.FC = () => {
                                   className="mr-3"
                                   onClick={() => getInspectionDetailsData(item.inspection_id)}
                                 >
-                                  Details
+                                  详情
                                 </Button>
 
                                 <Button
@@ -397,7 +406,7 @@ const Inspection: React.FC = () => {
                                   icon={<DownloadOutlined />}
                                   onClick={() => saveInspectionFile(item.inspection_id)}
                                 >
-                                  Download
+                                  下载
                                 </Button>
 
                                 <Button
@@ -407,7 +416,7 @@ const Inspection: React.FC = () => {
                                   icon={<DeleteOutlined />}
                                   onClick={() => onDeleteInspection(item.inspection_id)}
                                 >
-                                  Delete
+                                  删除
                                 </Button>
                               </div>
                             </Card>
@@ -418,8 +427,8 @@ const Inspection: React.FC = () => {
                   </>
                 ) : (
                   <div className="mt-16">
-                    <Empty description="Please Create the Inspection Record">
-                      {/* <Button type="primary" onClick={createInspectionModalHandler}>Create Now</Button> */}
+                    <Empty description="请创建巡检记录">
+                      <Button type="primary" onClick={createInspectionModalHandler}>立即创建</Button>
                     </Empty>
                   </div>
                 )}
@@ -446,7 +455,7 @@ const Inspection: React.FC = () => {
                   className='mb-1 flex items-center font-semibold'
                   htmlFor="InspectionTime"
                 >
-                  Inspection Time
+                  巡检时间
                 </label>
                 <Input value={inspectionDataForm.inspection_time} readOnly />
               </Col>
@@ -455,7 +464,7 @@ const Inspection: React.FC = () => {
                   className='mb-1 flex items-center font-semibold'
                   htmlFor="Inspector"
                 >
-                  Inspector
+                  巡检员
                 </label>
                 <Input value={inspectionDataForm.inspection_name} readOnly />
               </Col>
@@ -464,7 +473,7 @@ const Inspection: React.FC = () => {
                   className='mb-1 flex items-center font-semibold'
                   htmlFor="InspectionStatus"
                 >
-                  Inspection Status
+                  巡检状态
                 </label>
                 <Input value={inspectionDataForm.inspection_status as string} readOnly />
               </Col>
@@ -476,7 +485,7 @@ const Inspection: React.FC = () => {
                   className='mb-1 flex items-center font-semibold'
                   htmlFor="PhoneNumber"
                 >
-                  Phone
+                  手机号码
                 </label>
                 <Input value={inspectionDataForm.inspection_phone} readOnly />
               </Col>
@@ -486,19 +495,19 @@ const Inspection: React.FC = () => {
                   className='mb-1 flex items-center font-semibold'
                   htmlFor="email"
                 >
-                  Email
+                  电子邮箱
                 </label>
                 <Input value={inspectionDataForm.inspection_email} readOnly />
               </Col>
             </Row>
           </Space>
           {
-            Number(inspectionDataForm.inspection_number) === 0 ? (
+            Number(inspectionDataForm.inspection_number) === 0? (
               <Card className="mt-6">
                 <Result
                   status={'success'}
-                  title="All the device is ok"
-                  subTitle="No abnormalities were found during this inspection."
+                  title="所有设备均正常"
+                  subTitle="本次巡检未发现异常。"
                 />
               </Card>
             ) : (
@@ -512,7 +521,7 @@ const Inspection: React.FC = () => {
                     key: '1',
                     label: (
                       <div className="flex">
-                        <span className="mr-3">Problematic Equipment</span>
+                        <span className="mr-3">问题设备</span>
                         <Badge count={inspectionDataForm.inspection_number} />
                       </div>
                     ),
@@ -537,7 +546,7 @@ const Inspection: React.FC = () => {
         <Modal
           width={1260}
           open={createInspectionModal}
-          title="Create Inspection"
+          title="创建巡检记录"
           onCancel={() => setCreateInspectionModal(false)}
           onOk={insertInspectionRecordData}
           maskClosable={false}
@@ -552,7 +561,7 @@ const Inspection: React.FC = () => {
                   htmlFor="InspectionTime"
                 >
                   <span className="mr-1 text-red-600 font-thin">*</span>
-                  Inspection Time
+                  巡检时间
                 </label>
                 <Input value={inspectionDataForm.inspection_time} readOnly />
               </Col>
@@ -562,7 +571,7 @@ const Inspection: React.FC = () => {
                   htmlFor="Inspector"
                 >
                   <span className="mr-1 text-red-600 font-thin">*</span>
-                  Inspector
+                  巡检员
                 </label>
                 <Input value={inspectionDataForm.inspection_name} readOnly />
               </Col>
@@ -572,7 +581,7 @@ const Inspection: React.FC = () => {
                   htmlFor="Email"
                 >
                   <span className="mr-1 text-red-600 font-thin">*</span>
-                  Email
+                  电子邮箱
                 </label>
                 <Input value={inspectionDataForm.inspection_email} readOnly />
               </Col>
@@ -585,13 +594,13 @@ const Inspection: React.FC = () => {
                   htmlFor="InspectionStatus"
                 >
                   <span className="mr-1 text-red-600 font-thin">*</span>
-                  Have you discovered any problems?
+                  是否发现问题？
                 </label>
                 <Select
                   options={inspectionDataStatus}
                   style={{ width: '100%' }}
                   value={inspectionDataForm.inspection_status}
-                  placeholder="Please select"
+                  placeholder="请选择"
                   onChange={selectInspectionStatusData}
                 >
                 </Select>
@@ -602,7 +611,7 @@ const Inspection: React.FC = () => {
                   htmlFor="InspectionNumber"
                 >
                   <span className="mr-1 text-red-600 font-thin">*</span>
-                  Problem Number
+                  问题设备数量
                 </label>
                 <Input
                   disabled={problemNumberIsDisable}
@@ -619,10 +628,10 @@ const Inspection: React.FC = () => {
                   htmlFor="Phone"
                 >
                   <span className="mr-1 text-red-600 font-thin">*</span>
-                  Phone
+                  手机号码
                 </label>
                 <Input
-                  placeholder="Phone Number"
+                  placeholder="输入手机号"
                   value={inspectionDataForm.inspection_phone}
                   onChange={(e) => setInspectionDataForm({
                     ...inspectionDataForm,
@@ -632,17 +641,17 @@ const Inspection: React.FC = () => {
               </Col>
             </Row>
 
-            {inspectionDataForm.inspection_status === 'All the device is ok' && (
+            {inspectionDataForm.inspection_status === '所有设备均正常' && (
               <Card className="mt-6">
                 <Result
                   status={'success'}
-                  title="All the device is ok"
-                  subTitle="No abnormalities were found during this inspection."
+                  title="所有设备均正常"
+                  subTitle="本次巡检未发现异常。"
                 />
               </Card>
             )}
 
-            {inspectionDataForm.inspection_status === 'Discovered problem' && (
+            {inspectionDataForm.inspection_status === '发现问题' && (
               <>
                 <Row gutter={20} className="mt-3">
                   <Col span={24}>
@@ -662,7 +671,7 @@ const Inspection: React.FC = () => {
                       style={{ width: '100%' }}
                       value={inspectionItemForm.inspection_device}
                       options={selectAssetsData}
-                      placeholder="Select Device"
+                      placeholder="选择问题设备"
                       onChange={selectInspectionDeviceName}
                       allowClear
                     />
@@ -671,7 +680,7 @@ const Inspection: React.FC = () => {
                   <Col span={18}>
                     <Input.TextArea
                       autoSize
-                      placeholder="Please provide a brief description of the issue"
+                      placeholder="简单描述一下问题设备"
                       showCount
                       maxLength={150}
                       onChange={addProblemDeviceDescription}
@@ -695,12 +704,12 @@ const Inspection: React.FC = () => {
         </Modal>
 
         <Modal
-          title="Tips"
+          title="提示"
           open={isModalDelete}
           onCancel={() => setIsModalDelete(false)}
           onOk={confirmDeleteAssetsData}
         >
-          <p className="text-sm text-black">Are you sure you want to delete this data?</p>
+          <p className="text-sm text-black">确定要删除这条数据吗？</p>
         </Modal>
       </div>
     </>

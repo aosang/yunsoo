@@ -4,7 +4,7 @@ import { getTimeNumber } from "./pubFunProvider"
 import { inspectionForms } from '@/utils/dbType'
 
 export const getInspectionStatusData = async () => {
-  const { data, error } = await supabase.from('inspection_status').select('*')
+  const { data, error } = await supabase.from('inspection_status_cn').select('*')
   try {
     if (data) return data || []
     useMessage(2, error?.message, 'error')
@@ -16,7 +16,7 @@ export const getInspectionStatusData = async () => {
 
 export const getInspectionDeviceData = async (id?: string) => {
   const {data, error} = await supabase
-  .from('inspection_table')
+  .from('inspection_table_cn')
   .select('*')
   .match({id: id})
   .order('inspection_time', {ascending: false})
@@ -30,7 +30,7 @@ export const getInspectionDeviceData = async (id?: string) => {
 
 export const getInspectionDetailsDeviceData = async (inspectionId?: string) => {
   const {data, error} = await supabase
-  .from('inspection_table')
+  .from('inspection_table_cn')
   .select('*')
   .match({inspection_id: inspectionId})
   try {
@@ -51,7 +51,7 @@ export const insertInspectionDeviceData = async ({
     inspection_status,
     inspection_deviceData
 }: inspectionForms) => {
-  const {data, error} = await supabase.from('inspection_table').insert({
+  const {data, error} = await supabase.from('inspection_table_cn').insert({
     inspection_id: getTimeNumber()[1],
     inspection_time,
     inspection_number,
@@ -76,13 +76,13 @@ export const insertInspectionDeviceData = async ({
 // delete
 export const deleteInspectionDevice = async (id: any) => {
   const { error } = await supabase
-  .from('inspection_table')
+  .from('inspection_table_cn')
   .delete()
   .eq('inspection_id', id)
 
   try {
     if (error) return useMessage(2, error?.message, 'error')
-    useMessage(2, 'Inspection record delete sucessful!','success')
+    useMessage(2, '巡检记录删除成功!','success')
   }catch(error) {
     throw error
   }
@@ -94,7 +94,7 @@ export const searchFilterInspectionData = async (
 ) => {
   if(filterType && !filterStartTime) {
     const { data, error } = await supabase
-     .from('inspection_table')
+     .from('inspection_table_cn')
      .select('*')
      .match({id: id})
      .eq('inspection_status', filterType)
@@ -106,7 +106,7 @@ export const searchFilterInspectionData = async (
     }
   } else if (!filterType && filterStartTime) {
     const { data, error } = await supabase
-    .from('inspection_table')
+    .from('inspection_table_cn')
     .select('*')
     .match({id: id})
     .gte('inspection_time', filterStartTime)
@@ -119,7 +119,7 @@ export const searchFilterInspectionData = async (
     }
   }else if (filterType && filterStartTime) {
     const { data, error } = await supabase
-    .from('inspection_table')
+    .from('inspection_table_cn')
     .select('*')
     .match({id: id})
     .eq('inspection_status', filterType)
@@ -133,7 +133,7 @@ export const searchFilterInspectionData = async (
     }
   } else {
     const { data, error } = await supabase
-    .from('inspection_table')
+    .from('inspection_table_cn')
     .select('*')
 
     try {
