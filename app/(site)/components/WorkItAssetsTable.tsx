@@ -1,24 +1,37 @@
 'use client'
 import { useEffect, useState } from 'react'
-import dayjs from 'dayjs'
-
+import { getTimeNumber } from '@/utils/pubFunProvider'
 import { typeDataName, typeDataBrand, productItem } from '@/utils/dbType'
 import { Button, Row, Col, Select, DatePicker, Table, Modal, Divider, Space, Input, InputNumber, Upload, Skeleton } from 'antd'
 import { getWorkOrderType, getWorkBrand } from '@/utils/providerSelectData'
 import { insertItAssets, deleteItAssets, searchItAssetsData, getItAssetsTabbleData, editItAssetsData, uploadExcelItAssetsData } from '@/utils/providerItAssetsData'
-import { getTimeNumber } from '@/utils/pubFunProvider'
 import { IoIosSearch } from 'react-icons/io'
 import { InboxOutlined } from '@ant-design/icons'
 import useMessage from '@/utils/message'
 import * as XLSX from 'xlsx'
+
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
+
+// 启用插件
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 import locale from 'antd/es/date-picker/locale/zh_CN'
 import 'dayjs/locale/zh-cn'
 dayjs.locale('zh-cn')
 
 
-const { Dragger } = Upload
+// timestamp format
+const formatTimestamp = (timestamptz: string) => {
+  if (!timestamptz) return '';
+  
+  // 将UTC时间转换为东八区(Asia/Shanghai)时间
+  return dayjs(timestamptz).tz('Asia/Shanghai').format('YYYY-MM-DD HH:mm:ss');
+}
 
+const { Dragger } = Upload
 type asstesDataProps = productItem[]
 type typeDataProps = typeDataName[]
 type typeDataBrandProps = typeDataBrand[]
@@ -78,10 +91,10 @@ const WorkItAssetsTable: React.FC = () => {
       width: 230,
       render: (record: string) => {
         return (
-          <div>{record}</div>
+          <div>{formatTimestamp(record)}</div>
         )
       }
-    }, {
+    }, {  
       title: '数量',
       dataIndex: 'product_number',
       key: 'product_number'
@@ -120,25 +133,16 @@ const WorkItAssetsTable: React.FC = () => {
     }
   ])
 
-  // get create time 
-  const getCreateTime = () => {
-    let myCreateTimeData = getTimeNumber()[0]
-    setAssetsDataForm({
-      ...assetsDataForm,
-      product_time: myCreateTimeData,
-      product_update: myCreateTimeData
-    })
-  }
 
   const onAddItAssets = () => {
     if (assetsDataForm.product_name === '') {
-      useMessage(2, 'Please enter the product name', 'error')
+      useMessage(2, '请输入产品名称', 'error')
     } else if (assetsDataForm.product_number <= 0) {
-      useMessage(2, 'Please enter the product number', 'error')
+      useMessage(2, '请输入产品数量', 'error')
     } else if (assetsDataForm.product_price <= 0) {
-      useMessage(2, 'Please enter the product price', 'error')
+      useMessage(2, '请输入产品价格', 'error')
     } else if (!assetsDataForm.product_type) {
-      useMessage(2, 'Please select the product type', 'error')
+      useMessage(2, '请选择产品类型', 'error')
     } else {
       setAddItAssetsShow(false)
       insertItAssets(assetsDataForm)
@@ -157,8 +161,12 @@ const WorkItAssetsTable: React.FC = () => {
   }
 
   const modalAddDeviceHandler = () => {
-    getCreateTime()
     setAddItAssetsShow(true)
+    setAssetsDataForm({
+      ...assetsDataForm,
+      product_time: getTimeNumber()[0],
+      product_update: getTimeNumber()[0]
+    })
   }
 
   const onRowData = {
@@ -169,9 +177,9 @@ const WorkItAssetsTable: React.FC = () => {
         ...record,
         product_name: record.product_name,
         product_type: record.product_type,
-        product_brand: record.product_brand,
         product_time: record.product_time,
         product_update: getTimeNumber()[0],
+        product_brand: record.product_brand,
         product_number: record.product_number,
         product_price: record.product_price,
         product_remark: record.product_remark,
@@ -327,10 +335,15 @@ const WorkItAssetsTable: React.FC = () => {
       const sheet = wb.Sheets[sheetName]
       const jsonData = XLSX.utils.sheet_to_json(sheet)
 
+      jsonData.forEach((item:any) => {
+        item.product_time = getTimeNumber()[0]
+        item.product_update = getTimeNumber()[0]
+      })
+
       uploadExcelItAssetsData(jsonData as productItem[])
       .then(() => {
         getMyItAssetsData()
-        useMessage(2, 'Excel file uploaded successfully!', 'success')
+        useMessage(2, '表格导入成功!', 'success')
         setIsImportModalShow(false)
       })
     }
@@ -342,7 +355,7 @@ const WorkItAssetsTable: React.FC = () => {
     beforeUpload: (file: File) => {
       const isExcel = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.type === 'application/vnd.ms-excel'
       if(!isExcel) {
-        useMessage(2, 'Please upload Excel files only', 'error')
+        useMessage(2, '请上传Excel文件', 'error')
       }
       return isExcel
     },
@@ -847,7 +860,7 @@ const WorkItAssetsTable: React.FC = () => {
           <Table
             className='[&_.ant-table-thead>tr>th]:!bg-[#f0f5ff]'
             rowSelection={{ ...rowSelection }}
-            size='middle'
+            size='small'
             bordered
             columns={columns}
             dataSource={assetsData}

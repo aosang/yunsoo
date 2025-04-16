@@ -94,13 +94,13 @@ const Profile = () => {
   const updateProfileInfo = () => {
     const { username, company } = myProfileInfo
     if(username === '' || company === '') {
-      useMessage(2, 'Please fill in the username or company', 'error')
+      useMessage(2, '请填写用户名或公司名称', 'error')
     }else {
       updateProfiles(userId, myProfileInfo)
       .then(res => {
         window.localStorage.removeItem('userRegister')
         window.localStorage.setItem('userRegister', JSON.stringify(myProfileInfo))
-        useMessage(2, 'Update userinfo sucessful!','success')
+        useMessage(2, '更新个人信息成功!','success')
         window.location.reload()
       })
     }
@@ -118,12 +118,12 @@ const Profile = () => {
     } else {
       setImageUrl('')
       setRemovePath('')
-      useMessage(2, 'Delete avatar image successful!','success')
+      useMessage(2, '删除头像成功!','success')
     }
   }
 
   useEffect(() => {
-    document.title = 'Profile'
+    document.title = '个人设置'
     getUserInfo()
   }, [])
 

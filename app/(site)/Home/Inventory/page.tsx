@@ -393,7 +393,7 @@ const Inventory = () => {
           <Table
             columns={inventoryColumns}
             dataSource={inventoryData}
-            size='middle'
+            size='small'
             bordered
             className='[&_.ant-table-thead>tr>th]:!bg-[#f0f5ff]'
             pagination={{
@@ -542,7 +542,7 @@ const Inventory = () => {
           <Table
             columns={loanOutColumns}
             dataSource={loanOutData}
-            size='middle'
+            size='small'
             bordered
             className='[&_.ant-table-thead>tr>th]:!bg-[#f0f5ff] [&_.ant-pagination]: my-0'
             pagination={{
@@ -650,7 +650,7 @@ const Inventory = () => {
   useEffect(() => {
     getInventoryData()
     getInventoryTypeData()
-    document.title = 'Inventory Management'
+    document.title = '库存管理'
   }, [])
 
   return (

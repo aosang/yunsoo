@@ -4,9 +4,24 @@ import { supabase } from "@/utils/clients"
 import { Upload, Table } from 'antd'
 import { InboxOutlined } from '@ant-design/icons'
 import dayjs from "dayjs"
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
 import * as XLSX from 'xlsx'
 
 const { Dragger } = Upload
+
+// 启用插件
+dayjs.extend(utc)
+dayjs.extend(timezone)
+
+// 格式化timestamptz时间
+const formatTimestamptz = (timestamptz: string) => {
+  console.log(timestamptz)
+  if (!timestamptz) return '';
+  
+  // 将UTC时间转换为东八区(Asia/Shanghai)时间
+  return dayjs(timestamptz).tz('Asia/Shanghai').format('YYYY-MM-DD HH:mm:ss');
+}
 
 type tableDataProps = {
   order: number
@@ -23,9 +38,12 @@ const Test = () => {
     key: 'order',
   },
   {
-    title: 'Time',
+    title: '时间',
     dataIndex: 'time',
     key: 'time',
+    render: (text: string) => {
+      return formatTimestamptz(text)
+    }
   },
   {
     title: 'Name',
@@ -85,7 +103,7 @@ const Test = () => {
       setTableData((data! as tableDataProps[]).map((item, index) => ({
         ...item,
         order: index + 1,
-        time: dayjs().format('YYYY-MM-DD HH:mm:ss')
+        // time: dayjs().format('YYYY-MM-DD HH:mm:ss')
       })))
     }
   }

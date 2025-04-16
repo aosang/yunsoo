@@ -3,14 +3,14 @@ import { supabase } from "./clients"
 export const getLoanOutTableData = async (id?: string) => {
   if (id) {
     const [loanoutData] = await Promise.all([
-      supabase.from('loanout_table').select('*').eq('id', id)
+      supabase.from('loanout_table_cn').select('*').eq('id', id)
     ])
 
     if (loanoutData.error) throw loanoutData.error
     return loanoutData.data
   } else {
     const { data, error } = await supabase
-      .from('loanout_table')
+      .from('loanout_table_cn')
       .select('*')
 
     if (error) throw error
@@ -31,7 +31,7 @@ export const insertLoanOutTableData = async ({
   value
 }) => {
   const { data: loanoutData, error } = await supabase
-    .from('loanout_table')
+    .from('loanout_table_cn')
     .insert({
       id,
       loanout_id,
@@ -54,7 +54,7 @@ export const updateLoanOutTableData = async ({
   loanout_remark
 }) => {
   const { data, error } = await supabase
-    .from('loanout_table')
+    .from('loanout_table_cn')
     .update({
       loanout_number,
       loanout_remark,
@@ -67,7 +67,7 @@ export const updateLoanOutTableData = async ({
 
 export const deleteLoadoutTableData = async (id: string) => {
   const { error } = await supabase
-    .from('loanout_table')
+    .from('loanout_table_cn')
     .delete()
     .eq('loanout_id', id)
 
@@ -80,7 +80,7 @@ export const searchInventoryTableData = async (
 ) => {
   if (type && !searchText) {
     const { data, error } = await supabase
-      .from('it_assets')
+      .from('it_assets_cn')
       .select('*')
       .eq('product_type', type)
 
@@ -88,7 +88,7 @@ export const searchInventoryTableData = async (
     return data
   } else if (!type && searchText) {
     const { data, error } = await supabase
-      .from('it_assets')
+      .from('it_assets_cn')
       .select('*')
       .eq('product_name', `${searchText}`)
 
@@ -105,7 +105,7 @@ export const searchInventoryTableData = async (
     return data
   } else {
     const { data, error } = await supabase
-      .from('it_assets')
+      .from('it_assets_cn')
       .select('*')
 
     if (error) throw error
@@ -119,7 +119,7 @@ export const searchLoanoutTableData = async (
 ) => {
   if (type && !searchText) {
     const { data, error } = await supabase
-      .from('loanout_table')
+      .from('loanout_table_cn')
       .select('*')
       .eq('loanout_type', type)
 
@@ -127,7 +127,7 @@ export const searchLoanoutTableData = async (
     return data
   } else if (!type && searchText) {
     const { data, error } = await supabase
-      .from('loanout_table')
+      .from('loanout_table_cn')
       .select('*')
       .eq('loanout_name', `${searchText}`)
 
@@ -135,7 +135,7 @@ export const searchLoanoutTableData = async (
     return data
   } else if (type && searchText) {
     const { data, error } = await supabase
-      .from('loanout_table')
+      .from('loanout_table_cn')
       .select('*')
       .eq('loanout_type', type)
       .eq('loanout_name', `${searchText}`)
@@ -144,7 +144,7 @@ export const searchLoanoutTableData = async (
     return data
   } else {
     const { data, error } = await supabase
-      .from('loanout_table')
+      .from('loanout_table_cn')
       .select('*')
 
     if (error) throw error

@@ -64,7 +64,7 @@ export const insertInspectionDeviceData = async ({
   .select('*')
   try {
     if (data) {
-      useMessage(2, 'Inspection record create sucessful!','success')
+      useMessage(2, '巡检记录创建成功!','success')
       return data
     }
     useMessage(2, error?.message, 'error')

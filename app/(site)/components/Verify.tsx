@@ -40,11 +40,9 @@ const Verify: React.FC<emailProps> = ({ emailAddress }) => {
         textAlign: 'center' 
       }} />
       <p style={emailContent}>
-        Click this link, fill out the information or join Assets-Management, then confirm your email.
+        点击以下链接确认你的邮箱，加入Yusoo，开始你的资产管理之旅。
       </p>
-      <Link style={emailText} href={emailUrl}>
-        Email address website
-      </Link>
+      <Link style={emailText} href={emailUrl}>点击邮件确认</Link>
       <p></p>
     </div>
   )
