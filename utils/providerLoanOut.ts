@@ -1,9 +1,9 @@
 import { supabase } from "./clients"
-
+import { getTimeNumber } from "@/utils/pubFunProvider"
 export const getLoanOutTableData = async (id?: string) => {
   if (id) {
     const [loanoutData] = await Promise.all([
-      supabase.from('loanout_table_cn').select('*').eq('id', id)
+      supabase.from('loanout_table_cn').select('*').eq('loanout_id', id)
     ])
 
     if (loanoutData.error) throw loanoutData.error
@@ -50,16 +50,16 @@ export const insertLoanOutTableData = async ({
 
 export const updateLoanOutTableData = async ({
   id,
-  loanout_number,
+  loanout_id,
   loanout_remark
-}) => {
+}, returnComputed: number) => {
   const { data, error } = await supabase
     .from('loanout_table_cn')
     .update({
-      loanout_number,
+      loanout_number: returnComputed,
       loanout_remark,
     })
-    .eq('id', id)
+    .eq('loanout_id', loanout_id)
 
   if (error) throw error
   return data
