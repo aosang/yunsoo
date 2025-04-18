@@ -7,6 +7,7 @@ import dayjs from "dayjs"
 import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
 import * as XLSX from 'xlsx'
+import { Input, Button } from 'antd'
 
 const { Dragger } = Upload
 
@@ -114,6 +115,33 @@ const Test = () => {
 
   return (
     <div>
+      {/* 手机号 */}
+      <div className="flex items-center justify-center flex-col mt-4">
+        <Input 
+          type="phone" 
+          className="w-[260px] h-10 mb-3 rounded-md border border-gray-300 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200" 
+          placeholder="请输入手机号" 
+        />
+        <Input 
+          type="text" 
+          className="w-[260px] h-10 mb-3 rounded-md border border-gray-300 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+          placeholder="请输入验证码" 
+        />
+        <Button 
+          type="primary"
+          className="w-[260px] h-10 rounded-md bg-blue-500 hover:bg-blue-600 text-white font-medium transition duration-200"
+        >
+          获取验证码
+        </Button>
+        <Button 
+          type="primary"
+          className="w-[260px] h-10 rounded-md bg-blue-500 hover:bg-blue-600 text-white font-medium transition duration-200 mt-2"
+        >
+          登录
+        </Button>
+      </div>
+
+
       <div className="text-center mt-9 p-9">
         <Dragger {...uploadProps} showUploadList={false}>
           <p className="ant-upload-drag-icon">

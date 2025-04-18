@@ -31,9 +31,9 @@ export const getItAssetsTabbleData = async (id?: string) => {
 
 export const getCodeAssetsData = async (query?: string) => {
   const { data, error } = await supabase
-  .from('loanout_table')
+  .from('loanout_table_cn')
   .select('*')
-  .eq('id', query)
+  .eq('loanout_id', query)
 
   try {
     if (data) return data || []
@@ -46,7 +46,7 @@ export const getCodeAssetsData = async (query?: string) => {
 
 // get IT assets status
 export const getItAssetsStatusData = async () => {
-  const { data, error } = await supabase.from('it_status').select('*')
+  const { data, error } = await supabase.from('it_status_cn').select('*')
   try {
     if (data) return data || []
     useMessage(2, error?.message, 'error')
@@ -85,7 +85,7 @@ export const insertItAssets = async ({
 
   try {
     if (data) {
-      useMessage(2, 'Create sucessful!', 'success')
+      useMessage(2, '创建成功!', 'success')
       return data
     }
     useMessage(2, error!.message, 'error')
@@ -102,7 +102,7 @@ export const deleteItAssets = async (id: string[]) => {
     .in('id', id)
   try {
     if (error) return useMessage(2, error.message, 'error')
-    useMessage(2, 'Delete sucessful!', 'success')
+    useMessage(2, '删除成功!', 'success')
   } catch (error) {
     throw error
   }
@@ -175,7 +175,7 @@ export const editItAssetsData = async (assetsId: string, assetsOrderForm: produc
 
   try {
     if(error) return useMessage(2, error!.message, 'error')
-    useMessage(2, 'Update sucessful!','success')
+    useMessage(2, '更新成功!','success')
   } catch (error) {
     throw error
   }

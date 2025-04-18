@@ -4,11 +4,10 @@ import { flexible } from './phone.js'
 import { useSearchParams } from "next/navigation"
 import { QRCodeSVG } from 'qrcode.react'
 import { getCodeAssetsData } from '@/utils/providerItAssetsData'
-import { Button, Descriptions, Skeleton } from "antd"
+import { Button, Descriptions, Skeleton, Divider } from "antd"
 import tempcss from './temp.module.scss'
 import html2canvas from "html2canvas"
 import { getTimeNumber } from "@/utils/pubFunProvider"
-import dayjs from "dayjs"
 
 type myDeviceInfo = {
   loanout_id: string,
@@ -34,6 +33,7 @@ const TemplateCode: React.FC = () => {
 
   const createQRcodeDataImage = () => {
     let myId = searchParams.get('id')
+    
     if (myId) {
       getCodeAssetsData(myId).then(res => {
         setDeviceInfo(res![0] as myDeviceInfo)
@@ -68,69 +68,75 @@ const TemplateCode: React.FC = () => {
   useEffect(() => {
     flexible()
     createQRcodeDataImage()
-    document.title = 'Device Code'
-
+    document.title = '设备二维码'
   }, [])
 
   return (
     <div className={tempcss.rootLay}>
       <Skeleton active loading={isLoading} paragraph={{rows: 8}}>
-      <div className={tempcss.container}>
-        <div id="canvas">
-          <div className={tempcss.container_nav}>
-            <h2>Device Info</h2>
-          </div>
-          <div className="w-full pl-[0.16rem] pr-[0.16rem] pt-[0.16rem] pb-0">
-            <Descriptions
-              column={24}
-              style={{ marginBottom: '0.2rem' }}
-            >
-              <Descriptions.Item label="Loanout-Number" span={24}>
-                {deviceInfo.loanout_id}
-              </Descriptions.Item>
-              <Descriptions.Item label="Device-Name" span={24}>
-                {deviceInfo.loanout_name}
-              </Descriptions.Item>
-              <Descriptions.Item label="Loanout-User" span={24}>
-                {deviceInfo.loanout_user}
-              </Descriptions.Item>
-              <Descriptions.Item label="Loanout-Type" span={24}>
-                {deviceInfo.loanout_type}
-              </Descriptions.Item>
-              <Descriptions.Item label="Loanout-Brand" span={24}>
-                {deviceInfo.loanout_brand}
-              </Descriptions.Item>
-              <Descriptions.Item label="Loanout-Time" span={24}>
-                {dayjs(deviceInfo.loanout_time).format('MMM D, YYYY h:mm a')}
-              </Descriptions.Item>
-            </Descriptions>
-          </div>
-
-          {qrCodeData &&
-            <div className={tempcss.qrcodeBox}>
-              <QRCodeSVG
-                value={qrCodeData}
-                size={200}
-                bgColor="#fff"
-                fgColor="#000"
-                level="L"
-              />
+        <div className={tempcss.container}>
+          <div id="canvas">
+            <div className={tempcss.container_nav}>
+              <h2>设备信息</h2>
             </div>
-          }
-          <div className={tempcss.qrcodeWhite}></div>
-        </div>
+            <div className="w-full pl-[0.16rem] pr-[0.16rem] pt-[0.16rem] pb-0">
+              <Descriptions
+                column={24}
+                style={{ marginBottom: '0.2rem' }}
+              >
+                <Divider />
+                <Descriptions.Item label="借出编号" span={24}>
+                  {deviceInfo.loanout_id}
+                </Descriptions.Item>
+                <Divider />
+                <Descriptions.Item label="设备名称" span={24}>
+                  {deviceInfo.loanout_name}
+                </Descriptions.Item>
+                <Divider />
+                <Descriptions.Item label="借出人员" span={24}>
+                  {deviceInfo.loanout_user}
+                </Descriptions.Item>
+                <Divider />
+                <Descriptions.Item label="设备类型" span={24}>
+                  {deviceInfo.loanout_type}
+                </Descriptions.Item>
+                <Divider />
+                <Descriptions.Item label="设备品牌" span={24}>
+                  {deviceInfo.loanout_brand}
+                </Descriptions.Item>
+                <Divider />
+                <Descriptions.Item label="借出时间" span={24}>
+                  {deviceInfo.loanout_time}
+                </Descriptions.Item>
+                <Divider />
+              </Descriptions>
+            </div>
 
-        <div className='mx-auto my-0 w-[2rem]'>
-          <Button
-            style={{ width: '2rem', height: '0.32rem', fontSize: '0.15rem', display: 'block' }}
-            type="primary"
-            onClick={saveImageQrcode}
-            id="downLink"
-          >
-            Save Image
-          </Button>
+            {qrCodeData &&
+              <div className={tempcss.qrcodeBox}>
+                <QRCodeSVG
+                  value={qrCodeData}
+                  size={200}
+                  bgColor="#fff"
+                  fgColor="#000"
+                  level="L"
+                />
+              </div>
+            }
+            <div className={tempcss.qrcodeWhite}></div>
+          </div>
+
+          <div className='mx-auto my-0 w-[2rem]'>
+            <Button
+              style={{ width: '2rem', height: '0.32rem', fontSize: '0.15rem', display: 'block' }}
+              type="primary"
+              onClick={saveImageQrcode}
+              id="downLink"
+            >
+              保存图片
+            </Button>
+          </div>
         </div>
-      </div>
       </Skeleton>    
     </div>
   )

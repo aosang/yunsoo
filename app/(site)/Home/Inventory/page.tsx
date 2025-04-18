@@ -23,7 +23,7 @@ const Inventory = () => {
 
   const [searchLoanoutType, setSearchLoanoutType] = useState<string | null>(null)
   const [searchLoanoutProductText, setSearchLoanoutText] = useState<string | null>(null)
-  const [searchLoanoutProdutcName, setSearchLoanoutProdutcName] = useState<inspectionStatusItem[]>([])
+  const [searchLoanoutProdutcName, setSearchLoanoutProdutcName] = useState<productItem[]>([])
 
   const [loanOutTabKeys, setLoanOutTabKeys] = useState<string>('1')
   const [inventoryData, setInventoryData] = useState<productItem[]>([])
@@ -146,7 +146,7 @@ const Inventory = () => {
       getLoanOutTableData().then(data => {
         const formatData = data?.map(item => ({
           ...item,
-          loanout_time: dayjs(item.loanout_time).format('YYYY-MM-DD HH:mm:ss')
+          loanout_time: item.loanout_time
         }))
         setLoanOutData(formatData as inventoryItem[])
         setIsLoading(false)
@@ -158,7 +158,6 @@ const Inventory = () => {
   }
 
   
-
   const clearloanoutDataForm = (type: number) => {
     type === 1? setIsShowDetails(false) : setIsShowReturn(false)
 
@@ -192,7 +191,7 @@ const Inventory = () => {
       loanout_type: item.loanout_type,
       loanout_brand: item.loanout_brand,
       loanout_number: item.loanout_number,
-      loanout_time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      loanout_time: item.loanout_time,
       loanout_user: item.loanout_user,
       loanout_remark: item.loanout_remark,
     })
@@ -221,12 +220,8 @@ const Inventory = () => {
   }
 
   const getLoanoutProductName = async () => {
-    getLoanOutTableData().then(data => {
-      const formatData = data?.map(item => ({
-        ...item,
-        value: item.loanout_name
-      }))
-      setSearchLoanoutProdutcName(formatData as inspectionStatusItem[])
+    getItAssetsTabbleData().then(data => {
+      setSearchLoanoutProdutcName(data as productItem[])
     })
   }
 
@@ -274,7 +269,7 @@ const Inventory = () => {
       getLoanOutTableData().then(() => {
         const formatData = data?.map(item => ({
           ...item,
-          loanout_time: dayjs().format('YYYY-MM-DD HH:mm:ss')
+          loanout_time: item.loanout_time
         }))
         setLoanOutData(formatData as inventoryItem[])
       })
@@ -401,7 +396,7 @@ const Inventory = () => {
           size='small'
           type='primary'
           className='text-xs ml-2'
-          onClick={() => createQrCodePage(item.id)}
+          onClick={() => createQrCodePage(item.loanout_id)}
         >
           二维码
         </Button>

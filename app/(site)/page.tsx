@@ -174,7 +174,7 @@ const Auth: React.FC = () => {
                     <form>
                       <ul className={authScss.commitForm}>
                         <li className={authScss.commitFormItem}>
-                          <label htmlFor="Email" className='ml-1 mb-1'>电子邮箱</label>
+                          <span className='ml-1 mb-1 text-[14px]'>电子邮箱</span>
                           <Input
                             placeholder="请输入邮箱"
                             value={formState.email}
@@ -186,7 +186,7 @@ const Auth: React.FC = () => {
                         </li>
                         <li className={authScss.commitFormItem}>
                           <div className='flex items-center'>
-                            <label htmlFor="Email" className='ml-1 mr-1 mb-1'>密码</label>
+                            <span className='ml-1 mr-1 mb-1 text-[14px]'>密码</span>
                             <Tooltip
                               placement='right'
                               title='密码必须包含8-20个字符，至少包含一个大写字母、一个小写字母和一个数字'
@@ -204,7 +204,7 @@ const Auth: React.FC = () => {
                           />
                         </li>
                         <li className={authScss.commitFormItem}>
-                          <label htmlFor="Company" className='ml-1 mb-1'>公司名称</label>
+                          <span className='ml-1 mb-1 text-[14px]'>公司名称</span>
                           <Input
                             placeholder="请输入公司名称"
                             value={formState.company}
@@ -215,7 +215,7 @@ const Auth: React.FC = () => {
                           />
                         </li>
                         <li className={authScss.commitFormItem}>
-                          <label htmlFor="Username" className='ml-1 mb-1'>用户名</label>
+                          <span className='ml-1 mb-1 text-[14px]'>用户名</span>
                           <Input
                             placeholder="请输入用户名"
                             value={formState.username}
@@ -250,7 +250,7 @@ const Auth: React.FC = () => {
                     <form>
                       <ul className={authScss.commitForm}>
                         <li className={authScss.commitFormItem}>
-                          <label htmlFor="Email" className='ml-1 mb-1'>电子邮箱</label>
+                          <span className='ml-1 mb-1 text-[14px]'>电子邮箱</span>
                           <Input
                             placeholder="请输入邮箱"
                             value={formState.email}
@@ -261,7 +261,7 @@ const Auth: React.FC = () => {
                           />
                         </li>
                         <li className={authScss.commitFormItem}>
-                          <label htmlFor="Password" className='ml-1 mb-1'>密码</label>
+                          <span className='ml-1 mb-1 text-[14px]'>密码</span>
                           <Input.Password
                             placeholder="请输入密码"
                             value={formState.password}
