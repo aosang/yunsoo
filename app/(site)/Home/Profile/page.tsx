@@ -98,7 +98,7 @@ const Profile = () => {
     }else {
       updateProfiles(userId, myProfileInfo)
       .then(res => {
-        window.localStorage.removeItem('userRegister')
+        // window.localStorage.removeItem('userRegister')
         window.localStorage.setItem('userRegister', JSON.stringify(myProfileInfo))
         useMessage(2, '更新个人信息成功!','success')
         window.location.reload()

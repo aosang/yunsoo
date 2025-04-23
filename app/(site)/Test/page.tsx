@@ -7,7 +7,7 @@ import dayjs from "dayjs"
 import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
 import * as XLSX from 'xlsx'
-import { Input, Button } from 'antd'
+import { Button } from 'antd'
 
 const { Dragger } = Upload
 
@@ -17,9 +17,9 @@ dayjs.extend(timezone)
 
 // 格式化timestamptz时间
 const formatTimestamptz = (timestamptz: string) => {
-  console.log(timestamptz)
+  // console.log(timestamptz)
   if (!timestamptz) return '';
-  
+
   // 将UTC时间转换为东八区(Asia/Shanghai)时间
   return dayjs(timestamptz).tz('Asia/Shanghai').format('YYYY-MM-DD HH:mm:ss');
 }
@@ -33,6 +33,8 @@ type tableDataProps = {
 
 const Test = () => {
   const [tableData, setTableData] = useState<tableDataProps[]>([])
+  const [aiResponse, setAiResponse] = useState<string>("")
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const columns = [{
     title: 'No.',
     dataIndex: 'order',
@@ -109,38 +111,109 @@ const Test = () => {
     }
   }
 
+  const getAIDataEvent = async () => {
+    setIsLoading(true)
+    setAiResponse("")
+    
+    const options = {
+      method: 'POST',
+      headers: { 
+        Authorization: 'Bearer sk-apsnvgfxprqmsvacjrajtfinrvbyowwbeskipyzrjdogfyze', 
+        'Content-Type': 'application/json' 
+      },
+      body: JSON.stringify({
+        "model": "Qwen/QwQ-32B",
+        "messages": [{"role": "user", "content": "你好，AI助手"}],
+        "stream": true,  // 启用流式输出
+        "max_tokens": 512,
+        "stop": null,
+        "temperature": 0.7,
+        "top_p": 0.7,
+        "top_k": 50,
+        "frequency_penalty": 0.5,
+        "n": 1,
+        "response_format": {"type": "text"},
+        "tools": [{"type": "function", "function": {"description": "<string>", "name": "<string>", "parameters": {}, "strict": false}}]
+      })
+    };
+
+    try {
+      const response = await fetch('https://api.siliconflow.cn/v1/chat/completions', options);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      
+      if (!response.body) {
+        throw new Error("Response body is null");
+      }
+      
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      
+      while (true) {
+        const { done, value } = await reader.read();
+        
+        if (done) {
+          break;
+        }
+        
+        // 解码二进制数据
+        const chunk = decoder.decode(value, { stream: true });
+        
+        // 处理每个数据块
+        const lines = chunk
+          .split('\n')
+          .filter(line => line.trim() !== '' && line.trim() !== 'data: [DONE]');
+        
+        for (const line of lines) {
+          try {
+            // 移除 "data: " 前缀并解析 JSON
+            const jsonStr = line.replace(/^data: /, '').trim();
+            if (!jsonStr) continue;
+            
+            const json = JSON.parse(jsonStr);
+            
+            if (json.choices && json.choices[0]?.delta?.content) {
+              const content = json.choices[0].delta.content;
+              setAiResponse(prev => prev + content);
+            }
+          } catch (e) {
+            console.error("解析流数据时出错:", e);
+          }
+        }
+      }
+    } catch (err) {
+      console.error("获取AI数据时出错:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   useEffect(() => {
     getTableData()
   }, [])
 
   return (
     <div>
-      {/* 手机号 */}
       <div className="flex items-center justify-center flex-col mt-4">
-        <Input 
-          type="phone" 
-          className="w-[260px] h-10 mb-3 rounded-md border border-gray-300 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200" 
-          placeholder="请输入手机号" 
-        />
-        <Input 
-          type="text" 
-          className="w-[260px] h-10 mb-3 rounded-md border border-gray-300 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-          placeholder="请输入验证码" 
-        />
-        <Button 
+        <Button
           type="primary"
           className="w-[260px] h-10 rounded-md bg-blue-500 hover:bg-blue-600 text-white font-medium transition duration-200"
+          onClick={getAIDataEvent}
+          loading={isLoading}
         >
-          获取验证码
+          请求数据
         </Button>
-        <Button 
-          type="primary"
-          className="w-[260px] h-10 rounded-md bg-blue-500 hover:bg-blue-600 text-white font-medium transition duration-200 mt-2"
-        >
-          登录
-        </Button>
+        
+        {/* 显示AI响应 */}
+        {aiResponse && (
+          <div className="mt-4 p-4 w-full max-w-3xl border border-gray-200 rounded-lg bg-white">
+            <h3 className="text-lg font-medium mb-2">AI响应:</h3>
+            <div className="whitespace-pre-wrap">{aiResponse}</div>
+          </div>
+        )}
       </div>
-
 
       <div className="text-center mt-9 p-9">
         <Dragger {...uploadProps} showUploadList={false}>

@@ -50,7 +50,11 @@ export const getProfiles = async (id?: string | null) => {
 export const updateProfiles = async (userId: string, updateForm: updateProfilesItem) => {
   const {data, error} = await supabase
     .from('profiles')
-    .update(updateForm)
+    .update({
+      username: updateForm.username,
+      company: updateForm.company,
+      avatar_url: updateForm.avatar_url,
+    })
     .eq('id', userId)
   try{
     if(error) return useMessage(2, '更新失败!', 'error')

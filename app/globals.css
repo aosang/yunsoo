@@ -53,5 +53,13 @@ dd {
   list-style: none;
 }
 
+.view-btn-wrap {
+  right: 20px !important;
+  bottom: 40px !important;
+}
+
+.view-btn-wrap .view-btn {
+  background-color: #1677ff !important;
+}
 
 

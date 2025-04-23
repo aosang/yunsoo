@@ -10,6 +10,9 @@ import { BsToggles } from "react-icons/bs"
 import { LuMouse, LuRouter } from "react-icons/lu"
 import CountUp from 'react-countup'
 
+import Script from 'next/script'
+import Head from 'next/head'
+
 import { getWorkOrderCount, getAllAssetsCount, getTotalAssetsPrice } from '@/utils/providerSelectData'
 
 const workCardInfo: React.CSSProperties = {
@@ -94,7 +97,7 @@ const Home = () => {
 
   const fetchITAssetsCount = async () => {
     const res = await getAllAssetsCount()
-    
+
     setComputerNum(res.computerNum)
     setLaptopNum(res.laptopNum)
     setServerNum(res.serverNum)
@@ -114,213 +117,214 @@ const Home = () => {
     let res = await getTotalAssetsPrice()
     setTotalAssetsPrice(res)
   }
-  
+
   useEffect(() => {
     fetchWorkOrderCount()
     fetchITAssetsCount()
     fetchITAssetsPrice()
     document.title = '综合信息'
+    
   }, [])
 
   return (
-      <div style={{ width: '100%', padding: '12px', boxSizing: 'border-box' }}>
-        <div>
-          <Space direction="vertical" size={12} style={{ width: '100%' }}>
-            <Card title="工单信息">
-              <Skeleton active loading={isSpiningLoading}>
-                <Row gutter={20}>
-                  <Col span={6}>
-                    <div style={workCardInfo} className="bg-[#54a0ff]">
-                      <div className='w-[72px] h-[72px] rounded-2xl bg-[rgba(255,255,255,0.3)]'>
-                        <AiOutlineBars className='mt-5 mx-auto text-white block' size={30} />
-                      </div>
-                      <div style={workTotal}>
-                        <span style={{ fontSize: '36px', fontWeight: '600' }}>
-                          <CountUp end={totalNum} duration={2} delay={0.5} />
-                        </span>
-                        <p style={{ fontSize: '15px' }}>总计</p>
-                      </div>
+    <div style={{ width: '100%', padding: '12px', boxSizing: 'border-box' }}>
+      <div>
+        <Space direction="vertical" size={12} style={{ width: '100%' }}>
+          <Card title="工单信息">
+            <Skeleton active loading={isSpiningLoading}>
+              <Row gutter={20}>
+                <Col span={6}>
+                  <div style={workCardInfo} className="bg-[#54a0ff]">
+                    <div className='w-[72px] h-[72px] rounded-2xl bg-[rgba(255,255,255,0.3)]'>
+                      <AiOutlineBars className='mt-5 mx-auto text-white block' size={30} />
                     </div>
-                  </Col>
-                  <Col span={6}>
-                    <div style={workCardInfo} className="bg-[#10ac84]">
-                      <div style={workIcon}>
-                        <AiOutlineCheck style={workIconText} size={30} />
-                      </div>
-                      <div style={workTotal}>
-                        <span style={{ fontSize: '36px', fontWeight: '600' }}>
-                          <CountUp end={finishedNum} duration={2} delay={0.5} />
-                        </span>
-                        <p style={{ fontSize: '15px' }}>已完成</p>
-                      </div>
+                    <div style={workTotal}>
+                      <span style={{ fontSize: '36px', fontWeight: '600' }}>
+                        <CountUp end={totalNum} duration={2} delay={0.5} />
+                      </span>
+                      <p style={{ fontSize: '15px' }}>总计</p>
                     </div>
-                  </Col>
-                  <Col span={6}>
-                    <div style={workCardInfo} className="bg-[#ee5253]">
-                      <div className='w-[72px] h-[72px] rounded-2xl bg-[rgba(255,255,255,0.3)]'>
-                        <AiOutlineFileSync style={workIconText} size={30} />
-                      </div>
-                      <div style={workTotal}>
-                        <span style={{ fontSize: '36px', fontWeight: '600' }}>
-                          <CountUp end={processingNum} duration={2} delay={0.5} />
-                        </span>
-                        <p style={{ fontSize: '15px' }}>处理中</p>
-                      </div>
+                  </div>
+                </Col>
+                <Col span={6}>
+                  <div style={workCardInfo} className="bg-[#10ac84]">
+                    <div style={workIcon}>
+                      <AiOutlineCheck style={workIconText} size={30} />
                     </div>
-                  </Col>
-                  <Col span={6}>
-                    <div style={workCardInfo} className="bg-[#f39c12]">
-                      <div style={workIcon}>
-                        <AiOutlinePause style={workIconText} size={30} />
-                      </div>
-                      <div style={workTotal}>
-                        <span style={{ fontSize: '36px', fontWeight: '600' }}>
-                          <CountUp end={pendingNum} duration={2} delay={0.5} />
-                        </span>
-                        <p style={{ fontSize: '15px' }}>待处理</p>
-                      </div>
+                    <div style={workTotal}>
+                      <span style={{ fontSize: '36px', fontWeight: '600' }}>
+                        <CountUp end={finishedNum} duration={2} delay={0.5} />
+                      </span>
+                      <p style={{ fontSize: '15px' }}>已完成</p>
                     </div>
-                  </Col>
-                </Row>
-              </Skeleton>
-            </Card>
-            
-          </Space>
-          <Space direction="vertical" size={12} style={{ width: '100%', marginTop: '12px' }}>
-            <Card title="资产信息">
-              <Skeleton active loading={isDeviceLoading}>
-                <Row gutter={15}>
-                  <Col span={4} >
-                    <div style={assetsInfo}>
-                      <FiMonitor size={26} />
-                      <div style={assetsTotal}>
-                        <span style={assetsText} className='block text-right'>{computerNum}</span>
-                        <p className='block text-right'>电脑</p>
-                      </div>
+                  </div>
+                </Col>
+                <Col span={6}>
+                  <div style={workCardInfo} className="bg-[#ee5253]">
+                    <div className='w-[72px] h-[72px] rounded-2xl bg-[rgba(255,255,255,0.3)]'>
+                      <AiOutlineFileSync style={workIconText} size={30} />
                     </div>
-                  </Col>
+                    <div style={workTotal}>
+                      <span style={{ fontSize: '36px', fontWeight: '600' }}>
+                        <CountUp end={processingNum} duration={2} delay={0.5} />
+                      </span>
+                      <p style={{ fontSize: '15px' }}>处理中</p>
+                    </div>
+                  </div>
+                </Col>
+                <Col span={6}>
+                  <div style={workCardInfo} className="bg-[#f39c12]">
+                    <div style={workIcon}>
+                      <AiOutlinePause style={workIconText} size={30} />
+                    </div>
+                    <div style={workTotal}>
+                      <span style={{ fontSize: '36px', fontWeight: '600' }}>
+                        <CountUp end={pendingNum} duration={2} delay={0.5} />
+                      </span>
+                      <p style={{ fontSize: '15px' }}>待处理</p>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+            </Skeleton>
+          </Card>
 
-                  <Col span={4} >
-                    <div style={assetsInfo}>
-                      <MdOutlineComputer size={26} />
-                      <div style={assetsTotal}>
-                        <span style={assetsText} className='block text-right'>{laptopNum}</span>
-                        <p className='block text-right'>笔记本</p>
-                      </div>
+        </Space>
+        <Space direction="vertical" size={12} style={{ width: '100%', marginTop: '12px' }}>
+          <Card title="资产信息">
+            <Skeleton active loading={isDeviceLoading}>
+              <Row gutter={15}>
+                <Col span={4} >
+                  <div style={assetsInfo}>
+                    <FiMonitor size={26} />
+                    <div style={assetsTotal}>
+                      <span style={assetsText} className='block text-right'>{computerNum}</span>
+                      <p className='block text-right'>电脑</p>
                     </div>
-                  </Col>
-                  <Col span={4} >
-                    <div style={assetsInfo}>
-                      <HiOutlineServer size={26} />
-                      <div style={assetsTotal}>
-                        <span style={assetsText} className='block text-right'>{serverNum}</span>
-                        <p className='block text-right'>服务器</p>
-                      </div>
-                    </div>
-                  </Col>
+                  </div>
+                </Col>
 
-                  <Col span={4} >
-                    <div style={assetsInfo}>
-                      <BsToggles size={26} />
-                      <div style={assetsTotal}>
-                        <span style={assetsText} className='block text-right'>{switchNum}</span>
-                        <p className='block text-right'>交换机</p>
-                      </div>
+                <Col span={4} >
+                  <div style={assetsInfo}>
+                    <MdOutlineComputer size={26} />
+                    <div style={assetsTotal}>
+                      <span style={assetsText} className='block text-right'>{laptopNum}</span>
+                      <p className='block text-right'>笔记本</p>
                     </div>
+                  </div>
+                </Col>
+                <Col span={4} >
+                  <div style={assetsInfo}>
+                    <HiOutlineServer size={26} />
+                    <div style={assetsTotal}>
+                      <span style={assetsText} className='block text-right'>{serverNum}</span>
+                      <p className='block text-right'>服务器</p>
+                    </div>
+                  </div>
+                </Col>
 
-                  </Col>
-                  <Col span={4}>
-                    <div style={assetsInfo}>
-                      <FiPrinter size={26} />
-                      <div style={assetsTotal}>
-                        <span style={assetsText} className='block text-right'>{printerNum}</span>
-                        <p className='block text-right'>打印机</p>
-                      </div>
+                <Col span={4} >
+                  <div style={assetsInfo}>
+                    <BsToggles size={26} />
+                    <div style={assetsTotal}>
+                      <span style={assetsText} className='block text-right'>{switchNum}</span>
+                      <p className='block text-right'>交换机</p>
                     </div>
-                  </Col>
+                  </div>
 
-                  <Col span={4}>
-                    <div style={assetsInfo}>
-                      <LuRouter size={26} />
-                      <div style={assetsTotal}>
-                        <span style={assetsText} className='block text-right'>{routerNum}</span>
-                        <p className='block text-right'>路由器</p>
-                      </div>
+                </Col>
+                <Col span={4}>
+                  <div style={assetsInfo}>
+                    <FiPrinter size={26} />
+                    <div style={assetsTotal}>
+                      <span style={assetsText} className='block text-right'>{printerNum}</span>
+                      <p className='block text-right'>打印机</p>
                     </div>
-                  </Col>
-                </Row>
-                <Row gutter={15} className='mt-4'>
-                  <Col span={4}>
-                    <div style={assetsInfo}>
-                      <HiMiniDevicePhoneMobile size={26} />
-                      <div style={assetsTotal}>
-                        <span style={assetsText} className='block text-right'>{mobileNum}</span>
-                        <p className='block text-right'>手机</p>
-                      </div>
+                  </div>
+                </Col>
+
+                <Col span={4}>
+                  <div style={assetsInfo}>
+                    <LuRouter size={26} />
+                    <div style={assetsTotal}>
+                      <span style={assetsText} className='block text-right'>{routerNum}</span>
+                      <p className='block text-right'>路由器</p>
                     </div>
-                  </Col>
-                  <Col span={4}>
-                    <div style={assetsInfo}>
-                      <MdOutlineScreenshotMonitor size={26} />
-                      <div style={assetsTotal}>
-                        <span style={assetsText} className='block text-right'>{monitorNum}</span>
-                        <p className='block text-right'>显示器</p>
-                      </div>
+                  </div>
+                </Col>
+              </Row>
+              <Row gutter={15} className='mt-4'>
+                <Col span={4}>
+                  <div style={assetsInfo}>
+                    <HiMiniDevicePhoneMobile size={26} />
+                    <div style={assetsTotal}>
+                      <span style={assetsText} className='block text-right'>{mobileNum}</span>
+                      <p className='block text-right'>手机</p>
                     </div>
-                  </Col>
-                  <Col span={4}>
-                    <div style={assetsInfo}>
-                      <LuMouse size={26} />
-                      <div style={assetsTotal}>
-                        <span style={assetsText} className='block text-right'>{keyboardMouseNum}</span>
-                        <p className='block text-right'>键盘/鼠标</p>
-                      </div>
+                  </div>
+                </Col>
+                <Col span={4}>
+                  <div style={assetsInfo}>
+                    <MdOutlineScreenshotMonitor size={26} />
+                    <div style={assetsTotal}>
+                      <span style={assetsText} className='block text-right'>{monitorNum}</span>
+                      <p className='block text-right'>显示器</p>
                     </div>
-                  </Col>
-                  <Col span={4}>
-                    <div style={assetsInfo}>
-                      <MdOutlineOtherHouses size={26} />
-                      <div style={assetsTotal}>
-                        <span style={assetsText} className='block text-right'>{othersNum}</span>
-                        <p className='block text-right'>其他</p>
-                      </div>
+                  </div>
+                </Col>
+                <Col span={4}>
+                  <div style={assetsInfo}>
+                    <LuMouse size={26} />
+                    <div style={assetsTotal}>
+                      <span style={assetsText} className='block text-right'>{keyboardMouseNum}</span>
+                      <p className='block text-right'>键盘/鼠标</p>
                     </div>
-                  </Col>
-                  <Col span={8}>
-                    <div 
-                      className='
+                  </div>
+                </Col>
+                <Col span={4}>
+                  <div style={assetsInfo}>
+                    <MdOutlineOtherHouses size={26} />
+                    <div style={assetsTotal}>
+                      <span style={assetsText} className='block text-right'>{othersNum}</span>
+                      <p className='block text-right'>其他</p>
+                    </div>
+                  </div>
+                </Col>
+                <Col span={8}>
+                  <div
+                    className='
                         bg-white 
                         content-center
                         rounded-xl 
                         py-0 
                         px-6 
                         items-center
-                        shadow-[0_0_2px_2px_#ececec]' 
-                        style={{height: '90px'}}
-                      >
-                      <Row gutter={15}>
-                        <Col span={12}>
-                          <div className='w-full h-full border-r border-slate-200'>
-                            <p className='text-2xl font-bold text-slate-500 mb-1'>CNY {totalAssetsPrice}</p>
-                            <Tag color='green'>资产总价</Tag>
-                          </div>
-                        </Col>
+                        shadow-[0_0_2px_2px_#ececec]'
+                    style={{ height: '90px' }}
+                  >
+                    <Row gutter={15}>
+                      <Col span={12}>
+                        <div className='w-full h-full border-r border-slate-200'>
+                          <p className='text-2xl font-bold text-slate-500 mb-1'>CNY {totalAssetsPrice}</p>
+                          <Tag color='green'>资产总价</Tag>
+                        </div>
+                      </Col>
 
-                        <Col span={12}>
-                          <div className='w-full h-full pl-5'>
-                            <p className='text-2xl font-bold text-slate-500 mb-1'>{totalAssetsNum}</p>
-                            <Tag color='blue'>资产总数</Tag>
-                          </div>
-                        </Col>
-                      </Row>
-                    </div>
-                  </Col>
-                </Row>
-              </Skeleton>
-            </Card>
-          </Space>
-        </div>
+                      <Col span={12}>
+                        <div className='w-full h-full pl-5'>
+                          <p className='text-2xl font-bold text-slate-500 mb-1'>{totalAssetsNum}</p>
+                          <Tag color='blue'>资产总数</Tag>
+                        </div>
+                      </Col>
+                    </Row>
+                  </div>
+                </Col>
+              </Row>
+            </Skeleton>
+          </Card>
+        </Space>
       </div>
+    </div>
   )
 }
 

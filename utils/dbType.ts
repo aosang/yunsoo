@@ -79,6 +79,7 @@ export interface updateProfilesItem {
   username: string
   company: string
   email: string
+  avatar_url: string
 }
 
 export interface inspectionStatusItem {
