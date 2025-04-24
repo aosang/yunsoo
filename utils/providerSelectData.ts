@@ -54,6 +54,8 @@ export const updateProfiles = async (userId: string, updateForm: updateProfilesI
       username: updateForm.username,
       company: updateForm.company,
       avatar_url: updateForm.avatar_url,
+      email: updateForm.email,
+      created_at: updateForm.created_at
     })
     .eq('id', userId)
   try{

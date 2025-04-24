@@ -1,12 +1,12 @@
-'use client'
+// 'use client'
 import './globals.css'
 import 'antd/dist/reset.css'
 import Providers from './Provider'
 import { useEffect } from 'react'
 
-// export const metadata = {
-//   description: 'yunsoo资产管理系统',
-// }
+export const metadata = {
+  description: 'yunsoo资产管理系统',
+}
 
 export default function RootLayout({
   children
@@ -14,9 +14,6 @@ export default function RootLayout({
   children: React.ReactNode
 }
 ) {
-  useEffect(() => {
-    
-  }, []);
 
   return (
     <html lang="en">

@@ -80,6 +80,7 @@ export interface updateProfilesItem {
   company: string
   email: string
   avatar_url: string
+  created_at: string
 }
 
 export interface inspectionStatusItem {

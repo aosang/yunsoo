@@ -17,7 +17,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         setMySession(session)
         
         if (!session) {
-          // router.replace('/')
           router.replace('/')
         } else {
           setUserId(session!.user?.id)
