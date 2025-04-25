@@ -321,9 +321,9 @@ const Inspection: React.FC = () => {
     <>
       <div className="w-full p-3 box-border">
         <Space direction="vertical" size={16} className="w-full">
-          <Card title="巡检记录" style={{ background: '#f0f2f5' }}>
+          <Card title="巡检记录" style={{ background: '#f0f2f5'}}>
             <Skeleton active loading={isLoading}>
-              <div className="flex">
+              <div className="flex" style={{ marginTop: '-10px' }}>
                 <Button
                   type="primary"
                   className="mb-4"

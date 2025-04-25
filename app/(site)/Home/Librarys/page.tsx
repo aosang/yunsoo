@@ -11,6 +11,8 @@ import { PiLaptopFill, PiMonitorPlayFill } from "react-icons/pi"
 import { MdOtherHouses, MdKeyboard } from "react-icons/md"
 import { BiSolidMobile } from "react-icons/bi"
 import { getLibraryTableData, deleteLibraryTableData, getLibrarysDataList } from "@/utils/provideLibraryData"
+import AIButton from "@components/AIButton"
+
 const ReactWEditor = dynamic(() => import('../../components/Editor'), {
   ssr: false,
   loading: () => <p className="text-base text-blue-950">Loading...</p>
@@ -204,6 +206,7 @@ const Librarys = () => {
               />
             </div>
           }
+          <AIButton />
         </Card>
       </div>
     </>
