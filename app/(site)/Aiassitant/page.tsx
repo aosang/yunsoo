@@ -1,10 +1,11 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { UserOutlined, RobotOutlined, SmileOutlined } from '@ant-design/icons';
-import { Flex } from 'antd';
+import { UserOutlined, RobotOutlined, SmileOutlined, DeleteFilled } from '@ant-design/icons';
+import { Flex, Button } from 'antd';
 import type { GetProp, GetRef } from 'antd';
 import { Bubble, Sender } from '@ant-design/x';
 import ReactMarkdown from 'react-markdown';
+import { insertAiHistoryWord } from '@/utils/pubAiHistory'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import remarkGfm from 'remark-gfm';
@@ -133,6 +134,15 @@ function throttle(func: Function, limit: number) {
 }
 
 const App: React.FC = () => {
+  // test data
+  const testData = [{
+    id: 1,
+    name: 'listitem123'
+  }, {
+    id: 2,
+    name: 'listitem1231231233123123333000000'
+  }]
+
   const [value, setValue] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
   const [abortController, setAbortController] = useState<AbortController | null>(null)
@@ -389,6 +399,10 @@ const App: React.FC = () => {
     }
   }
 
+  const insertKeyWords = () => {
+    let text = '添加关键词'
+    insertAiHistoryWord(text)
+  }
 
   useEffect(() => {
     document.title = 'AI助手'
@@ -396,8 +410,9 @@ const App: React.FC = () => {
 
   return (
     <>
+      <Button type="primary" onClick={insertKeyWords}>添加关键词</Button>
       <div className='
-        w-[800px]
+        w-[1200px]
         min-h-[85%]
         mx-auto 
         bg-white 
@@ -407,23 +422,36 @@ const App: React.FC = () => {
         flex-1
         overflow-hidden
         flex
-        flex-col
         fixed
         top-2
         left-[50%]
         transform
         -translate-x-1/2
+        justify-around
       '>
-        <div dangerouslySetInnerHTML={{ __html: thinkingStyle }} />
-        <Flex gap="middle" vertical>
-          <Bubble.List
-            ref={listRef}
-            style={{ maxHeight: '700px' }} // 修正高度单位
-            roles={roles}
-            items={messages}
-            autoScroll
-          />
-        </Flex>
+        <ul className='w-[22%] text-[14px] border-r-2 border-gray-200'>
+          {testData.map((item) => {
+            return (
+              <li key={item.id} className='h-[40px] w-[90%] flex items-center'
+              >
+                <span className='leading-9 w-[150px] text-ellipsis whitespace-nowrap overflow-hidden'>{item.name}</span>
+                <span className='ml-auto cursor-pointer'><DeleteFilled /></span>
+            </li>
+            )
+          })}
+        </ul>
+        <div className='w-[70%]'>
+          <div dangerouslySetInnerHTML={{ __html: thinkingStyle }} />
+          <Flex gap="middle" vertical>
+            <Bubble.List
+              ref={listRef}
+              style={{ maxHeight: '700px' }} // 修正高度单位
+              roles={roles}
+              items={messages}
+              autoScroll
+            />
+          </Flex>
+        </div>
       </div>
       <Sender
         prefix={<SmileOutlined />}
@@ -435,8 +463,10 @@ const App: React.FC = () => {
         bottom-[3%] 
         left-0 
         right-0 
-        w-[800px] 
-        mx-auto'
+        w-[1200px] 
+        mx-auto
+        bg-white
+      '
         autoSize={{ minRows: 1, maxRows: 3 }}
         onSubmit={requestContent}
         value={value}

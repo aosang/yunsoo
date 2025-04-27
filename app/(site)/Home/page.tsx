@@ -10,9 +10,6 @@ import { BsToggles } from "react-icons/bs"
 import { LuMouse, LuRouter } from "react-icons/lu"
 import CountUp from 'react-countup'
 
-import Script from 'next/script'
-import Head from 'next/head'
-
 import { getWorkOrderCount, getAllAssetsCount, getTotalAssetsPrice } from '@/utils/providerSelectData'
 
 const workCardInfo: React.CSSProperties = {

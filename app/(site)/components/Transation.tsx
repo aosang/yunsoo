@@ -21,7 +21,7 @@ const Transation = () => {
             width={120} height={120} alt='logo'
             className='animate-rotate-slow' 
           />
-          <span className='text-xl font-semibold pt-2 text-blue-900'>The File Creating...</span>
+          <span className='text-xl font-semibold pt-2 text-blue-900'>正在加载中...</span>
         </div>
       }
     </>

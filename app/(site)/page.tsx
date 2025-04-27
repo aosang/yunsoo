@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Input, Button, Tooltip } from 'antd'
 import { emailRegFunc, passwordRegFunc } from '@/utils/pubFunProvider'
+
 import { supabase } from '@/utils/clients'
 import { formCollect } from '@/utils/dbType'
 import { InfoCircleOutlined } from '@ant-design/icons'
-import { getTimeNumber } from '@/utils/pubFunProvider'
 import authScss from './auth.module.scss'
 import useMessage from '@/utils/message'
 import Verify from './components/Verify'
@@ -65,19 +65,13 @@ const Auth: React.FC = () => {
           useMessage(2, '注册成功', 'success')
           setIsVerify(true)
 
-          window.localStorage.setItem('userRegister', JSON.stringify({
-            username,
-            company,
-            email,
-            created_at: getTimeNumber()[0],
-            avatar_url: ''
-          }))
-
           const { error } = await supabase.auth.signUp({
             email,
             password,
+            
             options: {
-              emailRedirectTo: 'https://www.wangle.run/assetsManager/Home'
+              data: {username, company}
+              // emailRedirectTo: 'https://www.wangle.run/assetsManager/Home'
               // emailRedirectTo: 'http://localhost:3000/Home'
             }
           })
@@ -135,7 +129,7 @@ const Auth: React.FC = () => {
 
   useEffect(() => {
     getSession()
-    document.title = 'IT-Assets'
+    document.title = 'yunsoo资产管理系统'
 
     const handleLoad = () => {
       setIsSpining(false)

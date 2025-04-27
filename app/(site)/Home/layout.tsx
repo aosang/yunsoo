@@ -1,9 +1,9 @@
 'use client'
 import SideBar from '../components/Sidebar'
-import { getSession, updateProfiles } from '@/utils/providerSelectData'
+import { getProfiles, getSession, updateProfiles } from '@/utils/providerSelectData'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { getProfiles } from '@/utils/providerSelectData'
+import { getTimeNumber } from '@/utils/pubFunProvider'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
@@ -19,20 +19,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         if (!session) {
           router.replace('/')
         } else {
-          setUserId(session!.user?.id)
-          let userRegister = window.localStorage.getItem('userRegister') || ''
-          if (userRegister) {
-            updateProfiles(session!.user?.id, JSON.parse(userRegister))
-          }else {
-            getProfiles(session!.user?.id)
-              .then(res => {
-                if (res) {
-                  window.localStorage.setItem('userRegister', JSON.stringify(res))
-                }
-              })
-          }
+          // setUserId(session!.user?.id)
+          // let updateForm = {
+          //   username: session.user.user_metadata.username || '',
+          //   company: session.user.user_metadata.company || '',
+          //   email: session.user.email || '',
+          //   avatar_url: '',
+          //   created_at: getTimeNumber()[0]
+          // }
+          // // let userRegister = window.localStorage.getItem('userRegister') || ''
+          // updateProfiles(session!.user?.id, updateForm).then(() => {
+          //   getProfiles()
+          // })
           
-          window.localStorage.setItem('myId', session!.user.id)
+          // window.localStorage.setItem('myId', session!.user.id)
         }
       })
   }

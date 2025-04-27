@@ -6,13 +6,13 @@ import type { MenuProps } from 'antd'
 import Image from 'next/image'
 import useMessage from '@/utils/message'
 import { useState, useEffect } from 'react'
-import { getProfiles } from '@/utils/providerSelectData'
+import { getProfiles, getSession } from '@/utils/providerSelectData'
 import dayjs from 'dayjs'
-import LanguageSwitch from './LanguageChange/LanguageSwitch'
+
 
 const items: MenuProps['items'] = [{
   key: '1',
-  label: 'Signout',
+  label: '退出登录',
 }]
 
 const profile: React.CSSProperties = {
@@ -32,16 +32,19 @@ const DropDownMenu = () => {
       const { error } = await supabase.auth.signOut()
       if(error) throw new Error(error.message)
       router.push('/')
-      useMessage(2, 'Sign out!','success')
+      useMessage(2, '已退出!','success')
     }
   }
 
   const getMyInfomation = () => {
-    let userId = window.localStorage.getItem('myId') || ''
-    getProfiles(userId).then(res => {
-      setUsername(res![0].username)
-      setAvatarUrl(res![0].avatar_url)
+    getSession().then(res => {
+      let userId = res!.session?.user.id
+        getProfiles(userId).then(res => {
+          setUsername(res![0].username)
+          setAvatarUrl(res![0].avatar_url)
+      })
     })
+    
   }
 
   useEffect(() => {
@@ -68,7 +71,12 @@ const DropDownMenu = () => {
               width={32} 
               height={32} 
               alt='avatar'
-              style={{borderRadius: '50%', marginRight: '10px'}}  
+              style={{
+                borderRadius: '50%', 
+                marginRight: '10px',
+                width: '32px',
+                height: '32px'
+              }}  
             />
             <Dropdown menu={{
               items,

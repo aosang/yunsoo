@@ -1,12 +1,15 @@
-// 'use client'
+'use client'
 import './globals.css'
 import 'antd/dist/reset.css'
-import Providers from './Provider'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useRouter, usePathname } from 'next/navigation'
+import { checkAuth } from '@/utils/authGuards'
+import Transation from '@components/Transation'
 
-export const metadata = {
-  description: 'yunsoo资产管理系统',
-}
+// 元数据需要移到单独的metadata.ts文件中，因为使用'use client'后不能在同一文件中导出metadata
+// export const metadata = {
+//   description: 'yunsoo资产管理系统',
+// }
 
 export default function RootLayout({
   children
@@ -14,6 +17,29 @@ export default function RootLayout({
   children: React.ReactNode
 }
 ) {
+  const router = useRouter()
+  const pathname = usePathname()
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const verifyAuth = async () => {
+      const authResult = await checkAuth()
+      setIsAuthenticated(authResult)
+      setIsLoading(false)
+      
+      // 如果未登录且不在登录页面，重定向到登录页
+      if (!authResult && pathname !== '/') {
+        router.push('/')
+      }
+      // 如果已登录且在登录页面，重定向到首页
+      else if (authResult && pathname === '/') {
+        router.push('/')
+      }
+    }
+
+    verifyAuth()
+  }, [pathname, router])
 
   return (
     <html lang="en">
@@ -45,9 +71,7 @@ export default function RootLayout({
         style={{ backgroundColor: '#f0f2f5' }}
         suppressHydrationWarning={true}
       >
-        <Providers>
-          {children}
-        </Providers>
+        {isLoading ? <Transation /> : children}
       </body>
     </html>
   )

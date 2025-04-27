@@ -48,6 +48,7 @@ export const getProfiles = async (id?: string | null) => {
 
 // update profiles
 export const updateProfiles = async (userId: string, updateForm: updateProfilesItem) => {
+  
   const {data, error} = await supabase
     .from('profiles')
     .update({
@@ -59,6 +60,7 @@ export const updateProfiles = async (userId: string, updateForm: updateProfilesI
     })
     .eq('id', userId)
   try{
+    // if(!error) return useMessage(2, '更新成功!', 'success')
     if(error) return useMessage(2, '更新失败!', 'error')
   }catch (error) {
     throw error
