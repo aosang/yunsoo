@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useState } from "react"
 import { Card, Col, Row, Input, Upload, Image, Button, Skeleton } from "antd"
-import { PlusOutlined, InfoCircleFilled } from '@ant-design/icons'
 import { RiDeleteBin5Fill } from "react-icons/ri"
 import { IoEyeSharp } from "react-icons/io5"
 import { getTimeNumber } from "@/utils/pubFunProvider"
@@ -9,13 +8,17 @@ import { supabase } from "@/utils/clients"
 import { getProfiles, updateProfiles, getSession } from "@/utils/providerSelectData"
 import useMessage from '@/utils/message'
 import dayjs from "dayjs"
+import { 
+  PlusOutlined, 
+  InfoCircleFilled,
+} from '@ant-design/icons'
 
 type myProfileInfoProps = {
   email: string,
   created_at: string,
   username: string,
   company: string,
-  avatar_url: string
+  avatar_url?: string
 }
 
 const Profile = () => {
@@ -70,7 +73,6 @@ const Profile = () => {
         username: res!.session?.user.user_metadata.username || '',
         company: res!.session?.user.user_metadata.company || '',
         email: res!.session?.user.email || '',
-        avatar_url: '',
         created_at: dayjs(res!.session?.user.created_at).format('YYYY-MM-DD HH:mm:ss') || ''
       }
       setMyProfileInfo(formData)

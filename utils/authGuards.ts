@@ -1,4 +1,3 @@
-import { NextRouter } from 'next/router';
 import { supabase } from './clients';
 
 export const checkAuth = async () => {

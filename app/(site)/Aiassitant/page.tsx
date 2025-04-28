@@ -1,11 +1,15 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { UserOutlined, RobotOutlined, SmileOutlined, DeleteFilled } from '@ant-design/icons';
-import { Flex, Button } from 'antd';
+import {
+  UserOutlined,
+  SmileOutlined,
+  FireOutlined,
+} from '@ant-design/icons';
+import { Flex, Space, ConfigProvider, theme} from 'antd';
 import type { GetProp, GetRef } from 'antd';
-import { Bubble, Sender } from '@ant-design/x';
+import { Bubble, Sender, Prompts } from '@ant-design/x';
+import type { PromptsProps } from '@ant-design/x'
 import ReactMarkdown from 'react-markdown';
-import { insertAiHistoryWord } from '@/utils/pubAiHistory'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import remarkGfm from 'remark-gfm';
@@ -102,10 +106,8 @@ const roles: GetProp<typeof Bubble.List, 'roles'> = {
   ai: {
     placement: 'start',
     avatar: {
-      icon: <RobotOutlined />,
-      style: {
-        background: '#fde3cf'
-      }
+      icon: <img src='/assets_logo_white.png' alt='yunsoo' className='!w-[20px] !h-[20px]' />,
+      style: { background: 'rgba(22, 119, 255, 0.65)' }
     },
     header: <span className='text-gray-600 font-bold text-[15px]'>yunsoo</span>
   }
@@ -115,7 +117,7 @@ const roles: GetProp<typeof Bubble.List, 'roles'> = {
 function throttle(func: Function, limit: number) {
   let lastFunc: NodeJS.Timeout;
   let lastRan: number = 0;
-  return function(this: any, ...args: any[]) {
+  return function (this: any, ...args: any[]) {
     const context = this;
     const now = Date.now();
     if (!lastRan) {
@@ -123,7 +125,7 @@ function throttle(func: Function, limit: number) {
       lastRan = now;
     } else {
       clearTimeout(lastFunc);
-      lastFunc = setTimeout(function() {
+      lastFunc = setTimeout(function () {
         if ((now - lastRan) >= limit) {
           func.apply(context, args);
           lastRan = now;
@@ -133,16 +135,40 @@ function throttle(func: Function, limit: number) {
   };
 }
 
-const App: React.FC = () => {
-  // test data
-  const testData = [{
-    id: 1,
-    name: 'listitem123'
-  }, {
-    id: 2,
-    name: 'listitem1231231233123123333000000'
-  }]
+const renderTitle = (icon: React.ReactElement, title: string) => (
+  <Space align="start">
+    {icon}
+    <span>{title}</span>
+  </Space>
+)
 
+const items: PromptsProps['items'] = [{
+  key: '1',
+  label: renderTitle(<FireOutlined style={{ color: '#FF4D4F' }} />, '热门运维知识'),
+  description: '你感兴趣的是什么？',
+  children: [{
+    key: '1-1',
+    description: `如何优化服务器性能？`,
+  }, {
+    key: '1-2',
+    description: `CI/CD流程如何搭建？`,
+  }, {
+    key: '1-3',
+    description: `K8s集群如何排错？`,
+  }, {
+    key: '1-4',
+    description: `如何保障系统高可用？`,
+  }, {
+    key: '1-5',
+    description: `监控告警如何配置？`,
+  }, {
+    key: '1-6',
+    description: `如何做好数据备份？`,
+  }]
+}]
+
+const AiAssitant: React.FC = () => {
+  
   const [value, setValue] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
   const [abortController, setAbortController] = useState<AbortController | null>(null)
@@ -151,15 +177,46 @@ const App: React.FC = () => {
     {
       key: 'welcome',
       role: 'ai',
-      content: '你好，我是AI助手，有什么可以帮你的吗？',
+      content: '你好，我是yunsoo小助手，关于运维方面的问题，我可以帮你解答。',
     }
   ])
   const listRef = React.useRef<GetRef<typeof Bubble.List>>(null)
 
+  // 添加窗口高度状态
+  const [windowHeight, setWindowHeight] = useState<number>(0);
+  
+  // 监听窗口大小变化
+  useEffect(() => {
+    // 初始化窗口高度
+    setWindowHeight(window.outerHeight);
+    
+    const handleResize = () => {
+      setWindowHeight(window.outerHeight);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+  
+  // 计算 Bubble.List 的高度
+  const getBubbleListHeight = () => {
+    // 在低分辨率下降低高度
+    if (windowHeight <= 728) {
+      return '420px'; // 低分辨率下的高度
+    } else if (windowHeight <= 900) {
+      return '560px'; // 中等分辨率下的高度
+    } else {
+      return '730px'; // 高分辨率下的高度
+    }
+  };
+
   const requestContent = (content: string) => {
     // 重置取消标志
     setIsCancelled(false);
-    
+
     // 先添加用户消息
     const userMessage: { key: string; role: 'user' | 'ai'; content: string } = {
       key: `user-${Date.now()}`,
@@ -188,11 +245,11 @@ const App: React.FC = () => {
 
     // 创建累积的内容变量
     let accumulatedContent = '';
-    
+
     // 创建新的 AbortController
     const controller = new AbortController();
     setAbortController(controller);
-    
+
     const options = {
       method: 'POST',
       headers: {
@@ -202,13 +259,15 @@ const App: React.FC = () => {
       body: JSON.stringify({
         "model": process.env.NEXT_PUBLIC_API_MODEL,
         "messages": [
-          { "role": "system", "content": `
+          {
+            "role": "system", "content": `
             # 角色
             你是一位拥有多年经验的资深运维工程师，对软件运维和硬件运维都有深入的了解
             ## 任务要求
             1. 根据用户的问题，给出详细的回答
             2. 回答的内容需要包含详细的步骤和操作方法
             3. 回答的内容要调理清晰
+            4. 回答的内容尽量减少代码
             ## 注意：
             如果用户的问题与运维无关，请直接回答："抱歉，我无法回答这个问题。"
           ` },
@@ -232,12 +291,12 @@ const App: React.FC = () => {
         if (!reader) {
           throw new Error('无法获取响应流');
         }
-        
+
         // 更新消息内容的函数
         const updateMessageContent = (content: string) => {
           // 如果已取消，不再更新UI
           if (isCancelled) return;
-          
+
           setMessages(prevMessages => {
             const newMessages = [...prevMessages];
             for (let i = newMessages.length - 1; i >= 0; i--) {
@@ -246,7 +305,7 @@ const App: React.FC = () => {
                   <div className="markdown-content">
                     <ReactMarkdown
                       components={{
-                        code({node, className, children, ...props}: any) {
+                        code({ node, className, children, ...props }: any) {
                           const match = /language-(\w+)/.exec(className || '')
                           const inline = (props as any).inline;
                           return !inline && match ? (
@@ -276,23 +335,23 @@ const App: React.FC = () => {
             }
             return newMessages;
           });
-          
+
           // 确保内容更新后滚动到底部
           setTimeout(() => {
             listRef.current?.scrollTo({ offset: 9999 });
           }, 10);
         };
-        
+
         // 使用节流函数
         const throttledUpdate = throttle(updateMessageContent, 50);
-        
+
         function processStream() {
           // 检查取消状态
           if (isCancelled) {
             reader?.cancel().catch(console.error);
             return Promise.resolve();
           }
-          
+
           return reader!.read().then(({ done, value }) => {
             // 如果已取消或完成，停止处理
             if (done || isCancelled) {
@@ -301,7 +360,7 @@ const App: React.FC = () => {
               setLoading(false);
               return;
             }
-            
+
             try {
               // 将二进制数据转换为文本
               const chunk = new TextDecoder().decode(value);
@@ -314,9 +373,9 @@ const App: React.FC = () => {
                     const jsonStr = line.substring(6).trim(); // 移除 'data: ' 前缀并去除空白
                     // 检查JSON字符串是否有效
                     if (!jsonStr || jsonStr === '') continue;
-                    
+
                     const jsonData = JSON.parse(jsonStr);
-                    
+
                     // 提取内容
                     const content = jsonData.choices?.[0]?.delta?.content || '';
                     if (content) {
@@ -362,7 +421,7 @@ const App: React.FC = () => {
           console.log('请求已取消');
           return;
         }
-        
+
         console.error('请求出错:', err);
         // 更新为错误消息
         setMessages(prevMessages => {
@@ -387,21 +446,16 @@ const App: React.FC = () => {
     if (abortController) {
       // 设置取消标志
       setIsCancelled(true);
-      
+
       // 中止请求
       abortController.abort();
       setAbortController(null);
-      
+
       // 将 loading 状态设置为 false
       setLoading(false);
-      
+
       console.log('已停止 AI 输出');
     }
-  }
-
-  const insertKeyWords = () => {
-    let text = '添加关键词'
-    insertAiHistoryWord(text)
   }
 
   useEffect(() => {
@@ -410,10 +464,9 @@ const App: React.FC = () => {
 
   return (
     <>
-      <Button type="primary" onClick={insertKeyWords}>添加关键词</Button>
       <div className='
         w-[1200px]
-        min-h-[85%]
+        h-[97.5vh]
         mx-auto 
         bg-white 
         p-4 
@@ -429,55 +482,76 @@ const App: React.FC = () => {
         -translate-x-1/2
         justify-around
       '>
-        <ul className='w-[22%] text-[14px] border-r-2 border-gray-200'>
-          {testData.map((item) => {
-            return (
-              <li key={item.id} className='h-[40px] w-[90%] flex items-center'
-              >
-                <span className='leading-9 w-[150px] text-ellipsis whitespace-nowrap overflow-hidden'>{item.name}</span>
-                <span className='ml-auto cursor-pointer'><DeleteFilled /></span>
-            </li>
-            )
-          })}
-        </ul>
+        <div className='border-r-2 border-gray-200'>
+          <div className='w-[160px] mb-5 ml-[50px]'>
+            <img src="/load-blue.png" alt="" className='w-[100%]' />
+          </div>
+          <ConfigProvider theme={{ algorithm: theme.defaultAlgorithm }}>
+            <Prompts
+              items={items}
+              wrap
+              styles={{
+                item: {
+                  width: '280px',
+                  flex: 'none',
+                  backgroundImage: `linear-gradient(137deg, #e5f4ff 0%, #efe7ff 100%)`,
+                  border: 0,
+                  height: '87.5vh',
+                  padding: '24px',
+                  boxSizing: 'border-box',
+                  margin: '0 26px 0 auto',
+                },
+                subItem: {
+                  background: 'rgba(255,255,255,0.45)',
+                  border: '1px solid #FFF',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  opacity: loading ? 0.6 : 1,
+                },
+              }}
+              onItemClick={(info) => {
+                if (!loading) {
+                  requestContent(info.data.description as string)
+                }
+              }}
+            />
+          </ConfigProvider>
+        </div>
         <div className='w-[70%]'>
           <div dangerouslySetInnerHTML={{ __html: thinkingStyle }} />
           <Flex gap="middle" vertical>
             <Bubble.List
               ref={listRef}
-              style={{ maxHeight: '700px' }} // 修正高度单位
+              style={{ maxHeight: getBubbleListHeight() }} // 使用动态计算的高度
               roles={roles}
               items={messages}
               autoScroll
             />
           </Flex>
+          <Sender
+            prefix={<SmileOutlined />}
+            classNames={{ prefix: 'my-sender' }}
+            styles={{ prefix: { position: 'relative', bottom: '6px' } }}
+            footer={<div className='text-xs text-gray-400'>yunsoo也可能会犯错，请务必核查重要信息。</div>}
+            className='
+              fixed 
+              bottom-[3%] 
+              w-[68.5%]
+              mx-auto
+              bg-white
+            '
+            autoSize={{ minRows: 1, maxRows: 2 }}
+            onSubmit={requestContent}
+            value={value}
+            onChange={(v) => { setValue(v) }}
+            onCancel={stopRequestAi}
+            loading={loading}
+            readOnly={loading}
+          />
         </div>
       </div>
-      <Sender
-        prefix={<SmileOutlined />}
-        classNames={{ prefix: 'my-sender'}}
-        styles={{ prefix: { position: 'relative', bottom: '6px' } }}
-        footer={<div className='text-xs text-gray-400'>yunsoo也可能会犯错，请务必核查重要信息。</div>}
-        className='
-        fixed 
-        bottom-[3%] 
-        left-0 
-        right-0 
-        w-[1200px] 
-        mx-auto
-        bg-white
-      '
-        autoSize={{ minRows: 1, maxRows: 3 }}
-        onSubmit={requestContent}
-        value={value}
-        onChange={(v) => { setValue(v) }}
-        onCancel={stopRequestAi}
-        loading={loading}
-        readOnly={loading}
-      />
     </>
 
   )
 }
 
-export default App;
+export default AiAssitant;

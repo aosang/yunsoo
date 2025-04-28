@@ -47,16 +47,22 @@ export const getProfiles = async (id?: string | null) => {
 }
 
 // update profiles
-export const updateProfiles = async (userId: string, updateForm: updateProfilesItem) => {
+export const updateProfiles = async (userId: string, {
+  username,
+  company,
+  avatar_url,
+  email,
+  created_at
+}: updateProfilesItem) => {
   
   const {data, error} = await supabase
     .from('profiles')
     .update({
-      username: updateForm.username,
-      company: updateForm.company,
-      avatar_url: updateForm.avatar_url,
-      email: updateForm.email,
-      created_at: updateForm.created_at
+      username,
+      company,
+      avatar_url,
+      email,
+      created_at
     })
     .eq('id', userId)
   try{

@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
 const Transation = () => {
@@ -16,10 +15,10 @@ const Transation = () => {
         transationIsShow && 
         <div 
           className="fixed w-full h-lvh top-0 left-0 z-10 bg-slate-50 flex justify-center items-center flex-col">
-          <Image 
+          <img 
             src='/assets_logo_transation.png' 
-            width={120} height={120} alt='logo'
-            className='animate-rotate-slow' 
+            alt='logo'
+            className='animate-rotate-slow w-[120px] h-[120px]' 
           />
           <span className='text-xl font-semibold pt-2 text-blue-900'>正在加载中...</span>
         </div>

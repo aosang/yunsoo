@@ -79,7 +79,7 @@ export interface updateProfilesItem {
   username: string
   company: string
   email: string
-  avatar_url: string
+  avatar_url?: string
   created_at: string
 }
 
