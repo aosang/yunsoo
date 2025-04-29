@@ -4,9 +4,8 @@ import { useRouter } from 'next/navigation'
 import {useState, useEffect} from 'react'
 import { AiFillProfile  } from "react-icons/ai"
 import { GoHomeFill } from "react-icons/go"
-import { RiComputerFill  } from 'react-icons/ri'
-import { FaUser } from "react-icons/fa"
-import { IoDocumentText, IoLibrary } from "react-icons/io5"
+import { RiComputerFill, RiUserAddFill } from 'react-icons/ri'
+import { IoDocumentText, IoLibrary, IoSettings  } from "react-icons/io5"
 import { MdInventory } from "react-icons/md"
 
 type MenuItem = Required<MenuProps>['items'][number]
@@ -54,9 +53,19 @@ const items: MenuItem[] = [{
     marginBottom: '12px'
   }
 }, {
+  key: 'UserManage',
+  label: '人员管理',
+  icon: <RiUserAddFill style={{fontSize: '16px'}} />,
+  style: {
+    marginBottom: '12px'
+  }
+}, {
   key: 'Profile',
   label: '个人设置',
-  icon: <FaUser style={{fontSize: '16px'}} />,
+  icon: <IoSettings style={{fontSize: '16px'}} />,
+  style: {
+    marginBottom: '12px'
+  }
 }]
 
 const SideBarItem: React.FC = () => {

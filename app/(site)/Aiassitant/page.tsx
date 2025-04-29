@@ -4,7 +4,8 @@ import {
   UserOutlined,
   SmileOutlined,
   FireOutlined,
-} from '@ant-design/icons';
+} 
+from '@ant-design/icons';
 import { Flex, Space, ConfigProvider, theme} from 'antd';
 import type { GetProp, GetRef } from 'antd';
 import { Bubble, Sender, Prompts } from '@ant-design/x';
@@ -13,7 +14,7 @@ import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import remarkGfm from 'remark-gfm';
-
+import { getAiHistoryWord } from '@/utils/pubFunProvider';
 // 添加思考动画的样式
 const thinkingStyle = `
   <style>
@@ -142,30 +143,7 @@ const renderTitle = (icon: React.ReactElement, title: string) => (
   </Space>
 )
 
-const items: PromptsProps['items'] = [{
-  key: '1',
-  label: renderTitle(<FireOutlined style={{ color: '#FF4D4F' }} />, '热门运维知识'),
-  description: '你感兴趣的是什么？',
-  children: [{
-    key: '1-1',
-    description: `如何优化服务器性能？`,
-  }, {
-    key: '1-2',
-    description: `CI/CD流程如何搭建？`,
-  }, {
-    key: '1-3',
-    description: `K8s集群如何排错？`,
-  }, {
-    key: '1-4',
-    description: `如何保障系统高可用？`,
-  }, {
-    key: '1-5',
-    description: `监控告警如何配置？`,
-  }, {
-    key: '1-6',
-    description: `如何做好数据备份？`,
-  }]
-}]
+
 
 const AiAssitant: React.FC = () => {
   
@@ -173,6 +151,7 @@ const AiAssitant: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [abortController, setAbortController] = useState<AbortController | null>(null)
   const [isCancelled, setIsCancelled] = useState<boolean>(false)
+  const [keywords, setKeywords] = useState<Array<{ key: string, description: string }>>([])
   const [messages, setMessages] = useState<Array<{ key: string, role: 'user' | 'ai', content: string | React.ReactNode }>>([
     {
       key: 'welcome',
@@ -180,6 +159,17 @@ const AiAssitant: React.FC = () => {
       content: '你好，我是yunsoo小助手，关于运维方面的问题，我可以帮你解答。',
     }
   ])
+
+  const items: PromptsProps['items'] = [{
+    key: '1',
+    label: renderTitle(<FireOutlined style={{ color: '#FF4D4F' }} />, '热门运维知识'),
+    description: '你感兴趣的是什么？',
+    children: keywords.map(item => ({
+      key: item.key,
+      description: item.description,
+    }))
+  }]
+  
   const listRef = React.useRef<GetRef<typeof Bubble.List>>(null)
 
   // 添加窗口高度状态
@@ -460,6 +450,9 @@ const AiAssitant: React.FC = () => {
 
   useEffect(() => {
     document.title = 'AI助手'
+    getAiHistoryWord().then(res => {
+      setKeywords(res)
+    })
   }, []); // 添加空依赖数组，避免重复执行
 
   return (

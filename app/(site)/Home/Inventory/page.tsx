@@ -10,12 +10,13 @@ import dayjs from 'dayjs'
 import useMessage from '@/utils/message'
 import { getTimeNumber } from '@/utils/pubFunProvider'
 import { IoIosSearch } from 'react-icons/io'
-
+import { userManageItem } from '@/utils/dbType'
+import { getUserManageData } from '@/utils/providerUserData'
 const Inventory = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [loanoutSpin, setLoanoutSpin] = useState<boolean>(true)
   const [returnSpin, setReturnSpin] = useState<boolean>(true)
-
+  const [userManageData, setUserManageData] = useState<userManageItem[]>([])
   const [searchTypeText, setSearchTypeText] = useState<string | null>(null)
   const [searchProductText, setSearchProductText] = useState<string | null>(null)
   const [searchProductName, setSearchProductName] = useState<inspectionStatusItem[]>([])
@@ -42,7 +43,7 @@ const Inventory = () => {
     loanout_brand: '',
     loanout_number: 0,
     loanout_time: getTimeNumber()[0],
-    loanout_user: '',
+    loanout_user: null,
     loanout_remark: '',
     value: ''
   })
@@ -103,7 +104,7 @@ const Inventory = () => {
       loanout_brand: '',
       loanout_number: 0,
       loanout_time: '',
-      loanout_user: '',
+      loanout_user: null,
       loanout_remark: '',
       value: ''
     })
@@ -119,7 +120,7 @@ const Inventory = () => {
       loanout_type: deviceData![0].product_type,
       loanout_brand: deviceData![0].product_brand,
       loanout_number: 0,
-      loanout_user: '',
+      loanout_user: null,
       loanout_remark: '',
       loanout_time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
       value: deviceData![0].product_name
@@ -170,7 +171,7 @@ const Inventory = () => {
       loanout_number: 0,
       return_number: 0,
       loanout_time: '',
-      loanout_user: '',
+      loanout_user: null,
       loanout_remark: '',
       value: ''
     })
@@ -203,7 +204,7 @@ const Inventory = () => {
     if (loanout_number === 0 || loanout_number > stockQuantity) {
       useMessage(2, '借出数量无效', 'error')
       return
-    } else if (loanout_user === '') {
+    } else if (!loanout_user) {
       useMessage(2, '借出人无效', 'error')
       return
     } else {
@@ -519,13 +520,18 @@ const Inventory = () => {
                         <Col span={24} className='mb-3'>
                           <label className='flex mb-1' htmlFor="username">
                             <span className='text-red-500 text-sx mr-1'>*</span>
-                            借出人
+                            选择借出人
                           </label>
-                          <Input
-                            placeholder="借出人"
+                          <Select
+                            style={{ width: '100%' }}
+                            placeholder='选择借出人'
                             value={loanoutForm.loanout_user}
-                            onChange={e => setLoanoutForm({ ...loanoutForm, loanout_user: e.target.value })}
-                          />
+                            options={userManageData}
+                            onChange={e => setLoanoutForm({ ...loanoutForm, loanout_user: e })}
+                            allowClear
+                            showSearch
+                          >
+                          </Select>
                         </Col>
                         <Col span={24} className='mt-3'>
                           <Input.TextArea
@@ -663,7 +669,7 @@ const Inventory = () => {
                       </label>
                       <Input
                         placeholder="借出人"
-                        value={loanoutForm.loanout_user}
+                        value={loanoutForm.loanout_user || ''}
                         onChange={e => setLoanoutForm({ ...loanoutForm, loanout_user: e.target.value })}
                         readOnly
                       />
@@ -699,6 +705,9 @@ const Inventory = () => {
   useEffect(() => {
     getInventoryData()
     getInventoryTypeData()
+    getUserManageData().then(data => {
+      setUserManageData(data as userManageItem[])
+    })
     document.title = '库存管理'
   }, [])
 

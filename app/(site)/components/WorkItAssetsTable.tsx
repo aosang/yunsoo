@@ -855,7 +855,6 @@ const WorkItAssetsTable: React.FC = () => {
           </Col>
         </Row>
         <div className='mt-5'>
-          <Divider />
 
           <Table
             className='[&_.ant-table-thead>tr>th]:!bg-[#f0f5ff]'

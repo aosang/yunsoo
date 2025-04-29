@@ -5,11 +5,8 @@ import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { checkAuth } from '@/utils/authGuards'
 import Transation from '@components/Transation'
-
-// 元数据需要移到单独的metadata.ts文件中，因为使用'use client'后不能在同一文件中导出metadata
-// export const metadata = {
-//   description: 'yunsoo资产管理系统',
-// }
+// 引入metadata
+import { metadata } from '@/utils/metadata'
 
 export default function RootLayout({
   children
@@ -32,9 +29,9 @@ export default function RootLayout({
       if (!authResult && pathname !== '/') {
         router.push('/')
       }
-      // 如果已登录且在登录页面，重定向到首页
+      // 如果已登录且在登录页面，重定向到首页或仪表盘
       else if (authResult && pathname === '/') {
-        router.push('/')
+        router.push('/') // 或其他适合的已认证用户的首页
       }
     }
 
@@ -44,6 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <meta name="description" content={metadata.description || ''} />
         <meta
           name="viewport"
           content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />

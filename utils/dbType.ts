@@ -132,7 +132,16 @@ export interface inventoryItem {
   loanout_brand: string,
   loanout_number: number,
   return_number?: number,
-  loanout_user: string,
+  loanout_user: string | null,
   loanout_remark: string,
   value: string
+}
+
+export interface userManageItem {
+  manage_num: string,
+  manage_name: string,
+  manage_phone: string,
+  manage_email: string,
+  manage_role: string,
+  manage_remark: string
 }

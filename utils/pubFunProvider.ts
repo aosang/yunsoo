@@ -57,3 +57,13 @@ export const getDeviceData = async (query?: string) => {
     }
   } 
 }
+
+export const getAiHistoryWord = async () => {
+  const {data, error} = await supabase.from('ai_history')
+  .select('*')
+
+  if(error) throw error
+  return data
+}
+
+
