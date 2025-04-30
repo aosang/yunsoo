@@ -3,12 +3,15 @@ import { useEffect, useState } from 'react'
 import { Card, Table, Button, Row, Col, Modal, Input, Divider } from 'antd'
 import { userManageItem } from '@/utils/dbType'
 import message from '@/utils/message'
-import { getUserManageData, insertUserData, updateUserData, deleteUserData } from '@/utils/providerUserData'
+import { getUserManageData, insertUserData, updateUserData, deleteUserData, searchUserData } from '@/utils/providerUserData'
+import { SearchOutlined } from '@ant-design/icons'
 
 const UserManage = () => {
+  const [searchValue, setSearchValue] = useState<string>('')
   const [editId, setEditId] = useState('')
   const [isAddModal, setIsAddModal] = useState(false)
   const [deleteIds, setDeleteIds] = useState<string>('')
+  const [isDeleteModal, setIsDeleteModal] = useState(false)
   const [isEditModal, setIsEditModal] = useState(false)
   const [userManageData, setUserManageData] = useState<userManageItem[]>([])
   const [userManageForm, setUserManageForm] = useState<userManageItem>({
@@ -109,9 +112,21 @@ const UserManage = () => {
     })
   }
 
-  const deleteUserManageEvent = () => {
+  const confirmDeleteUserManageEvent = () => {
+    setIsDeleteModal(false)
     deleteUserData(deleteIds).then(() => {
       getMyUserManageData()
+    })
+  }
+
+  const deleteUserManageEvent = () => {
+    if(!deleteIds) return message(2, '请选择要删除的人员', 'error')
+    setIsDeleteModal(true)
+  }
+
+  const searchUserManageEvent = () => {
+    searchUserData(searchValue).then((res) => {
+      setUserManageData(res as userManageItem[])
     })
   }
 
@@ -122,6 +137,18 @@ const UserManage = () => {
 
   return (
     <>
+      {/* 是否删除 */}
+      <Modal
+        title="提示"
+        maskClosable={false}
+        open={isDeleteModal}
+        onOk={confirmDeleteUserManageEvent}
+        onCancel={() => setIsDeleteModal(false)}
+        okText='确定'
+        cancelText='取消'
+      >
+        <p>确定要删除这条数据吗？</p>
+      </Modal>
       <Modal
         title="新增人员"
         open={isAddModal}
@@ -279,6 +306,15 @@ const UserManage = () => {
           <Row gutter={10}>
             <Col><Button type='primary' onClick={() => setIsAddModal(true)}>新增人员</Button></Col>
             <Col><Button type='primary' danger onClick={deleteUserManageEvent}>删除</Button></Col>
+            <Col className='my-0 mr-0 ml-auto'>
+              <Input 
+                className='w-[300px]' 
+                placeholder='请输入姓名/手机号/职位' 
+                onChange={(e) => setSearchValue(e.target.value)}
+                allowClear 
+              />
+              <Button type='primary' className='ml-2' icon={<SearchOutlined />} onClick={searchUserManageEvent}></Button>
+            </Col>
           </Row>
           <Table
             className='[&_.ant-table-thead>tr>th]:!bg-[#f0f5ff]'

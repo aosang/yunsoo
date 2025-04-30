@@ -50,3 +50,21 @@ export const deleteUserData = async (manage_num: string) => {
   }
   return message(2, '删除成功', 'success')
 }
+
+export const searchUserData = async (searchValue?: string) => {
+  if (!searchValue) {
+    return await getUserManageData();
+  }
+  
+  const { data, error } = await supabase
+    .from('user_manage')
+    .select('*')
+    .or(`manage_name.ilike.%${searchValue}%,manage_phone.ilike.%${searchValue}%,manage_email.ilike.%${searchValue}%,manage_role.ilike.%${searchValue}%`)
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    message(2, '搜索失败', 'error')
+    return []
+  }
+  return data
+}
