@@ -143,8 +143,6 @@ const renderTitle = (icon: React.ReactElement, title: string) => (
   </Space>
 )
 
-
-
 const AiAssitant: React.FC = () => {
   const [isSkeletonLoading, setIsSkeletonLoading] = useState<boolean>(true)
   const [value, setValue] = useState<string>('')
@@ -465,7 +463,7 @@ const AiAssitant: React.FC = () => {
             }
           }
           return newMessages;
-        });
+        })
         // 确保在错误情况下也将loading设置为false
         setLoading(false)
       })

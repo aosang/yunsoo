@@ -16,7 +16,7 @@ const Transation = () => {
         <div 
           className="fixed w-full h-lvh top-0 left-0 z-10 bg-slate-50 flex justify-center items-center flex-col">
           <img 
-            src='/assets_logo_transation.png' 
+            src='https://www.wangle.run/company_icon/public_image/assets_logo_transation.png' 
             alt='logo'
             className='animate-rotate-slow w-[120px] h-[120px]' 
           />
