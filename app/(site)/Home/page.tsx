@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import { Card, Space, Col, Row, Tag, Skeleton } from 'antd'
 import { AiOutlineBars, AiOutlineCheck, AiOutlineFileSync, AiOutlinePause } from 'react-icons/ai'
 import { FiMonitor, FiPrinter } from 'react-icons/fi'
@@ -10,7 +10,7 @@ import { BsToggles } from "react-icons/bs"
 import { LuMouse, LuRouter } from "react-icons/lu"
 import CountUp from 'react-countup'
 
-import { getWorkOrderCount, getAllAssetsCount, getTotalAssetsPrice } from '@/utils/providerSelectData'
+import { getWorkOrderCount, getAllAssetsCount, getTotalAssetsPrice, getSession } from '@/utils/providerSelectData'
 
 const workCardInfo: React.CSSProperties = {
   display: 'flex',
@@ -81,9 +81,17 @@ const Home = () => {
   const [totalAssetsNum, setTotalAssetsNum] = useState<number>(0)
 
   const [totalAssetsPrice, setTotalAssetsPrice] = useState<number>(0)
+ 
+  const getUserSession = async () => {
+    let session = ''
+    getSession().then(res => {
+      session = res!.session?.user.id as string
+      fetchWorkOrderCount(session)
+    })
+  }
 
-  const fetchWorkOrderCount = async () => {
-    const res = await getWorkOrderCount()
+  const fetchWorkOrderCount = async (id: string) => {   
+    const res = await getWorkOrderCount(id)
     setFinishedNum(res.finished)
     setProcessingNum(res.processing)
     setPendingNum(res.pending)
@@ -116,9 +124,10 @@ const Home = () => {
   }
 
   useEffect(() => {
-    fetchWorkOrderCount()
+    // fetchWorkOrderCount()
     fetchITAssetsCount()
     fetchITAssetsPrice()
+    getUserSession()
     document.title = '综合信息'
     
   }, [])

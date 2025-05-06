@@ -6,7 +6,7 @@ import {
   FireOutlined,
 } 
 from '@ant-design/icons';
-import { Flex, Space, ConfigProvider, theme} from 'antd';
+import { Flex, Space, ConfigProvider, theme, Skeleton} from 'antd';
 import type { GetProp, GetRef } from 'antd';
 import { Bubble, Sender, Prompts } from '@ant-design/x';
 import type { PromptsProps } from '@ant-design/x'
@@ -101,7 +101,7 @@ const roles: GetProp<typeof Bubble.List, 'roles'> = {
         background: '#87d068'
       }
     },
-    header: <span className='text-gray-500 font-bold text-[15px]'>aosang</span>
+    header: <span className='text-gray-500 font-bold text-[15px]'>User</span>
   },
 
   ai: {
@@ -146,12 +146,25 @@ const renderTitle = (icon: React.ReactElement, title: string) => (
 
 
 const AiAssitant: React.FC = () => {
-  
+  const [isSkeletonLoading, setIsSkeletonLoading] = useState<boolean>(true)
   const [value, setValue] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
   const [abortController, setAbortController] = useState<AbortController | null>(null)
   const [isCancelled, setIsCancelled] = useState<boolean>(false)
   const [keywords, setKeywords] = useState<Array<{ key: string, description: string }>>([])
+  const [contextMessages, setContextMessages] = useState<Array<{ role: string, content: string }>>([
+    { role: "system", content: `
+      # 角色
+      你是一位拥有多年经验的资深运维工程师，对软件运维和硬件运维都有深入的了解
+      ## 任务要求
+      1. 根据用户的问题，给出详细的回答
+      2. 回答的内容需要包含详细的步骤和操作方法
+      3. 回答的内容要调理清晰
+      4. 回答的内容尽量减少代码
+      ## 注意：
+      如果用户的问题与运维无关，请直接回答："抱歉，我无法回答这个问题。"
+    ` }
+  ]);
   const [messages, setMessages] = useState<Array<{ key: string, role: 'user' | 'ai', content: string | React.ReactNode }>>([
     {
       key: 'welcome',
@@ -203,6 +216,17 @@ const AiAssitant: React.FC = () => {
     }
   };
 
+  // 计算 Prompts 的高度
+  const getPromptsHeight = () => {
+    if (windowHeight <= 728) {
+      return '84vh'; // 低分辨率下的高度
+    } else if (windowHeight <= 900) {
+      return '87.5vh'; // 中等分辨率下的高度
+    } else {
+      return '87.5vh'; // 高分辨率下的高度
+    }
+  };
+
   const requestContent = (content: string) => {
     // 重置取消标志
     setIsCancelled(false);
@@ -233,12 +257,37 @@ const AiAssitant: React.FC = () => {
     ]);
     setLoading(true)
 
+    // 更新上下文消息
+    const updatedContextMessages = [...contextMessages, { role: "user", content }];
+    setContextMessages(updatedContextMessages);
+
     // 创建累积的内容变量
     let accumulatedContent = '';
 
     // 创建新的 AbortController
     const controller = new AbortController();
     setAbortController(controller);
+
+    // 计算当前上下文的token数量（粗略估计）
+    const estimateTokens = (text: string) => {
+      // 英文大约每4个字符1个token，中文每个字符约1.5个token
+      // 这是一个粗略估计，实际情况会有所不同
+      const englishChars = text.match(/[a-zA-Z0-9.,?!;:'"()\[\]{}]/g)?.length || 0;
+      const chineseChars = text.match(/[\u4e00-\u9fa5]/g)?.length || 0;
+      const otherChars = text.length - englishChars - chineseChars;
+      
+      return Math.ceil(englishChars / 4 + chineseChars * 1.5 + otherChars);
+    };
+    
+    // 计算上下文消息的总token数
+    let contextTokens = 0;
+    updatedContextMessages.forEach(msg => {
+      contextTokens += estimateTokens(msg.content);
+    });
+    
+    // 计算剩余可用的token数量，确保至少有1000个token用于回复
+    const maxModelTokens = parseInt(process.env.NEXT_PUBLIC_MAX_TOKENS || "8192");
+    const availableTokens = Math.max(1000, maxModelTokens - contextTokens);
 
     const options = {
       method: 'POST',
@@ -248,23 +297,9 @@ const AiAssitant: React.FC = () => {
       },
       body: JSON.stringify({
         "model": process.env.NEXT_PUBLIC_API_MODEL,
-        "messages": [
-          {
-            "role": "system", "content": `
-            # 角色
-            你是一位拥有多年经验的资深运维工程师，对软件运维和硬件运维都有深入的了解
-            ## 任务要求
-            1. 根据用户的问题，给出详细的回答
-            2. 回答的内容需要包含详细的步骤和操作方法
-            3. 回答的内容要调理清晰
-            4. 回答的内容尽量减少代码
-            ## 注意：
-            如果用户的问题与运维无关，请直接回答："抱歉，我无法回答这个问题。"
-          ` },
-          { "role": "user", "content": content }
-        ],
+        "messages": updatedContextMessages, // 使用上下文消息
         "stream": true,
-        "max_tokens": parseInt(process.env.NEXT_PUBLIC_MAX_TOKENS || "2048"),
+        "max_tokens": availableTokens, // 动态计算可用的token数量
         "stop": null,
       }),
       signal: controller.signal // 添加信号,用于取消请求
@@ -347,6 +382,12 @@ const AiAssitant: React.FC = () => {
             if (done || isCancelled) {
               // 确保最后的内容被更新
               updateMessageContent(accumulatedContent);
+              
+              // 将AI回复添加到上下文中
+              if (accumulatedContent) {
+                setContextMessages(prev => [...prev, { role: "assistant", content: accumulatedContent }]);
+              }
+              
               setLoading(false);
               return;
             }
@@ -452,6 +493,7 @@ const AiAssitant: React.FC = () => {
     document.title = 'AI助手'
     getAiHistoryWord().then(res => {
       setKeywords(res)
+      setIsSkeletonLoading(false)
     })
   }, []); // 添加空依赖数组，避免重复执行
 
@@ -475,39 +517,41 @@ const AiAssitant: React.FC = () => {
         -translate-x-1/2
         justify-around
       '>
-        <div className='border-r-2 border-gray-200'>
-          <div className='w-[160px] mb-5 ml-[50px]'>
-            <img src="/load-blue.png" alt="" className='w-[100%]' />
-          </div>
-          <ConfigProvider theme={{ algorithm: theme.defaultAlgorithm }}>
-            <Prompts
-              items={items}
-              wrap
-              styles={{
-                item: {
-                  width: '280px',
-                  flex: 'none',
-                  backgroundImage: `linear-gradient(137deg, #e5f4ff 0%, #efe7ff 100%)`,
-                  border: 0,
-                  height: '87.5vh',
-                  padding: '24px',
-                  boxSizing: 'border-box',
-                  margin: '0 26px 0 auto',
-                },
-                subItem: {
-                  background: 'rgba(255,255,255,0.45)',
-                  border: '1px solid #FFF',
-                  cursor: loading ? 'not-allowed' : 'pointer',
-                  opacity: loading ? 0.6 : 1,
-                },
-              }}
-              onItemClick={(info) => {
-                if (!loading) {
-                  requestContent(info.data.description as string)
-                }
-              }}
-            />
-          </ConfigProvider>
+        <div className='border-r-2 border-gray-200 w-[280px]'>
+          <Skeleton active loading={isSkeletonLoading} paragraph={{ rows: 16 }} className='w-[246px]'>
+            <div className='w-[160px] mb-5 ml-[40px]'>
+              <img src="/load-blue.png" alt="logo" className='w-[100%]' />
+            </div>
+            <ConfigProvider theme={{ algorithm: theme.defaultAlgorithm }}>
+              <Prompts
+                items={items}
+                wrap
+                styles={{
+                  item: {
+                    width: '246px',
+                    flex: 'none',
+                    backgroundImage: `linear-gradient(137deg, #e5f4ff 0%, #efe7ff 100%)`,
+                    border: 0,
+                    height: getPromptsHeight(), // 使用动态计算的高度
+                    padding: '24px',
+                    boxSizing: 'border-box',
+                    margin: '0',
+                  },
+                  subItem: {
+                    background: 'rgba(255,255,255,0.45)',
+                    border: '1px solid #FFF',
+                    cursor: loading ? 'not-allowed' : 'pointer',
+                    opacity: loading ? 0.6 : 1,
+                  },
+                }}
+                onItemClick={(info) => {
+                  if (!loading) {
+                    requestContent(info.data.description as string)
+                  }
+                }}
+              />
+            </ConfigProvider>
+          </Skeleton>
         </div>
         <div className='w-[70%]'>
           <div dangerouslySetInnerHTML={{ __html: thinkingStyle }} />

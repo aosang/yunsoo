@@ -130,12 +130,12 @@ export const getWorkOrder = async (id?: string) => {
 }
 
 // get workOrder count
-export const getWorkOrderCount = async () => {
+export const getWorkOrderCount = async (id?: string) => {
   try {
     const [finishedData, processingData, pendingData] = await Promise.all([
-      supabase.from('work_order_cn').select('*').eq('created_status', '已完成'),
-      supabase.from('work_order_cn').select('*').eq('created_status', '处理中'),
-      supabase.from('work_order_cn').select('*').eq('created_status', '待处理'),
+      supabase.from('work_order_cn').select('*').eq('created_status', '已完成').eq('id', id),
+      supabase.from('work_order_cn').select('*').eq('created_status', '处理中').eq('id', id),
+      supabase.from('work_order_cn').select('*').eq('created_status', '待处理').eq('id', id),
     ])
 
     if (finishedData.error) throw finishedData.error
@@ -156,8 +156,7 @@ export const getWorkOrderCount = async () => {
 // get assets count
 export const getAllAssetsCount = async () => {
   try {
-    const [
-      computerNum, 
+    const [computerNum, 
       laptopNum, 
       serverNum, 
       switchNum, 
