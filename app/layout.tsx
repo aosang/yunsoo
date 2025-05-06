@@ -26,12 +26,14 @@ export default function RootLayout({
       setIsLoading(false)
       
       // 如果未登录且不在登录页面，重定向到登录页
-      if (!authResult && pathname !== '/') {
+      if (!authResult && pathname !== '/' && pathname !== '/ResetPassword/') {
         router.push('/')
+      }else if (pathname === '/ResetPassword/') {
+        router.push('/ResetPassword')
       }
       // 如果已登录且在登录页面，重定向到首页或仪表盘
       else if (authResult && pathname === '/') {
-        router.push('/') // 或其他适合的已认证用户的首页
+        router.push('/Home') // 或其他适合的已认证用户的首页
       }
     }
 

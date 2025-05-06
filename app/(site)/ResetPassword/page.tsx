@@ -117,11 +117,11 @@ const resetPassword = () => {
     <div style={resetBg}>
       {setPassword ? (
         <div className="
-            w-520 
-            bg-white 
-            absolute
-            top-1/2
-            left-1/2
+          w-520 
+          bg-white 
+          absolute
+          top-1/2
+          left-1/2
           rounded-sm"
         style={resetBox}
         >

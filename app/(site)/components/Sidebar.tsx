@@ -74,7 +74,7 @@ const AppLayout = ({children, userId, update}) => {
           <Content style={contentStyle}>
             {children}
           </Content>
-          <Footer style={footerStyle} className='bg-gray-200'>Yunsoo with StevenWang ©2024</Footer>
+          <Footer style={footerStyle} className='bg-gray-200'>Yunsoo with StevenWang ©2025</Footer>
         </Layout>
       </Layout>
     </div>
