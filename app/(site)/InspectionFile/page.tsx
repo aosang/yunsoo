@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState, useRef } from "react"
-import { Descriptions, Divider, Table, Result, Button } from "antd"
+import { Descriptions, Divider, Table, Result, Button, Modal } from "antd"
 import { DownloadOutlined  } from '@ant-design/icons'
 import { inspectionForms } from '@/utils/dbType'
 import { getSession } from "@/utils/providerSelectData"
@@ -8,8 +8,11 @@ import Transation from "../components/Transation"
 import { getTimeNumber } from "@/utils/pubFunProvider"
 import html2Canvas from "html2canvas"
 import jsPDF from "jspdf"
+import { useRouter } from "next/navigation"
 
 const InspectionFile: React.FC = () => {
+  const [isModalOpenWindow, setIsModalOpenWindow] = useState(false)
+  const router = useRouter()
   const columns = [{
       title: '设备名称',
       dataIndex: 'inspection_device',
@@ -37,17 +40,20 @@ const InspectionFile: React.FC = () => {
   const getInspectioPdfData = () => {
     let inspectionData = window.sessionStorage.getItem('inspectionData') as unknown
     inspectionData =  JSON.parse(inspectionData as string)
-    
-    setCreatePdfData({
-      inspection_id: inspectionData![0].inspection_id,
-      inspection_time: inspectionData![0].inspection_time,
-      inspection_number: inspectionData![0].inspection_number,
-      inspection_phone: inspectionData![0].inspection_phone,
-      inspection_name: inspectionData![0].inspection_name,
-      inspection_email: inspectionData![0].inspection_email,
-      inspection_status: inspectionData![0].inspection_status,
-      inspection_deviceData: inspectionData![0].inspection_deviceData
-    }) 
+    if(inspectionData === null || inspectionData === undefined) { 
+      router.push('/not-found')
+    }else {
+      setCreatePdfData({
+        inspection_id: inspectionData![0].inspection_id || '',
+        inspection_time: inspectionData![0].inspection_time || '',
+        inspection_number: inspectionData![0].inspection_number || 0,
+        inspection_phone: inspectionData![0].inspection_phone || '',
+        inspection_name: inspectionData![0].inspection_name || '',
+        inspection_email: inspectionData![0].inspection_email || '',
+        inspection_status: inspectionData![0].inspection_status || '',
+        inspection_deviceData: inspectionData![0].inspection_deviceData || []
+      }) 
+    }
   }
 
   const getCompanyPdfName = () => {
@@ -55,6 +61,7 @@ const InspectionFile: React.FC = () => {
       setCreateCompanyPdfName(res!.session?.user.user_metadata.company)
     })
   }
+
 
   const exportInspectionPdfFile = () => {
     let shareContent = document.getElementById('contentRef')
@@ -94,13 +101,23 @@ const InspectionFile: React.FC = () => {
   }
 
   useEffect(() => {
-    document.title = '巡检记录'
+    document.title = '巡检记录报告'
     getInspectioPdfData()
     getCompanyPdfName()
   }, [])
 
   return (
     <>
+      <Modal 
+        title="提示" 
+        open={isModalOpenWindow} 
+        maskClosable={false}
+        onOk={() => {}}
+        footer={null}
+        closeIcon={null}
+      >
+        <p>巡检数据不存在，请关闭页面</p>
+      </Modal>
       <Button 
         type="primary" 
         shape="circle" 
@@ -121,7 +138,7 @@ const InspectionFile: React.FC = () => {
           <div className="w-36 float-left">
             <img 
               className="w-full" 
-              src='/system_logo.png' 
+              src='https://www.wangle.run/company_icon/public_image/system_logo.png' 
               alt="It assets logo" 
             />
           </div>

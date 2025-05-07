@@ -107,7 +107,7 @@ const roles: GetProp<typeof Bubble.List, 'roles'> = {
   ai: {
     placement: 'start',
     avatar: {
-      icon: <img src='/assets_logo_white.png' alt='yunsoo' className='!w-[20px] !h-[20px]' />,
+      icon: <img src='https://www.wangle.run/company_icon/public_image/assets_logo_white.png' alt='yunsoo' className='!w-[20px] !h-[20px]' />,
       style: { background: 'rgba(22, 119, 255, 0.65)' }
     },
     header: <span className='text-gray-600 font-bold text-[15px]'>yunsoo</span>
@@ -518,7 +518,7 @@ const AiAssitant: React.FC = () => {
         <div className='border-r-2 border-gray-200 w-[280px]'>
           <Skeleton active loading={isSkeletonLoading} paragraph={{ rows: 16 }} className='w-[246px]'>
             <div className='w-[160px] mb-5 ml-[40px]'>
-              <img src="/load-blue.png" alt="logo" className='w-[100%]' />
+              <img src="https://www.wangle.run/company_icon/public_image/load-blue.png" alt="logo" className='w-[100%]' />
             </div>
             <ConfigProvider theme={{ algorithm: theme.defaultAlgorithm }}>
               <Prompts
@@ -572,8 +572,7 @@ const AiAssitant: React.FC = () => {
               bottom-[3%] 
               w-[68.5%]
               mx-auto
-              bg-white
-            '
+              bg-white'
             autoSize={{ minRows: 1, maxRows: 2 }}
             onSubmit={requestContent}
             value={value}

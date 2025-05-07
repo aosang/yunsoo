@@ -140,7 +140,7 @@ const Home = () => {
             <Skeleton active loading={isSpiningLoading}>
               <Row gutter={20}>
                 <Col span={6}>
-                  <div style={workCardInfo} className="bg-[#54a0ff]">
+                  <div style={workCardInfo} className="bg-gradient-to-r from-[#54a0ff] to-[#6fb6ff]">
                     <div className='w-[72px] h-[72px] rounded-2xl bg-[rgba(255,255,255,0.3)]'>
                       <AiOutlineBars className='mt-5 mx-auto text-white block' size={30} />
                     </div>
@@ -153,7 +153,7 @@ const Home = () => {
                   </div>
                 </Col>
                 <Col span={6}>
-                  <div style={workCardInfo} className="bg-[#10ac84]">
+                  <div style={workCardInfo} className="bg-gradient-to-r from-[#10ac84] to-[#1dd1a1]">
                     <div style={workIcon}>
                       <AiOutlineCheck style={workIconText} size={30} />
                     </div>
@@ -166,7 +166,7 @@ const Home = () => {
                   </div>
                 </Col>
                 <Col span={6}>
-                  <div style={workCardInfo} className="bg-[#ee5253]">
+                  <div style={workCardInfo} className="bg-gradient-to-r from-[#ee5253] to-[#ff6b6b]">
                     <div className='w-[72px] h-[72px] rounded-2xl bg-[rgba(255,255,255,0.3)]'>
                       <AiOutlineFileSync style={workIconText} size={30} />
                     </div>
@@ -179,7 +179,7 @@ const Home = () => {
                   </div>
                 </Col>
                 <Col span={6}>
-                  <div style={workCardInfo} className="bg-[#f39c12]">
+                  <div style={workCardInfo} className="bg-gradient-to-r from-[#f39c12] to-[#feca57]">
                     <div style={workIcon}>
                       <AiOutlinePause style={workIconText} size={30} />
                     </div>

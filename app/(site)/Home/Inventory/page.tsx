@@ -278,7 +278,7 @@ const Inventory = () => {
   }
 
   const createQrCodePage = (id: string) => {
-    window.open(`/TemplateCode?id=${id}`, '_blank')
+    window.open(`/assetsmanager/TemplateCode?id=${id}`, '_blank')
   }
 
   const inventoryColumns = [{

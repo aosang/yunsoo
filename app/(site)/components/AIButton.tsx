@@ -23,9 +23,10 @@ const AIButton = () => {
           right: 24, 
           width: 130, 
           height: 36,
+          bottom: 84,
         }}
         onClick={() => {
-        window.open('/Aiassitant', '_blank')
+          window.open('https://www.wangle.run/assetsmanager/Aiassitant', '_blank')
         }}
       />
     </ConfigProvider>

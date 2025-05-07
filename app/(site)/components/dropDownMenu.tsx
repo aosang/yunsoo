@@ -1,4 +1,4 @@
-import { Dropdown, Space, Button } from 'antd'
+import { Dropdown, Space } from 'antd'
 import { DownOutlined, ClockCircleOutlined } from '@ant-design/icons'
 import { supabase } from '@/utils/clients'
 import { useRouter } from 'next/navigation'
@@ -38,12 +38,13 @@ const DropDownMenu = () => {
 
   const getMyInfomation = () => {
     getSession().then(res => {
-      let userId = res!.session?.user.id
-        getProfiles(userId).then(res => {
-          setUsername(res![0].username)
-          setAvatarUrl(res![0].avatar_url)
+      setUsername(res!.session?.user.user_metadata.username)
+
+      getProfiles(res!.session?.user.id).then(res => {
+        setAvatarUrl(res![0].avatar_url)
       })
     })
+
     
   }
 

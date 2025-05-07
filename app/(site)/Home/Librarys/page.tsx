@@ -13,12 +13,12 @@ import { BiSolidMobile } from "react-icons/bi"
 import { getLibraryTableData, deleteLibraryTableData, getLibrarysDataList } from "@/utils/provideLibraryData"
 import AIButton from "@components/AIButton"
 
-const ReactWEditor = dynamic(() => import('../../components/Editor'), {
+const ReactWEditor = dynamic(() => import('@components/Editor'), {
   ssr: false,
   loading: () => <p className="text-base text-blue-950">Loading...</p>
 })
 
-const UpdateEditor = dynamic(() => import('../../components/EditorUpdate'), {
+const UpdateEditor = dynamic(() => import('@components/EditorUpdate'), {
   ssr: false,
   loading: () => <p className="text-base text-blue-950">Loading...</p>
 })
@@ -48,7 +48,7 @@ const Librarys = () => {
 
   const goToLibrarysDetails = (id: string) => {
     // router.push(`/KnowledgeTemplate?KnowledgeId=${id}`)
-    window.open(`/KnowledgeTemplate?KnowledgeId=${id}`, '_blank')
+    window.open(`https://www.wangle.run/assetsmanager/KnowledgeTemplate?KnowledgeId=${id}`, '_blank')
   }
 
   const delteLibrarModal = (id: string) => {
@@ -60,7 +60,7 @@ const Librarys = () => {
     deleteLibraryTableData(deleteId).then(res => {
       getLibraryListData()
       setIsDeleteModal(false)
-      useMessage(2, 'Delete Success!', 'success')
+      useMessage(2, '删除成功！', 'success')
     })
   }
 

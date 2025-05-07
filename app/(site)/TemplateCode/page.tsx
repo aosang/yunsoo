@@ -37,7 +37,8 @@ const TemplateCode: React.FC = () => {
     if (myId) {
       getCodeAssetsData(myId).then(res => {
         setDeviceInfo(res![0] as myDeviceInfo)
-        setQrCodeData(`https://37165a514c.vicp.fun/TemplateCode?id=${myId}`)
+        // setQrCodeData(`https://37165a514c.vicp.fun/TemplateCode?id=${myId}`)
+        setQrCodeData(`https://www.wangle.run/assetsmanager/TemplateCode?id=${myId}`)
         setTimeout(() => {
           setIsLoading(false)
         }, 500)
@@ -84,31 +85,29 @@ const TemplateCode: React.FC = () => {
                 column={24}
                 style={{ marginBottom: '0.2rem' }}
               >
-                <Divider />
                 <Descriptions.Item label="借出编号" span={24}>
-                  {deviceInfo.loanout_id}
+                  {deviceInfo.loanout_id || '-'}
                 </Descriptions.Item>
-                <Divider />
-                <Descriptions.Item label="设备名称" span={24}>
-                  {deviceInfo.loanout_name}
-                </Descriptions.Item>
-                <Divider />
-                <Descriptions.Item label="借出人员" span={24}>
-                  {deviceInfo.loanout_user}
-                </Descriptions.Item>
-                <Divider />
+                
                 <Descriptions.Item label="设备类型" span={24}>
-                  {deviceInfo.loanout_type}
+                  {deviceInfo.loanout_type || '-'}
                 </Descriptions.Item>
-                <Divider />
+                  
+                <Descriptions.Item label="设备名称" span={24}>
+                  {deviceInfo.loanout_name || '-'}
+                </Descriptions.Item>
+                  
+                <Descriptions.Item label="借出人员" span={24}>
+                  {deviceInfo.loanout_user || '-'}
+                </Descriptions.Item>
+                  
                 <Descriptions.Item label="设备品牌" span={24}>
-                  {deviceInfo.loanout_brand}
+                  {deviceInfo.loanout_brand || '-'}
                 </Descriptions.Item>
-                <Divider />
-                <Descriptions.Item label="借出时间" span={24}>
-                  {deviceInfo.loanout_time}
+                  
+                <Descriptions.Item label="借出时间" span={24} >
+                  {deviceInfo.loanout_time || '-'}
                 </Descriptions.Item>
-                <Divider />
               </Descriptions>
             </div>
 

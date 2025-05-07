@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react"
 import { Editor, Toolbar, } from "@wangeditor/editor-for-react"
-import { Row, Col, Input, Select, FloatButton, Divider, Button  } from "antd"
+import { Row, Col, Input, Select, Divider, Button  } from "antd"
 import { supabase } from "@/utils/clients"
 import { getTimeNumber } from "@/utils/pubFunProvider"
 import { knowledgeTypeItem, typeDataName} from "@/utils/dbType"
-import { getWorkOrderType } from "@/utils/providerSelectData"
-import { insertLibraryData} from "@/utils/provideLibraryData"
+import { getWorkOrderType, getSession } from "@/utils/providerSelectData"
+import { insertLibraryData } from "@/utils/provideLibraryData"
 import useMessage from "@/utils/message"
-import { IDomEditor, IToolbarConfig, i18nChangeLanguage } from '@wangeditor/editor'
+import { IDomEditor, IToolbarConfig } from '@wangeditor/editor'
 // i18nChangeLanguage('en')
 import '@wangeditor/editor/dist/css/style.css'
 
@@ -144,7 +144,7 @@ const EditorPage = ({isEdit, setIsEdit, onSubmit}: {
           description: ''
         })
         setIsEdit(false)
-        useMessage(2, 'Knowledge library create sucessful!', 'success')
+        useMessage(2, '知识库创建成功！', 'success')
         onSubmit()
       })
     }
@@ -170,12 +170,14 @@ const EditorPage = ({isEdit, setIsEdit, onSubmit}: {
   }, [editor])
 
   useEffect(() => {
-    let userRegister = window.localStorage.getItem('userRegister') || ''
-    let userRegisterInfo = JSON.parse(userRegister)
-    setKnowledgeItem(prevState => ({
-      ...prevState,
-      author: userRegisterInfo.username,
-    }))
+    getSession().then(res => {
+      console.log(res)
+      
+      setKnowledgeItem(prevState => ({
+        ...prevState,
+        author: res!.session?.user.user_metadata.username,
+      }))
+    })
   }, [])
 
   useEffect(() => {

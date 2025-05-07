@@ -70,8 +70,11 @@ const Auth: React.FC = () => {
             password,
             
             options: {
-              data: {username, company}
-              // emailRedirectTo: 'https://www.wangle.run/assetsManager/Home'
+              data: {
+                username, 
+                company
+              },
+              emailRedirectTo: 'https://www.wangle.run/assetsmanager/Home'
               // emailRedirectTo: 'http://localhost:3000/Home'
             }
           })

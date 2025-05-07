@@ -250,7 +250,7 @@ const Inspection: React.FC = () => {
     getInspectionDetailsDeviceData(inspectionId)
       .then(res => {
         window.sessionStorage.setItem('inspectionData', JSON.stringify(res))
-        window.open('/InspectionFile', '_blank')
+        window.open('https://www.wangle.run/assetsmanager/InspectionFile', '_blank')
       })
   }
 
