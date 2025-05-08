@@ -7,9 +7,11 @@ import { getLibrarysDataList } from "@/utils/provideLibraryData"
 import { getTimeNumber } from '@/utils/pubFunProvider'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
+import { useRouter } from 'next/navigation'
 
 const KnowledgeTemplate = () => {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const [librarysData, setLibrarysData] = useState([
     {
       title: '',
@@ -25,10 +27,13 @@ const KnowledgeTemplate = () => {
     const id = searchParams.get('KnowledgeId')
     if (id) {
       getLibrarysDataList(id).then(res => {
-        setLibrarysData(res as [])
+        if(res!.length === 0 || res === null || res === undefined) { 
+          router.push('/404')
+        }else {
+          setLibrarysData(res as [])
+        }
       })
     }
-
     setIsLoading(false)
   }
   

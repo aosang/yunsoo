@@ -41,7 +41,7 @@ const resetPassword = () => {
             useMessage(2, '邮箱未找到', 'error')
           } else {
             const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
-              redirectTo: `${window.location.origin}/ResetPassword`
+              redirectTo: `${window.location.origin}/assetsmanager/ResetPassword`
             })
             try {
               if (error !== null) return useMessage(2, '操作过于频繁，请稍后再试', 'error')
@@ -156,7 +156,7 @@ const resetPassword = () => {
               className='w-full h-10 mt-4 text-base mb-12 leading-10'
               onClick={sendResetEmailInfo}
             >
-              发送邮件
+              发送邮件链接
             </Button>
           </div>
         </div>

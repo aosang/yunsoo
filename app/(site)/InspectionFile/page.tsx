@@ -40,8 +40,8 @@ const InspectionFile: React.FC = () => {
   const getInspectioPdfData = () => {
     let inspectionData = window.sessionStorage.getItem('inspectionData') as unknown
     inspectionData =  JSON.parse(inspectionData as string)
-    if(inspectionData === null || inspectionData === undefined) { 
-      router.push('/not-found')
+    if(inspectionData === null || inspectionData === undefined || !inspectionData) { 
+      router.push('/404')
     }else {
       setCreatePdfData({
         inspection_id: inspectionData![0].inspection_id || '',

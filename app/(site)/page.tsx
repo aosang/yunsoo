@@ -10,7 +10,6 @@ import { InfoCircleOutlined } from '@ant-design/icons'
 import authScss from './auth.module.scss'
 import useMessage from '@/utils/message'
 import Verify from './components/Verify'
-import MaskLoad from './components/MaskLoad'
 
 const Auth: React.FC = () => {
   const router = useRouter()
@@ -154,14 +153,14 @@ const Auth: React.FC = () => {
 
   return (
     <>
-      {isSpining && <MaskLoad />}
+      {/* {isSpining && <MaskLoad />} */}
       {!mySession && !isSpining && (
         <div>
           {isVerify ? <Verify emailAddress={formState.email} /> : (
             <div className={authScss.background}>
               <div className={authScss.signUpForm}>
-                <div className='w-48 my-6 mx-auto'>
-                  <img className='w-full' src="https://www.wangle.run/Company_icon/public_image/system_logo.png" alt="system-logo" />
+                <div className='w-40 my-6 mx-auto'>
+                  <img className='w-full' src="https://www.wangle.run/company_icon/public_image/system_logo.png" alt="system-logo" />
                 </div>
                 {/* <h3>Assets Management</h3> */}
                 <span className={authScss.line}></span>
