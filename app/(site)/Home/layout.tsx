@@ -1,9 +1,8 @@
 'use client'
 import SideBar from '../components/Sidebar'
-import { getProfiles, getSession, updateProfiles } from '@/utils/providerSelectData'
+import { getSession } from '@/utils/providerSelectData'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { getTimeNumber } from '@/utils/pubFunProvider'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()

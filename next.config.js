@@ -16,7 +16,7 @@ const nextConfig = {
     unoptimized: true,
   },
    
-  trailingSlash: false,
+  trailingSlash: true,
   output: 'export',
   basePath: '/assetsmanager',
   assetPrefix: '/assetsmanager',

@@ -26,7 +26,7 @@ const resetPassword = () => {
   const [newPassword, setNewPassword] = useState<string>('')
   const [confirmPassword, setConfirmPassword] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(true)
-
+  // const [code, setCode] = useState<string>('')
   const router = useRouter()
 
   const sendResetEmailInfo = async () => {
@@ -40,8 +40,9 @@ const resetPassword = () => {
           if (!emailData) {
             useMessage(2, '邮箱未找到', 'error')
           } else {
+            const redirectUrl = `${window.location.origin}/assetsmanager/ResetPassword/`
             const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
-              redirectTo: `${window.location.origin}/assetsmanager/ResetPassword`
+              redirectTo: redirectUrl,
             })
             try {
               if (error !== null) return useMessage(2, '操作过于频繁，请稍后再试', 'error')
@@ -86,9 +87,27 @@ const resetPassword = () => {
 
   useEffect(() => {
     const url = window.location.href
+    // const urls = 'https://www.wangle.run/assetsmanager/ResetPassword/?code=123456'
+    
+
+    let code: string | null = null
     const parsedUrl = new URL(url)
-    let code: string | null = ''
-    code = parsedUrl.searchParams.get("code")
+    code = parsedUrl.searchParams.get("code") || ''
+
+    // try {
+    //   const parsedUrl = new URL(url)
+    //   code = parsedUrl.searchParams.get("code")
+      
+    //   // 如果URL格式是/ResetPassword/code=123456这种格式
+    //   if (!code &&  url.includes('/code=')) {
+    //     const codeMatch = url.match(/\/code=([^&]+)/)
+    //     if (codeMatch && codeMatch[1]) {
+    //       code = codeMatch[1]
+    //     }
+    //   }
+    // } catch (error) {
+    //   console.error('URL解析错误:', error)
+    // }
 
     if (code) {
       changeSetPassword(false)
