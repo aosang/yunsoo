@@ -1,7 +1,7 @@
 'use client'
 
 import useMessage from '@/utils/message'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Input, Button, Tooltip } from 'antd'
 import { supabase } from '@/utils/clients'
@@ -20,7 +20,8 @@ const resetBox: React.CSSProperties = {
   transform: 'translate(-50%, -50%)',
 }
 
-const resetPassword = () => {
+// 创建一个内部组件来使用 useSearchParams
+function ResetPasswordContent() {
   const [resetEmail, setResetEmail] = useState<string>('')
   const [setPassword, changeSetPassword] = useState<boolean>(true)
   const [newPassword, setNewPassword] = useState<string>('')
@@ -217,4 +218,18 @@ const resetPassword = () => {
     </div>
   )
 }
-export default resetPassword
+
+// 主组件使用 Suspense 包裹内部组件
+const ResetPassword = () => {
+  return (
+    <Suspense fallback={
+      <div style={resetBg} className="flex items-center justify-center">
+        <div className="text-white text-xl">加载中...</div>
+      </div>
+    }>
+      <ResetPasswordContent />
+    </Suspense>
+  )
+}
+
+export default ResetPassword

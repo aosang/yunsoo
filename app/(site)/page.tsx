@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Input, Button, Tooltip } from 'antd'
 import { emailRegFunc, passwordRegFunc } from '@/utils/pubFunProvider'
-
+import Transation from '@components/Transation'
 import { supabase } from '@/utils/clients'
 import { formCollect } from '@/utils/dbType'
 import { InfoCircleOutlined } from '@ant-design/icons'
@@ -156,7 +156,8 @@ const Auth: React.FC = () => {
       {/* {isSpining && <MaskLoad />} */}
       {!mySession && !isSpining && (
         <div>
-          {isVerify ? <Verify emailAddress={formState.email} /> : (
+          <Transation/>
+          {isVerify? <Verify emailAddress={formState.email} /> : ( 
             <div className={authScss.background}>
               <div className={authScss.signUpForm}>
                 <div className='w-40 my-6 mx-auto'>

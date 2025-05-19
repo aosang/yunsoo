@@ -66,4 +66,8 @@ export const getAiHistoryWord = async () => {
   return data
 }
 
-
+export const getUpdateText = async () => {
+  const { data, error } = await supabase.from('update_text').select('*')
+  if(error) throw error
+  return data
+}

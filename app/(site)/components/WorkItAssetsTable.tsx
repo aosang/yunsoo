@@ -336,15 +336,20 @@ const WorkItAssetsTable: React.FC = () => {
       const jsonData = XLSX.utils.sheet_to_json(sheet)
 
       jsonData.forEach((item:any) => {
-        item.product_time = getTimeNumber()[0]
-        item.product_update = getTimeNumber()[0]
-      })
+        if(!item.product_type || !item.product_brand || !item.product_name || !item.product_number || !item.product_price || !item.value) { 
+          useMessage(2, '表格导入失败！请检查表格数据是否正确', 'error')
+          return
+        }else {
+          item.product_time = getTimeNumber()[0]
+          item.product_update = getTimeNumber()[0]
+        }
 
-      uploadExcelItAssetsData(jsonData as productItem[])
-      .then(() => {
-        getMyItAssetsData()
-        useMessage(2, '表格导入成功!', 'success')
-        setIsImportModalShow(false)
+        uploadExcelItAssetsData(jsonData as productItem[])
+        .then(() => {
+          getMyItAssetsData()
+          useMessage(2, '表格导入成功!', 'success')
+          setIsImportModalShow(false)
+        })
       })
     }
     reader.readAsArrayBuffer(file)

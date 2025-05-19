@@ -15,56 +15,72 @@ const items: MenuItem[] = [{
   label: '综合信息',
   icon: <GoHomeFill style={{fontSize: '16px'}} />,
   style: {
-    marginBottom: '12px'
+    marginBottom: '12px',
+    borderRadius: '0px',
+    padding: '0px 60px'
   }
 }, {
   key: 'WorkOrder',
   label: '我的工单',
   icon: <AiFillProfile style={{fontSize: '16px'}} />,
   style: {
-    marginBottom: '12px'
+    marginBottom: '12px',
+    borderRadius: '0px',
+    padding: '0px 60px'
   }
 }, {
   key: 'Inventory',
   label: '库存管理',
   icon: <MdInventory style={{fontSize: '16px'}} />,
   style: {
-    marginBottom: '12px'
+    marginBottom: '12px',
+    borderRadius: '0px',
+    padding: '0px 60px'
   }
 }, {
   key: 'Inspection',
   label: '巡检记录',
   icon: <IoDocumentText style={{fontSize: '16px'}} />,
   style: {
-    marginBottom: '12px'
+    marginBottom: '12px',
+    borderRadius: '0px',
+    padding: '0px 60px'
   }
 }, {
   key: 'Librarys',
   label: '知识库',
   icon: <IoLibrary style={{fontSize: '16px'}} />,
   style: {
-    marginBottom: '12px'
+    marginBottom: '12px',
+    borderRadius: '0px',
+    padding: '0px 60px'
   }
 }, {
   key: 'WorkItAssets',
   label: 'IT设备',
   icon: <RiComputerFill style={{fontSize: '16px'}} />,
   style: {
-    marginBottom: '12px'
+    marginBottom: '12px',
+    borderRadius: '0px',
+    padding: '0px 60px'
   }
 }, {
   key: 'UserManage',
   label: '人员管理',
   icon: <RiUserAddFill style={{fontSize: '16px'}} />,
   style: {
-    marginBottom: '12px'
+    marginBottom: '12px',
+    borderRadius: '0px',
+    padding: '0px 60px'
   }
 }, {
   key: 'Profile',
   label: '个人设置',
   icon: <IoSettings style={{fontSize: '16px'}} />,
   style: {
-    marginBottom: '12px'
+    marginBottom: '12px',
+    borderRadius: '0px',
+    padding: '0px 60px'
   }
 }]
 

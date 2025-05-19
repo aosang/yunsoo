@@ -145,3 +145,10 @@ export interface userManageItem {
   manage_role: string,
   manage_remark: string
 }
+
+export interface updateTextItem {
+  id: string,
+  created_at: string,
+  update_content: string,
+  update_version: string
+}

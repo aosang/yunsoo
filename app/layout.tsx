@@ -3,7 +3,6 @@ import './globals.css'
 import 'antd/dist/reset.css'
 import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
-import Transation from '@components/Transation'
 // 引入metadata
 import { metadata } from '@/utils/metadata'
 import { checkAuth } from '@/utils/authGuards'
@@ -19,13 +18,16 @@ export default function RootLayout({
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    const verifyAuth = async () => {
-      const authResult = await checkAuth()
-      setIsAuthenticated(authResult)
-      setIsLoading(false)
-      
+  const verifyAuth = async () => {
+    const authResult = await checkAuth()
+    setIsAuthenticated(authResult)
+    
+    if (!authResult) {
+      router.push('/')
     }
+  }
+
+  useEffect(() => {
     verifyAuth()
   }, [])
 
@@ -61,7 +63,7 @@ export default function RootLayout({
         style={{ backgroundColor: '#f0f2f5' }}
         suppressHydrationWarning={true}
       >
-        {isLoading ? <Transation /> : children}
+        {children}
       </body>
     </html>
   )
