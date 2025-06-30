@@ -100,16 +100,20 @@ const WorkOrder: React.FC = ({ }) => {
 
   // get profiles
   const getProfilesUsername = async () => {
-    getProfiles()
+    getUser()
       .then(res => {
-        if (res) {
+        getProfiles(res?.user?.id)
+        .then(res => {
           setWorkOrderForm({
             ...workOrderForm,
-            created_name: res[0].username,
+            created_name: res![0].username,
             created_time: getTimeNumber()[0],
             created_update: getTimeNumber()[0]
           })
-        }
+        })
+      })
+      .catch(error => {
+        throw error
       })
   }
 

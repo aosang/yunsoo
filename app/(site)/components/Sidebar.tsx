@@ -18,7 +18,7 @@ const siderStyle: React.CSSProperties = {
 
 const headerStyle: React.CSSProperties = {
   position: 'fixed',
-  width: '86%',
+  width: '86.5%',
   top: '0',
   right: '0',
   color: '#001529',
@@ -29,7 +29,7 @@ const headerStyle: React.CSSProperties = {
 }
 
 const contentStyle: React.CSSProperties = {
-  width: 'calc(100% - 14%)',
+  width: 'calc(100% - 13.5%)',
   margin: '64px 0 48px auto',
 }
 
@@ -37,7 +37,7 @@ const footerStyle: React.CSSProperties = {
   position: 'fixed',
   bottom: 0,
   right: 0,
-  width: 'calc(100% - 14%)',
+  width: 'calc(100% - 13.5%)',
   height: 48,
   display: 'flex',
   alignItems: 'center',
@@ -51,7 +51,7 @@ const AppLayout = ({children, userId, update}) => {
   return (
     <div>
       <Layout style={{ minHeight: '100vh'}}>
-        <Sider width="14%" style={siderStyle}>
+        <Sider width="13.5%" style={siderStyle}>
           <div className='
             h-16
             text-white 
