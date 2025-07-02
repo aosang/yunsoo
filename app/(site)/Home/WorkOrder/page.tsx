@@ -78,14 +78,14 @@ const WorkOrder: React.FC = ({ }) => {
 
   const onDeleteConfirm = async () => {
     deleteWorkOrder(deleteDataId)
-      .then(() => {
-        setIsModalDelete(false)
-        getWorkOrderData()
-        setFilterStatusValue(null)
-        setFilterTypeValue(null)
-        setStartTime(null)
-        setEndTime(null)
-      })
+    .then(() => {
+      setIsModalDelete(false)
+      getWorkOrderData()
+      setFilterStatusValue(null)
+      setFilterTypeValue(null)
+      setStartTime(null)
+      setEndTime(null)
+    })
   }
 
   const onDeleteModal = () => {
@@ -102,14 +102,11 @@ const WorkOrder: React.FC = ({ }) => {
   const getProfilesUsername = async () => {
     getUser()
       .then(res => {
-        getProfiles(res?.user?.id)
-        .then(res => {
-          setWorkOrderForm({
-            ...workOrderForm,
-            created_name: res![0].username,
-            created_time: getTimeNumber()[0],
-            created_update: getTimeNumber()[0]
-          })
+        setWorkOrderForm({
+          ...workOrderForm,
+          created_name: res?.user?.user_metadata.username,
+          created_time: getTimeNumber()[0],
+          created_update: getTimeNumber()[0]
         })
       })
       .catch(error => {
@@ -418,7 +415,7 @@ const WorkOrder: React.FC = ({ }) => {
                     </label>
                     <Input
                       style={{ width: '100%' }}
-                      readOnly
+                      disabled
                       value={workOrderForm.created_name}
                     />
                   </Col>
@@ -451,7 +448,7 @@ const WorkOrder: React.FC = ({ }) => {
                     </label>
                     <Input
                       style={{ width: '100%' }}
-                      readOnly
+                      disabled
                       value={workOrderForm.created_time}
                     />
                   </Col>
@@ -465,7 +462,7 @@ const WorkOrder: React.FC = ({ }) => {
                     </label>
                     <Input
                       style={{ width: '100%' }}
-                      readOnly
+                      disabled
                       value={workOrderForm.created_update}
                     />
                   </Col>
@@ -538,26 +535,30 @@ const WorkOrder: React.FC = ({ }) => {
                     />
                   </Col>
                 </Row>
-                <Row>
-                  <Col span={24}>
-                    <label
-                      htmlFor="Solution"
-                      className='mb-1 flex items-center font-semibold'
-                    >
-                      <span className='mr-1 text-red-600 font-thin'>*</span>
-                      解决方案
-                    </label>
-                    <Input.TextArea
-                      rows={5}
-                      placeholder='描述解决方案'
-                      autoSize={{ minRows: 5, maxRows: 5 }}
-                      value={workOrderForm.created_solved}
-                      onChange={e => setWorkOrderForm({ ...workOrderForm, created_solved: e.target.value })}
-                      maxLength={260}
-                      showCount
-                    />
-                  </Col>
-                </Row>
+
+                {workOrderForm.created_status === '已完成' && (
+                  <Row>
+                    <Col span={24}>
+                      <label
+                        htmlFor="Solution"
+                        className='mb-1 flex items-center font-semibold'
+                      >
+                        <span className='mr-1 text-red-600 font-thin'>*</span>
+                        解决方案
+                      </label>
+                      <Input.TextArea
+                        rows={5}
+                        placeholder='描述解决方案'
+                        autoSize={{ minRows: 5, maxRows: 5 }}
+                        value={workOrderForm.created_solved}
+                        onChange={e => setWorkOrderForm({ ...workOrderForm, created_solved: e.target.value })}
+                        maxLength={260}
+                        showCount
+                      />
+                    </Col>
+                  </Row>
+                )}
+
                 <Row>
                   <Col span={24}>
                     <label
@@ -604,16 +605,12 @@ const WorkOrder: React.FC = ({ }) => {
                       <span className='mr-1 text-red-600 font-thin'>*</span>
                       设备名称
                     </label>
-                    <Select
+                    <Input
                       className='w-full'
-                      options={deviceData}
-                      placeholder="选择设备名称"
-                      showSearch
                       allowClear
-                      onChange={e => setWorkOrderForm({ ...workOrderForm, created_product: e })}
-                      value={workOrderForm.created_product}
-                    >
-                    </Select>
+                      value={workOrderForm.created_product as string}
+                      disabled
+                    />
                   </Col>
                   <Col span={8}>
                     <label
@@ -625,7 +622,7 @@ const WorkOrder: React.FC = ({ }) => {
                     </label>
                     <Input
                       style={{ width: '100%' }}
-                      readOnly
+                      disabled
                       value={workOrderForm.created_name}
                     />
                   </Col>
@@ -648,7 +645,7 @@ const WorkOrder: React.FC = ({ }) => {
                   </Col>
                 </Row>
                 <Row gutter={15}>
-                  <Col span={layoutWidth}>
+                  <Col span={6}>
                     <label
                       htmlFor="Create_time"
                       className='mb-1 flex items-center font-semibold'
@@ -658,11 +655,11 @@ const WorkOrder: React.FC = ({ }) => {
                     </label>
                     <Input
                       style={{ width: '100%' }}
-                      readOnly
+                      disabled
                       value={workOrderForm.created_time}
                     />
                   </Col>
-                  <Col span={layoutWidth}>
+                  <Col span={6}>
                     <label
                       htmlFor="Create_time"
                       className='mb-1 flex items-center font-semibold'
@@ -672,11 +669,11 @@ const WorkOrder: React.FC = ({ }) => {
                     </label>
                     <Input
                       style={{ width: '100%' }}
-                      readOnly
+                      disabled
                       value={workOrderForm.created_update}
                     />
                   </Col>
-                  <Col span={layoutWidth}>
+                  <Col span={6}>
                     {/* product type */}
                     <label
                       htmlFor="Type"
@@ -685,45 +682,26 @@ const WorkOrder: React.FC = ({ }) => {
                       <span className='mr-1 text-red-600 font-thin'>*</span>
                       设备类型
                     </label>
-                    <Select
+                    <Input
                       style={{ width: '100%' }}
-                      options={typeData}
-                      placeholder='选择设备类型'
-                      onChange={selectProductType}
-                      value={workOrderForm.created_type}
-                      allowClear
-                    >
-                    </Select>
+                      disabled
+                      value={workOrderForm.created_type as string}
+                    />
                   </Col>
-                  {productBrandShow && (
-                    <Col span={layoutWidth}>
-                      <label
-                        htmlFor="Brand"
-                        className='mb-1 flex items-center font-semibold'
-                      >
-                        <span className='mr-1 text-red-600 font-thin'>*</span>
-                        品牌
-                      </label>
-                      <Select
-                        style={{ width: '100%' }}
-                        placeholder='选择品牌'
-                        options={typeDataBrand.map(item => {
-                          return {
-                            label:
-                              <div className='flex'>
-                                {selectOpen && <img src={item.logo_url} alt='avatar' className='mr-2 w-6' />}<span className='w-7 mt-0.5'>{item.value}</span>
-                              </div>,
-                            value: item.value
-                          }
-                        })}
-                        value={workOrderForm.created_brand}
-                        onChange={e => setWorkOrderForm({ ...workOrderForm, created_brand: e })}
-                        allowClear
-                        onDropdownVisibleChange={onTriggerSelected}
-                      >
-                      </Select>
-                    </Col>
-                  )}
+                  <Col span={6}>
+                    <label
+                      htmlFor="Brand"
+                      className='mb-1 flex items-center font-semibold'
+                    >
+                      <span className='mr-1 text-red-600 font-thin'>*</span>
+                      品牌
+                    </label>
+                    <Input
+                      style={{ width: '100%' }}
+                      disabled
+                      value={workOrderForm.created_brand as string}
+                    />
+                  </Col>
                 </Row>
                 <Row>
                   <Col span={24}>
@@ -737,34 +715,39 @@ const WorkOrder: React.FC = ({ }) => {
                     <Input.TextArea
                       rows={5}
                       autoSize={{ minRows: 5, maxRows: 5 }}
-                      placeholder='描述设备问题'
                       value={workOrderForm.created_text}
                       onChange={e => setWorkOrderForm({ ...workOrderForm, created_text: e.target.value })}
                       maxLength={260}
                       showCount
+                      disabled
                     />
                   </Col>
                 </Row>
-                <Row>
-                  <Col span={24}>
-                    <label
-                      htmlFor="Solution"
-                      className='mb-1 flex items-center font-semibold'
-                    >
-                      <span className='mr-1 text-red-600 font-thin'>*</span>
-                      解决方案
-                    </label>
-                    <Input.TextArea
-                      rows={5}
-                      placeholder='描述解决方案'
-                      autoSize={{ minRows: 5, maxRows: 5 }}
-                      value={workOrderForm.created_solved}
-                      onChange={e => setWorkOrderForm({ ...workOrderForm, created_solved: e.target.value })}
-                      maxLength={260}
-                      showCount
-                    />
-                  </Col>
-                </Row>
+                {workOrderForm.created_status === '已完成' && (
+                  <Row>
+                    <Col span={24}>
+                      <label
+                        htmlFor="Solution"
+                        className='mb-1 flex items-center font-semibold'
+                      >
+                        <span className='mr-1 text-red-600 font-thin'>*</span>
+                        解决方案
+                      </label>
+                      <Input.TextArea
+                        rows={5}
+                        placeholder='描述解决方案'
+                        autoSize={{ minRows: 5, maxRows: 5 }}
+                        value={workOrderForm.created_solved}
+                        onChange={e => setWorkOrderForm({ ...workOrderForm, created_solved: e.target.value })}
+                        maxLength={260}
+                        showCount
+                      />
+                    </Col>
+                  </Row>
+                )}
+                  
+                
+
                 <Row>
                   <Col span={24}>
                     <label

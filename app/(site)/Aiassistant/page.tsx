@@ -15,6 +15,8 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import remarkGfm from 'remark-gfm';
 import { getAiHistoryWord } from '@/utils/pubFunProvider';
+import Transation from '../components/Transation';
+
 // 添加思考动画的样式
 const thinkingStyle = `
   <style>
@@ -497,6 +499,7 @@ const AiAssitant: React.FC = () => {
 
   return (
     <>
+      <Transation />
       <div className='
         w-[1200px]
         h-[97.5vh]

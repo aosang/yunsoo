@@ -6,7 +6,7 @@ const Transation = () => {
   useEffect(() => {
     setTimeout(() => {
       setTransationIsShow(false)
-    }, 1500)
+    }, 1200)
   }, [])
 
   return (

@@ -82,15 +82,12 @@ const Inspection: React.FC = () => {
 
     getUser()
       .then((res) => {
-        getProfiles(res?.user!.id as string)
-          .then(res => {
-            setInspectionDataForm({
-              ...inspectionDataForm,
-              inspection_time: getTimeNumber()[0],
-              inspection_email: res![0].email || '',
-              inspection_name: res![0].username || ''
-            })
-          })
+        setInspectionDataForm({
+          ...inspectionDataForm,
+          inspection_time: getTimeNumber()[0],
+          inspection_email: res?.user?.email || '',
+          inspection_name: res?.user?.user_metadata.username || ''
+        })
       })
   }
 

@@ -1,7 +1,17 @@
 "use client"
 import { ConfigProvider, FloatButton } from "antd"
 import { AiOutlineMessage } from "react-icons/ai"
+import { usePathname } from "next/navigation"
 const AIButton = () => {
+  const pathname = usePathname()
+
+  const getPathname = () => {
+    const baseUrl = window.location.origin  
+    //http://localhost:3000/Home/Librarys/
+    // console.log(pathname)
+    window.open(baseUrl + '/assetsmanager/Aiassistant', '_blank')
+  }
+
   return (
     <ConfigProvider theme={{
       components: {
@@ -25,9 +35,7 @@ const AIButton = () => {
           height: 36,
           bottom: 84,
         }}
-        onClick={() => {
-          window.open('https://www.wangle.run/assetsmanager/Aiassistant', '_blank')
-        }}
+        onClick={getPathname}
       />
     </ConfigProvider>
   )

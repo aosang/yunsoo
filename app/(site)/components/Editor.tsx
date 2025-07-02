@@ -171,8 +171,6 @@ const EditorPage = ({isEdit, setIsEdit, onSubmit}: {
 
   useEffect(() => {
     getSession().then(res => {
-      console.log(res)
-      
       setKnowledgeItem(prevState => ({
         ...prevState,
         author: res!.session?.user.user_metadata.username,

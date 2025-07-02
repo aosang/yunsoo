@@ -81,7 +81,7 @@ const WorkItAssetsTable: React.FC = () => {
       dataIndex: 'product_brand',
       key: 'product_brand',
     }, {
-      title: '产品名称',
+      title: '设备名称',
       dataIndex: 'product_name',
       key: 'product_name'
     }, {
@@ -136,13 +136,13 @@ const WorkItAssetsTable: React.FC = () => {
 
   const onAddItAssets = () => {
     if (assetsDataForm.product_name === '') {
-      useMessage(2, '请输入产品名称', 'error')
+      useMessage(2, '请输入设备名称', 'error')
     } else if (assetsDataForm.product_number <= 0) {
-      useMessage(2, '请输入产品数量', 'error')
+      useMessage(2, '请输入设备数量', 'error')
     } else if (assetsDataForm.product_price <= 0) {
-      useMessage(2, '请输入产品价格', 'error')
+      useMessage(2, '请输入设备价格', 'error')
     } else if (!assetsDataForm.product_type) {
-      useMessage(2, '请选择产品类型', 'error')
+      useMessage(2, '请选择设备类型', 'error')
     } else {
       setAddItAssetsShow(false)
       insertItAssets(assetsDataForm)
@@ -452,11 +452,11 @@ const WorkItAssetsTable: React.FC = () => {
             <Col span={24}>
               <label htmlFor="Product" className='mb-1 flex items-center font-semibold'>
                 <span className='mr-1 text-red-600 font-thin'>*</span>
-                产品名称
+                设备名称
               </label>
               <Input
                 style={{ width: '100%' }}
-                placeholder='产品名称'
+                placeholder='设备名称'
                 value={assetsDataForm.product_name}
                 onChange={e => {
                   setAssetsDataForm({
@@ -472,15 +472,15 @@ const WorkItAssetsTable: React.FC = () => {
             <Col span={layoutWidth}>
               {/* product type */}
               <label
-                htmlFor="产品类型"
+                htmlFor="设备类型"
                 className='mb-1 flex items-center font-semibold'
               >
                 <span className='mr-1 text-red-600 font-thin'>*</span>
-                产品类型
+                设备类型
               </label>
               <Select
                 style={{ width: '100%' }}
-                placeholder='产品类型'
+                placeholder='设备类型'
                 allowClear
                 options={typeData}
                 onChange={selectProductType}
@@ -497,11 +497,11 @@ const WorkItAssetsTable: React.FC = () => {
                   className='mb-1 flex items-center font-semibold'
                 >
                   <span className='mr-1 text-red-600 font-thin'>*</span>
-                  产品品牌
+                  设备品牌
                 </label>
                 <Select
                   style={{ width: '100%' }}
-                  placeholder='产品品牌'
+                  placeholder='设备品牌'
                   allowClear
                   onDropdownVisibleChange={onTriggerSelected}
                   value={assetsDataForm.product_brand}
@@ -526,12 +526,12 @@ const WorkItAssetsTable: React.FC = () => {
                 className='mb-1 flex items-center font-semibold'
               >
                 <span className='mr-1 text-red-600 font-thin'>*</span>
-                产品数量
+                设备数量
               </label>
               <InputNumber
                 min={0}
                 style={{ width: '100%' }}
-                placeholder='产品数量'
+                placeholder='设备数量'
                 value={assetsDataForm.product_number}
                 onChange={e => {
                   setAssetsDataForm({
@@ -545,12 +545,12 @@ const WorkItAssetsTable: React.FC = () => {
             <Col span={layoutWidth}>
               <label htmlFor="Price" className='mb-1 flex items-center font-semibold'>
                 <span className='mr-1 text-red-600 font-thin'>*</span>
-                产品总价 <i className='text-xs text-gray-500 not-italic ml-2'>(单价 * 数量)</i>
+                设备总价 <i className='text-xs text-gray-500 not-italic ml-2'>(单价 * 数量)</i>
               </label>
               <InputNumber
                 min={0}
                 style={{ width: '100%' }}
-                placeholder='产品总价'
+                placeholder='设备总价'
                 addonAfter="CNY"
                 value={assetsDataForm.product_price}
                 onChange={e => {
@@ -575,7 +575,7 @@ const WorkItAssetsTable: React.FC = () => {
               </label>
               <Input
                 style={{ width: '100%' }}
-                readOnly
+                disabled
                 value={assetsDataForm.product_time}
               />
             </Col>
@@ -589,7 +589,7 @@ const WorkItAssetsTable: React.FC = () => {
               </label>
               <Input
                 style={{ width: '100%' }}
-                readOnly
+                disabled
                 value={assetsDataForm.product_update}
               />
             </Col>
@@ -641,11 +641,11 @@ const WorkItAssetsTable: React.FC = () => {
             <Col span={24}>
               <label htmlFor="Product" className='mb-1 flex items-center font-semibold'>
                 <span className='mr-1 text-red-600 font-thin'>*</span>
-                产品名称
+                设备名称
               </label>
               <Input
                 style={{ width: '100%' }}
-                placeholder='产品名称'
+                placeholder='设备名称'
                 value={assetsDataForm.product_name}
                 onChange={e => {
                   setAssetsDataForm({
@@ -665,11 +665,11 @@ const WorkItAssetsTable: React.FC = () => {
                 className='mb-1 flex items-center font-semibold'
               >
                 <span className='mr-1 text-red-600 font-thin'>*</span>
-                产品类型
+                设备类型
               </label>
               <Select
                 style={{ width: '100%' }}
-                placeholder='产品类型'
+                placeholder='设备类型'
                 allowClear
                 options={typeData}
                 onChange={selectProductType}
@@ -686,11 +686,11 @@ const WorkItAssetsTable: React.FC = () => {
                   className='mb-1 flex items-center font-semibold'
                 >
                   <span className='mr-1 text-red-600 font-thin'>*</span>
-                  产品品牌
+                  设备品牌
                 </label>
                 <Select
                   style={{ width: '100%' }}
-                  placeholder='产品品牌'
+                  placeholder='设备品牌'
                   allowClear
                   onDropdownVisibleChange={onTriggerSelected}
                   value={assetsDataForm.product_brand}
@@ -712,12 +712,12 @@ const WorkItAssetsTable: React.FC = () => {
             <Col span={layoutWidth}>
               <label htmlFor="Price" className='mb-1 flex items-center font-semibold'>
                 <span className='mr-1 text-red-600 font-thin'>*</span>
-                产品数量
+                设备数量
               </label>
               <InputNumber
                 min={0}
                 style={{ width: '100%' }}
-                placeholder='产品数量'
+                placeholder='设备数量'
                 addonAfter="USD"
                 value={assetsDataForm.product_number}
                 onChange={e => {
@@ -732,12 +732,12 @@ const WorkItAssetsTable: React.FC = () => {
             <Col span={layoutWidth}>
               <label htmlFor="Price" className='mb-1 flex items-center font-semibold'>
                 <span className='mr-1 text-red-600 font-thin'>*</span>
-                产品总价
+                设备总价
               </label>
               <InputNumber
                 min={0}
                 style={{ width: '100%' }}
-                placeholder='产品总价'
+                placeholder='设备总价'
                 addonAfter="CNY"
                 value={assetsDataForm.product_price}
                 onChange={e => {
