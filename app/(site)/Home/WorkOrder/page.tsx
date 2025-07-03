@@ -11,7 +11,6 @@ import {
   getWorkOrderType,
   getWorkOrderStatus,
   getWorkBrand,
-  getProfiles,
   getUser,
   getWorkOrder,
   insertUpdateWorkOrder,
@@ -178,17 +177,17 @@ const WorkOrder: React.FC = ({ }) => {
     const { created_brand, created_status, created_product, created_text, created_solved, created_type } = workOrderForm
     // verify form
     if (!created_product) {
-      useMessage(2, 'Select product name', 'error')
+      useMessage(2, '选择产品', 'error')
     } else if (!created_type) {
-      useMessage(2, 'Select product type', 'error')
+      useMessage(2, '选择产品类型', 'error')
     } else if (!created_brand) {
-      useMessage(2, 'Select product brand', 'error')
+      useMessage(2, '选择产品品牌', 'error')
     } else if (!created_status) {
-      useMessage(2, 'Select status', 'error')
+      useMessage(2, '选择状态', 'error')
     } else if (!created_text) {
-      useMessage(2, 'Describe the device problem', 'error')
-    } else if (!created_solved) {
-      useMessage(2, 'Describe the solution', 'error')
+      useMessage(2, '描述问题', 'error')
+    } else if (!created_solved && created_status === '已解决') {
+      useMessage(2, '描述解决方案', 'error')
     } else {
       insertUpdateWorkOrder(workOrderForm).then(res => {
         if (res) {
@@ -209,12 +208,19 @@ const WorkOrder: React.FC = ({ }) => {
   }
 
   const confirmEditModalForm = () => {
-    editWorkOrderData(editId, { ...workOrderForm, created_update: getTimeNumber()[0] })
-      .then(res => {
+    if (workOrderForm.created_status === '已解决' && workOrderForm.created_solved === '') {
+      useMessage(2, '描述解决方案', 'error')
+    }else {
+      editWorkOrderData(editId, { ...workOrderForm, 
+        created_update: getTimeNumber()[0],
+        created_solved: workOrderForm.created_status === '已解决'?  workOrderForm.created_solved : ''
+      })
+        .then(res => {
         setIsModalEditOpen(false)
-        useMessage(2, 'Update success!', 'success')
+        useMessage(2, '更新成功', 'success')
         getWorkOrderData()
       })
+    }
   }
 
   const onClosedHandler = () => {
@@ -536,7 +542,7 @@ const WorkOrder: React.FC = ({ }) => {
                   </Col>
                 </Row>
 
-                {workOrderForm.created_status === '已完成' && (
+                {workOrderForm.created_status === '已解决' && (
                   <Row>
                     <Col span={24}>
                       <label
@@ -723,7 +729,7 @@ const WorkOrder: React.FC = ({ }) => {
                     />
                   </Col>
                 </Row>
-                {workOrderForm.created_status === '已完成' && (
+                {workOrderForm.created_status === '已解决' && (
                   <Row>
                     <Col span={24}>
                       <label
@@ -738,7 +744,9 @@ const WorkOrder: React.FC = ({ }) => {
                         placeholder='描述解决方案'
                         autoSize={{ minRows: 5, maxRows: 5 }}
                         value={workOrderForm.created_solved}
-                        onChange={e => setWorkOrderForm({ ...workOrderForm, created_solved: e.target.value })}
+                        onChange={e => setWorkOrderForm({ 
+                          ...workOrderForm, created_solved: e.target.value 
+                        })}
                         maxLength={260}
                         showCount
                       />
@@ -746,8 +754,6 @@ const WorkOrder: React.FC = ({ }) => {
                   </Row>
                 )}
                   
-                
-
                 <Row>
                   <Col span={24}>
                     <label

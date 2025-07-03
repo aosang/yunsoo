@@ -54,7 +54,7 @@ const WorkTable: React.FC<workTableProps> = ({ workInfo, onChangeSelectData, onG
     render: (text: string) => {
       return (
         <>
-          {text === '已完成' && <Tag color="green">已完成</Tag>}
+          {text === '已解决' && <Tag color="green">已解决</Tag>}
           {text === '处理中' && <Tag color="red">处理中</Tag>}
           {text === '待处理' && <Tag color="orange">待处理</Tag>}
         </>
