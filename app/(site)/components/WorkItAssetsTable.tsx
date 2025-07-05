@@ -868,7 +868,7 @@ const WorkItAssetsTable: React.FC = () => {
             bordered
             columns={columns}
             dataSource={assetsData}
-            scroll={{ x: '1300px' }}
+            scroll={{ x: '1450px' }}
             pagination={{
               position: ['bottomRight'],
               pageSizeOptions: ['10', '20', '50'],

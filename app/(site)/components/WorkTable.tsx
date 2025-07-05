@@ -90,6 +90,7 @@ const WorkTable: React.FC<workTableProps> = ({ workInfo, onChangeSelectData, onG
           dataSource={workInfo}
           bordered
           size="small"
+          scroll={{ x: '1450px' }}
           pagination={{ 
             position: ['bottomRight'], 
             pageSizeOptions: ['10', '20', '50'], 

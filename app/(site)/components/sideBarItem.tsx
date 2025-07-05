@@ -13,47 +13,47 @@ type MenuItem = Required<MenuProps>['items'][number]
 const items: MenuItem[] = [{
   key: 'Home',
   label: '综合信息',
-  icon: <GoHomeFill style={{fontSize: '16px'}} />,
+  icon: <GoHomeFill style={{fontSize: '15px'}} />,
   style: {
     marginBottom: '12px',
     borderRadius: '0px',
-    padding: '0px 60px'
+    padding: '0px 50px'
   }
 }, {
   key: 'WorkOrder',
   label: '我的工单',
-  icon: <AiFillProfile style={{fontSize: '16px'}} />,
+  icon: <AiFillProfile style={{fontSize: '15px'}} />,
   style: {
     marginBottom: '12px',
     borderRadius: '0px',
-    padding: '0px 60px'
+    padding: '0px 50px'
   }
 }, {
   key: 'Inventory',
   label: '库存管理',
-  icon: <MdInventory style={{fontSize: '16px'}} />,
+  icon: <MdInventory style={{fontSize: '15px'}} />,
   style: {
     marginBottom: '12px',
     borderRadius: '0px',
-    padding: '0px 60px'
+    padding: '0px 50px'
   }
 }, {
   key: 'Inspection',
   label: '巡检记录',
-  icon: <IoDocumentText style={{fontSize: '16px'}} />,
+  icon: <IoDocumentText style={{fontSize: '15px'}} />,
   style: {
     marginBottom: '12px',
     borderRadius: '0px',
-    padding: '0px 60px'
+    padding: '0px 50px'
   }
 }, {
   key: 'Librarys',
   label: '知识库',
-  icon: <IoLibrary style={{fontSize: '16px'}} />,
+  icon: <IoLibrary style={{fontSize: '15px'}} />,
   style: {
     marginBottom: '12px',
     borderRadius: '0px',
-    padding: '0px 60px'
+    padding: '0px 50px'
   }
 }, {
   key: 'WorkItAssets',
@@ -62,25 +62,25 @@ const items: MenuItem[] = [{
   style: {
     marginBottom: '12px',
     borderRadius: '0px',
-    padding: '0px 60px'
+    padding: '0px 50px'
   }
 }, {
   key: 'UserManage',
   label: '人员管理',
-  icon: <RiUserAddFill style={{fontSize: '16px'}} />,
+  icon: <RiUserAddFill style={{fontSize: '15px'}} />,
   style: {
     marginBottom: '12px',
     borderRadius: '0px',
-    padding: '0px 60px'
+    padding: '0px 50px'
   }
 }, {
   key: 'Profile',
   label: '个人设置',
-  icon: <IoSettings style={{fontSize: '16px'}} />,
+  icon: <IoSettings style={{fontSize: '15px'}} />,
   style: {
     marginBottom: '12px',
     borderRadius: '0px',
-    padding: '0px 60px'
+    padding: '0px 50px'
   }
 }]
 

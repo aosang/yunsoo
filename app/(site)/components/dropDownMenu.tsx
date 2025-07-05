@@ -97,7 +97,7 @@ const DropDownMenu = () => {
               className='mr-4 cursor-pointer' 
               onClick={() => setIsModalOpen(true)}
             >
-              版本v1.0.0
+              版本v1.0.1
             </span>
             {/* <LanguageSwitch /> */}
             <Image 

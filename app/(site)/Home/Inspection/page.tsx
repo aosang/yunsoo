@@ -358,7 +358,7 @@ const Inspection: React.FC = () => {
                     <Row gutter={20} className="mt-6">
                       {deviceRecordListData.map(item => {
                         return (
-                          <Col span={6} key={item.inspection_id} className="mb-5">
+                          <Col span={8} key={item.inspection_id} className="mb-5">
                             <Card className="relative">
                               <Row className="mb-2">
                                 <Col span={24}><span className="text-sm">巡检时间：{item.inspection_time}</span></Col>
@@ -367,8 +367,8 @@ const Inspection: React.FC = () => {
                                 <Col span={24}><span className="text-sm">巡检状态：{item.inspection_status}</span></Col>
                               </Row>
                               <Row className="mb-2">
-                                <Col span={12}><span className="text-sm">巡检员：{item.inspection_name}</span></Col>
-                                <Col span={12}><span className="text-sm">手机号码：{item.inspection_phone}</span></Col>
+                                <Col className="mr-4"><span className="text-sm">巡检员：{item.inspection_name}</span></Col>
+                                <Col><span className="text-sm">手机号码：{item.inspection_phone}</span></Col>
                               </Row>
                               <Row className="mb-2">
                                 <Col span={24}><span className="text-sm">电子邮箱：{item.inspection_email}</span></Col>

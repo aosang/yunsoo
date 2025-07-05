@@ -445,6 +445,7 @@ const Inventory = () => {
             dataSource={inventoryData}
             size='small'
             bordered
+            scroll={{ x: '1450px' }}
             className='[&_.ant-table-thead>tr>th]:!bg-[#f0f5ff]'
             pagination={{
               position: ['bottomRight'],
@@ -599,6 +600,7 @@ const Inventory = () => {
             dataSource={loanOutData}
             size='small'
             bordered
+            scroll={{ x: '1450px' }}
             className='[&_.ant-table-thead>tr>th]:!bg-[#f0f5ff] [&_.ant-pagination]: my-0'
             pagination={{
               position: ['bottomRight'],

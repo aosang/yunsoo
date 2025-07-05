@@ -61,7 +61,7 @@ const AppLayout = ({children, userId, update}) => {
             border-b
             border-gray-500'
           >
-            <div className='w-44 mx-auto p-4'>
+            <div className='w-40 mx-auto p-4'>
               <img className='w-full' src="https://www.wangle.run/company_icon/public_image/system_logo_white.png" alt="system-logo" />
             </div>
           </div>

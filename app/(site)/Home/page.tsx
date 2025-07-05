@@ -17,7 +17,7 @@ const workCardInfo: React.CSSProperties = {
   width: '100%',
   height: '130px',
   borderRadius: '12px',
-  padding: '16px 48px',
+  padding: '16px 24px',
   alignItems: 'center',
 }
 

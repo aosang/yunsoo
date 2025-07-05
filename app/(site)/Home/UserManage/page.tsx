@@ -321,6 +321,7 @@ const UserManage = () => {
             bordered size='small' 
             columns={columns}
             style={{ marginTop: '15px' }}
+            scroll={{ x: '1450px' }}
             rowSelection={{
               onChange: (selectedRowKeys, selectedRows) => {
                 setDeleteIds(selectedRows.map((item) => item.manage_num).join(','))
