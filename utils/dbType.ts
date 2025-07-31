@@ -64,6 +64,7 @@ export interface assetsItem {
 export interface productItem {
   id: string,
   product_number: number,
+  product_unitprice: number,
   product_name: string
   product_type: null | string
   product_brand: null | string

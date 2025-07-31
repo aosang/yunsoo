@@ -18,10 +18,10 @@ const nextConfig = {
    
   trailingSlash: true,
   output: 'export',
-  basePath: '/assetsmanager',
-  assetPrefix: '/assetsmanager',
-  // basePath: '',
-  // assetPrefix: '',
+  // basePath: '/assetsmanager',
+  // assetPrefix: '/assetsmanager',
+  basePath: '',
+  assetPrefix: '',
 
   webpack: (config) => {
     config.resolve.alias = {

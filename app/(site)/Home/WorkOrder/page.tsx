@@ -615,7 +615,7 @@ const WorkOrder: React.FC = ({ }) => {
                       className='w-full'
                       allowClear
                       value={workOrderForm.created_product as string}
-                      disabled
+                      readOnly
                     />
                   </Col>
                   <Col span={8}>
@@ -628,7 +628,7 @@ const WorkOrder: React.FC = ({ }) => {
                     </label>
                     <Input
                       style={{ width: '100%' }}
-                      disabled
+                      readOnly
                       value={workOrderForm.created_name}
                     />
                   </Col>
@@ -661,7 +661,7 @@ const WorkOrder: React.FC = ({ }) => {
                     </label>
                     <Input
                       style={{ width: '100%' }}
-                      disabled
+                      readOnly
                       value={workOrderForm.created_time}
                     />
                   </Col>
@@ -675,7 +675,7 @@ const WorkOrder: React.FC = ({ }) => {
                     </label>
                     <Input
                       style={{ width: '100%' }}
-                      disabled
+                      readOnly
                       value={workOrderForm.created_update}
                     />
                   </Col>
@@ -690,7 +690,7 @@ const WorkOrder: React.FC = ({ }) => {
                     </label>
                     <Input
                       style={{ width: '100%' }}
-                      disabled
+                      readOnly
                       value={workOrderForm.created_type as string}
                     />
                   </Col>
@@ -704,7 +704,7 @@ const WorkOrder: React.FC = ({ }) => {
                     </label>
                     <Input
                       style={{ width: '100%' }}
-                      disabled
+                      readOnly
                       value={workOrderForm.created_brand as string}
                     />
                   </Col>
@@ -725,7 +725,7 @@ const WorkOrder: React.FC = ({ }) => {
                       onChange={e => setWorkOrderForm({ ...workOrderForm, created_text: e.target.value })}
                       maxLength={260}
                       showCount
-                      disabled
+                      readOnly
                     />
                   </Col>
                 </Row>

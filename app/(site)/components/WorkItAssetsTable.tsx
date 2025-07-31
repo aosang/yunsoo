@@ -59,6 +59,7 @@ const WorkItAssetsTable: React.FC = () => {
   const [assetsDataForm, setAssetsDataForm] = useState<productItem>({
     id: '',
     product_number: 0,
+    product_unitprice: 0,
     product_name: '',
     product_time: '',
     product_update: '',
@@ -94,6 +95,11 @@ const WorkItAssetsTable: React.FC = () => {
           <div>{formatTimestamp(record)}</div>
         )
       }
+    }, {
+      title: '单价',
+      dataIndex: 'product_unitprice',
+      key: 'product_unitprice',
+      width: 150
     }, {  
       title: '数量',
       dataIndex: 'product_number',
@@ -139,8 +145,8 @@ const WorkItAssetsTable: React.FC = () => {
       useMessage(2, '请输入设备名称', 'error')
     } else if (assetsDataForm.product_number <= 0) {
       useMessage(2, '请输入设备数量', 'error')
-    } else if (assetsDataForm.product_price <= 0) {
-      useMessage(2, '请输入设备价格', 'error')
+    } else if (assetsDataForm.product_unitprice <= 0) {
+      useMessage(2, '请输入设备单价', 'error')
     } else if (!assetsDataForm.product_type) {
       useMessage(2, '请选择设备类型', 'error')
     } else {
@@ -180,6 +186,7 @@ const WorkItAssetsTable: React.FC = () => {
         product_time: record.product_time,
         product_update: getTimeNumber()[0],
         product_brand: record.product_brand,
+        product_unitprice: record.product_unitprice,
         product_number: record.product_number,
         product_price: record.product_price,
         product_remark: record.product_remark,
@@ -257,6 +264,7 @@ const WorkItAssetsTable: React.FC = () => {
       product_type: null,
       product_brand: null,
       product_number: 0,
+      product_unitprice: 0,
       product_time: '',
       product_update: '',
       product_username: '',
@@ -519,7 +527,30 @@ const WorkItAssetsTable: React.FC = () => {
                 </Select>
               </Col>
             )}
-
+            
+            <Col span={layoutWidth}>
+              <label
+                htmlFor="Type"
+                className='mb-1 flex items-center font-semibold'
+              >
+                <span className='mr-1 text-red-600 font-thin'>*</span>
+                设备单价
+              </label>
+              <InputNumber
+                addonAfter="CNY"
+                min={0}
+                style={{ width: '100%' }}
+                placeholder='设备单价'
+                value={assetsDataForm.product_unitprice}
+                onChange={e => {
+                  setAssetsDataForm({
+                    ...assetsDataForm,
+                    product_unitprice: Number(e),
+                    product_price: Number(e) * Number(assetsDataForm.product_number)
+                  })
+                }}
+              />
+            </Col>
             <Col span={layoutWidth}>
               <label
                 htmlFor="Type"
@@ -536,13 +567,18 @@ const WorkItAssetsTable: React.FC = () => {
                 onChange={e => {
                   setAssetsDataForm({
                     ...assetsDataForm,
-                    product_number: Number(e)
+                    product_number: Number(e),
+                    product_price: Number(e) * Number(assetsDataForm.product_unitprice)
                   })
                 }}
               />
             </Col>
+          </Row>
 
-            <Col span={layoutWidth}>
+          <Row gutter={20}>
+          
+
+            {/* <Col span={8}>
               <label htmlFor="Price" className='mb-1 flex items-center font-semibold'>
                 <span className='mr-1 text-red-600 font-thin'>*</span>
                 设备总价 <i className='text-xs text-gray-500 not-italic ml-2'>(单价 * 数量)</i>
@@ -552,6 +588,7 @@ const WorkItAssetsTable: React.FC = () => {
                 style={{ width: '100%' }}
                 placeholder='设备总价'
                 addonAfter="CNY"
+                readOnly
                 value={assetsDataForm.product_price}
                 onChange={e => {
                   setAssetsDataForm({
@@ -560,9 +597,9 @@ const WorkItAssetsTable: React.FC = () => {
                   })
                 }}
               />
-            </Col>
+            </Col> */}
           </Row>
-
+            
           <Row gutter={20}>
             {/* create time */}
             <Col span={12}>
@@ -575,7 +612,7 @@ const WorkItAssetsTable: React.FC = () => {
               </label>
               <Input
                 style={{ width: '100%' }}
-                disabled
+                readOnly
                 value={assetsDataForm.product_time}
               />
             </Col>
@@ -589,7 +626,7 @@ const WorkItAssetsTable: React.FC = () => {
               </label>
               <Input
                 style={{ width: '100%' }}
-                disabled
+                readOnly
                 value={assetsDataForm.product_update}
               />
             </Col>
@@ -679,35 +716,58 @@ const WorkItAssetsTable: React.FC = () => {
             </Col>
 
             {/* product brand */}
-            {productBrandShow && (
-              <Col span={layoutWidth}>
-                <label
-                  htmlFor="Brand"
-                  className='mb-1 flex items-center font-semibold'
-                >
-                  <span className='mr-1 text-red-600 font-thin'>*</span>
-                  设备品牌
-                </label>
-                <Select
-                  style={{ width: '100%' }}
-                  placeholder='设备品牌'
-                  allowClear
-                  onDropdownVisibleChange={onTriggerSelected}
-                  value={assetsDataForm.product_brand}
-                  onChange={assetsProductBrand}
-                  options={typeDataBrand.map(item => {
-                    return {
-                      label:
-                        <div className='flex'>
-                          {selectOpen && <img src={item.logo_url} alt='avatar' className='mr-2 w-6' />}<span className='w-7 mt-0.5'>{item.value}</span>
-                        </div>,
-                      value: item.value
-                    }
-                  })}
-                >
-                </Select>
-              </Col>
-            )}
+            <Col span={layoutWidth}>
+              <label
+                htmlFor="Brand"
+                className='mb-1 flex items-center font-semibold'
+              >
+                <span className='mr-1 text-red-600 font-thin'>*</span>
+                设备品牌
+              </label>
+              <Select
+                style={{ width: '100%' }}
+                placeholder='设备品牌'
+                allowClear
+                onDropdownVisibleChange={onTriggerSelected}
+                value={assetsDataForm.product_brand}
+                onChange={assetsProductBrand}
+                options={typeDataBrand.map(item => {
+                  return {
+                    label:
+                      <div className='flex'>
+                        {selectOpen && <img src={item.logo_url} alt='avatar' className='mr-2 w-6' />}<span className='w-7 mt-0.5'>{item.value}</span>
+                      </div>,
+                    value: item.value
+                  }
+                })}
+              >
+              </Select>
+            </Col>
+
+            {/* 设备单价 */}
+            <Col span={layoutWidth}>
+              <label
+                htmlFor="Type"
+                className='mb-1 flex items-center font-semibold'
+              >
+                <span className='mr-1 text-red-600 font-thin'>*</span>
+                设备单价
+              </label>
+              <InputNumber
+                addonAfter="CNY"
+                min={0}
+                style={{ width: '100%' }}
+                placeholder='设备单价'
+                value={assetsDataForm.product_unitprice}
+                onChange={e => {
+                  setAssetsDataForm({
+                    ...assetsDataForm,
+                    product_unitprice: Number(e),
+                    product_price: Number(e) * Number(assetsDataForm.product_number)
+                  })
+                }}
+              />
+            </Col>
 
             <Col span={layoutWidth}>
               <label htmlFor="Price" className='mb-1 flex items-center font-semibold'>
@@ -718,18 +778,18 @@ const WorkItAssetsTable: React.FC = () => {
                 min={0}
                 style={{ width: '100%' }}
                 placeholder='设备数量'
-                addonAfter="USD"
                 value={assetsDataForm.product_number}
                 onChange={e => {
                   setAssetsDataForm({
                     ...assetsDataForm,
-                    product_number: Number(e)
+                    product_number: Number(e),
+                    product_price: Number(e) * Number(assetsDataForm.product_unitprice)
                   })
                 }}
               />
             </Col>
 
-            <Col span={layoutWidth}>
+            {/* <Col span={layoutWidth}>
               <label htmlFor="Price" className='mb-1 flex items-center font-semibold'>
                 <span className='mr-1 text-red-600 font-thin'>*</span>
                 设备总价
@@ -747,7 +807,7 @@ const WorkItAssetsTable: React.FC = () => {
                   })
                 }}
               />
-            </Col>
+            </Col> */}
           </Row>
           <Row gutter={15}>
             <Col span={12}>

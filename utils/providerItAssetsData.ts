@@ -64,6 +64,7 @@ export const insertItAssets = async ({
   product_update,
   product_brand,
   product_number,
+  product_unitprice,
   product_price,
   product_remark,
   value
@@ -78,6 +79,7 @@ export const insertItAssets = async ({
     product_brand,
     product_number,
     product_price,
+    product_unitprice,
     product_remark,
     value
   })
