@@ -170,15 +170,7 @@ const EditorPage = ({isEdit, setIsEdit, onSubmit, editInfo}: {
     }
   }, [editor])
 
-  useEffect(() => {
-    let userRegister = window.localStorage.getItem('userRegister') || ''
-    let userRegisterInfo = JSON.parse(userRegister)
-    setKnowledgeItem(prevState => ({
-      ...prevState,
-      author: userRegisterInfo.username,
-    }))
-  }, [])
-
+  
   useEffect(() => {
     setKnowledgeItem({
       ...knowledgeItem,
@@ -229,21 +221,21 @@ const EditorPage = ({isEdit, setIsEdit, onSubmit, editInfo}: {
           <Col span={8}>
             <label className="flex items-center font-semibold">
               <span className='mr-1 mb-1 text-red-600 font-thin'>*</span>
-              Update Time
+              更新时间
             </label>
             <Input value={knowledgeItem.created_time} readOnly />
           </Col>
           <Col span={8}>
             <label className="flex items-center font-semibold">
               <span className='mr-1 mb-1 text-red-600 font-thin'>*</span>
-              Author
+              作者
             </label>
             <Input value={knowledgeItem.author} readOnly />
           </Col>
           <Col span={8}>
             <label className="flex items-center font-semibold">
               <span className='mr-1 mb-1 text-red-600 font-thin'>*</span>
-              Type
+              类型
             </label>
             <Select 
               className="w-full"
@@ -278,12 +270,12 @@ const EditorPage = ({isEdit, setIsEdit, onSubmit, editInfo}: {
         className="mr-3"
         onClick={() => {closeEditor()}}
       >
-        Close
+        关闭
       </Button>
       <Button 
         type="primary" 
         onClick={updateKnowledgeLibrarys}>
-          Update
+        确认更新
       </Button>
 
       {/* <div dangerouslySetInnerHTML={{__html: html}}></div> */}

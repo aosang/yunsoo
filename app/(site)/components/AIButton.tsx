@@ -1,15 +1,16 @@
 "use client"
 import { ConfigProvider, FloatButton } from "antd"
 import { AiOutlineMessage } from "react-icons/ai"
-import { usePathname } from "next/navigation"
-const AIButton = () => {
-  const pathname = usePathname()
 
+const AIButton = () => {
+  
   const getPathname = () => {
-    const baseUrl = window.location.origin  
-    //http://localhost:3000/Home/Librarys/
-    // console.log(pathname)
-    window.open(baseUrl + '/assetsmanager/Aiassistant', '_blank')
+    const baseUrl = window.location.origin
+    if(baseUrl === 'https://www.wangle.run') {
+      window.open(baseUrl + '/assetsmanager/Aiassistant', '_blank')
+    } else {
+      window.open(baseUrl + '/Aiassistant', '_blank')
+    }
   }
 
   return (

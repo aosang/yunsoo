@@ -67,7 +67,8 @@ export const getAiHistoryWord = async () => {
 }
 
 export const getUpdateText = async () => {
-  const { data, error } = await supabase.from('update_text').select('*')
+  // 按时间排序
+  const { data, error } = await supabase.from('update_text').select('*').order('created_at', { ascending: false })
   if(error) throw error
   return data
 }

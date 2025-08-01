@@ -151,5 +151,6 @@ export interface updateTextItem {
   id: string,
   created_at: string,
   update_content: string,
-  update_version: string
+  update_version: string,
+  update_arr: (string | { content: string })[]
 }

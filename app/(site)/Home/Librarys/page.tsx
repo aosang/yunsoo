@@ -155,6 +155,7 @@ const Librarys = () => {
                         title={
                           <div className="flex items-center">
                             <span className="
+                            text-base
                             block
                             text-gray-600 
                             hover:text-blue-500 cursor-pointer hover:underline"

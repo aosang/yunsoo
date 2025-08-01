@@ -18,7 +18,7 @@ import {
 } from '@/utils/providerSelectData'
 import { editWorkOrderData } from '@/utils/pubEditProviders'
 import { getFilterWorkStatus, getFilterWorkType, searchTypeData } from '@/utils/pubFilterProviders'
-import { Card, Space, Button, Row, Col, Modal, Divider, Select, Input, DatePicker, Skeleton } from 'antd'
+import { Card, Space, Button, Row, Col, Modal, Divider, Select, Input, DatePicker, Skeleton, ConfigProvider } from 'antd'
 import { IoIosSearch } from "react-icons/io"
 import { useState, useEffect } from 'react'
 import { getTimeNumber, getDeviceData } from '@/utils/pubFunProvider'
@@ -325,9 +325,9 @@ const WorkOrder: React.FC = ({ }) => {
   }, [])
 
   return (
-    <div style={{ width: '100%', padding: '12px', boxSizing: 'border-box' }}>
-      <Space direction="vertical" size={16} style={{ width: '100%' }}>
-        <Card title="工单管理">
+  <div style={{ width: '100%', padding: '12px', boxSizing: 'border-box' }}>
+    <Space direction="vertical" size={16} style={{ width: '100%' }}>
+      <Card title="工单管理">
           <Skeleton loading={isLoading} active paragraph={{rows: 10}}>
             <Row gutter={10}>
               <Col>
@@ -421,7 +421,7 @@ const WorkOrder: React.FC = ({ }) => {
                     </label>
                     <Input
                       style={{ width: '100%' }}
-                      disabled
+                      readOnly
                       value={workOrderForm.created_name}
                     />
                   </Col>
@@ -454,7 +454,7 @@ const WorkOrder: React.FC = ({ }) => {
                     </label>
                     <Input
                       style={{ width: '100%' }}
-                      disabled
+                      readOnly
                       value={workOrderForm.created_time}
                     />
                   </Col>
@@ -468,7 +468,7 @@ const WorkOrder: React.FC = ({ }) => {
                     </label>
                     <Input
                       style={{ width: '100%' }}
-                      disabled
+                      readOnly
                       value={workOrderForm.created_update}
                     />
                   </Col>
@@ -753,7 +753,7 @@ const WorkOrder: React.FC = ({ }) => {
                     </Col>
                   </Row>
                 )}
-                  
+                
                 <Row>
                   <Col span={24}>
                     <label
@@ -783,8 +783,7 @@ const WorkOrder: React.FC = ({ }) => {
               onGetEditData={onEditData}
             />
           </Skeleton>
-        </Card>
-
+        </Card>       
       </Space>
     </div>
   )

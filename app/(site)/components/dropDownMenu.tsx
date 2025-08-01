@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react'
 import { getProfiles, getSession } from '@/utils/providerSelectData'
 import { getUpdateText } from '@/utils/pubFunProvider'
 import { updateTextItem } from '@/utils/dbType'
+import { useUserStore } from '@/store/userStore'
 import dayjs from 'dayjs'
 
 const items: MenuProps['items'] = [{
@@ -29,10 +30,11 @@ const DropDownMenu = () => {
   const [ username, setUsername ] = useState('')
   const [ avatarUrl, setAvatarUrl ] = useState('')
   const [updateText, setUpdateText] = useState<updateTextItem[]>([])
+  const logout = useUserStore((state) => state.logout)
       
-
   const handleMenuClick: MenuProps['onClick'] = async ({ key }) => { 
     if(key === '1') {
+      logout()
       const { error } = await supabase.auth.signOut()
       if(error) throw new Error(error.message)
       router.push('/')
@@ -83,8 +85,14 @@ const DropDownMenu = () => {
                 className='h-[560px] overflow-y-auto' items={updateText.map(item => ({
                   key: item.id,
                   children: <div>
-                    <span className='text-[13px] text-gray-400 flex items-center'>{dayjs(item.created_at).format('YYYY-MM-DD')} <a className='ml-3'>{item.update_version}</a></span>
-                    <span className='text-[15px] text-gray-600 leading-[22px]'>{item.update_content}</span>
+                    <span className='text-[13px] text-gray-400 flex items-center'>{dayjs(item.created_at).format('YYYY-MM-DD')} <a className='ml-3'>
+                      {item.update_version}</a>
+                    </span>
+                    {item.update_arr.map((updateItem, index) => (
+                      <div key={index} className='text-[14px] text-gray-600 leading-[24px]'>
+                        {typeof updateItem === 'object' ? updateItem.content : updateItem}
+                      </div>
+                    ))}
                   </div>
                 }))}
               >
@@ -97,7 +105,7 @@ const DropDownMenu = () => {
               className='mr-4 cursor-pointer' 
               onClick={() => setIsModalOpen(true)}
             >
-              版本v1.0.1
+              版本v1.0.2
             </span>
             {/* <LanguageSwitch /> */}
             <Image 

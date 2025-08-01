@@ -10,8 +10,10 @@ import { InfoCircleOutlined } from '@ant-design/icons'
 import authScss from './auth.module.scss'
 import useMessage from '@/utils/message'
 import Verify from './components/Verify'
+import { useUserStore } from '@/store/userStore'
 
 const Auth: React.FC = () => {
+  const setUser = useUserStore((state) => state.setUser)
   const router = useRouter()
   const [isSpining, setIsSpining] = useState<boolean>(true)
   const [mySession, setMySession] = useState<any>('')
@@ -90,6 +92,7 @@ const Auth: React.FC = () => {
           email,
           password,
         })
+        setUser(data.session?.user)
         try {
           if (data.session) {
             useMessage(2, '登录成功', 'success')

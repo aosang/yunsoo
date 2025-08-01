@@ -11,6 +11,7 @@ import { LuMouse, LuRouter } from "react-icons/lu"
 import CountUp from 'react-countup'
 
 import { getWorkOrderCount, getAllAssetsCount, getTotalAssetsPrice, getSession } from '@/utils/providerSelectData'
+import { useUserStore } from '@/store/userStore'
 
 const workCardInfo: React.CSSProperties = {
   display: 'flex',
@@ -60,6 +61,7 @@ const assetsText: React.CSSProperties = {
 }
 
 const Home = () => {
+  const user = useUserStore((state) => state.user)
   const [isSpiningLoading, setIsSpiningLoading] = useState<boolean>(true)
   const [isDeviceLoading, setDeviceLoading] = useState<boolean>(true)
 
@@ -129,7 +131,6 @@ const Home = () => {
     fetchITAssetsPrice()
     getUserSession()
     document.title = '综合信息'
-    
   }, [])
 
   return (

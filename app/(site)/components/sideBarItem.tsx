@@ -13,7 +13,7 @@ type MenuItem = Required<MenuProps>['items'][number]
 const items: MenuItem[] = [{
   key: 'Home',
   label: '综合信息',
-  icon: <GoHomeFill style={{fontSize: '15px'}} />,
+  icon: <GoHomeFill style={{fontSize: '14px'}} />,
   style: {
     marginBottom: '12px',
     borderRadius: '0px',
@@ -22,7 +22,7 @@ const items: MenuItem[] = [{
 }, {
   key: 'WorkOrder',
   label: '我的工单',
-  icon: <AiFillProfile style={{fontSize: '15px'}} />,
+  icon: <AiFillProfile style={{fontSize: '14px'}} />,
   style: {
     marginBottom: '12px',
     borderRadius: '0px',
@@ -31,7 +31,7 @@ const items: MenuItem[] = [{
 }, {
   key: 'Inventory',
   label: '库存管理',
-  icon: <MdInventory style={{fontSize: '15px'}} />,
+  icon: <MdInventory style={{fontSize: '14px'}} />,
   style: {
     marginBottom: '12px',
     borderRadius: '0px',
@@ -40,7 +40,7 @@ const items: MenuItem[] = [{
 }, {
   key: 'Inspection',
   label: '巡检记录',
-  icon: <IoDocumentText style={{fontSize: '15px'}} />,
+  icon: <IoDocumentText style={{fontSize: '14px'}} />,
   style: {
     marginBottom: '12px',
     borderRadius: '0px',
@@ -49,7 +49,7 @@ const items: MenuItem[] = [{
 }, {
   key: 'Librarys',
   label: '知识库',
-  icon: <IoLibrary style={{fontSize: '15px'}} />,
+  icon: <IoLibrary style={{fontSize: '14px'}} />,
   style: {
     marginBottom: '12px',
     borderRadius: '0px',
@@ -58,7 +58,7 @@ const items: MenuItem[] = [{
 }, {
   key: 'WorkItAssets',
   label: 'IT设备',
-  icon: <RiComputerFill style={{fontSize: '16px'}} />,
+  icon: <RiComputerFill style={{fontSize: '14px'}} />,
   style: {
     marginBottom: '12px',
     borderRadius: '0px',
@@ -67,7 +67,7 @@ const items: MenuItem[] = [{
 }, {
   key: 'UserManage',
   label: '人员管理',
-  icon: <RiUserAddFill style={{fontSize: '15px'}} />,
+  icon: <RiUserAddFill style={{fontSize: '14px'}} />,
   style: {
     marginBottom: '12px',
     borderRadius: '0px',
@@ -76,7 +76,7 @@ const items: MenuItem[] = [{
 }, {
   key: 'Profile',
   label: '个人设置',
-  icon: <IoSettings style={{fontSize: '15px'}} />,
+  icon: <IoSettings style={{fontSize: '14px'}} />,
   style: {
     marginBottom: '12px',
     borderRadius: '0px',

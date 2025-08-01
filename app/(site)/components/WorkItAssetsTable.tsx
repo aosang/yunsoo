@@ -177,6 +177,8 @@ const WorkItAssetsTable: React.FC = () => {
 
   const onRowData = {
     onClick: (record: productItem) => {
+      setProductBrandShow(true)
+      setLayoutWidth(6)
       setIsEditModalShow(true)
       setIsEditId(record.id)
       setAssetsDataForm({
@@ -198,13 +200,13 @@ const WorkItAssetsTable: React.FC = () => {
   // edit confirm data
   const onConfirmEditAssetsData = () => {
     if (assetsDataForm.product_name === '') {
-      useMessage(2, 'Please enter the product name', 'error')
+      useMessage(2, '请输入产品名称', 'error')
     } else if (!assetsDataForm.product_type) {
-      useMessage(2, 'Please select the product type', 'error')
+      useMessage(2, '请选择产品类型', 'error')
     } else if (assetsDataForm.product_number <= 0) {
-      useMessage(2, 'Please select the product number', 'error')
-    } else if (assetsDataForm.product_price <= 0) {
-      useMessage(2, 'Please enter the product price', 'error')
+      useMessage(2, '请输入产品数量', 'error')
+    } else if (assetsDataForm.product_unitprice <= 0) {
+      useMessage(2, '请输入产品单价', 'error')
     } else {
       editItAssetsData(isEditId, assetsDataForm)
         .then(() => {
@@ -344,12 +346,13 @@ const WorkItAssetsTable: React.FC = () => {
       const jsonData = XLSX.utils.sheet_to_json(sheet)
 
       jsonData.forEach((item:any) => {
-        if(!item.product_type || !item.product_brand || !item.product_name || !item.product_number || !item.product_price || !item.value) { 
+        if(!item.product_type || !item.product_brand || !item.product_name || !item.product_number || !item.product_unitprice || !item.value) { 
           useMessage(2, '表格导入失败！请检查表格数据是否正确', 'error')
           return
         }else {
           item.product_time = getTimeNumber()[0]
           item.product_update = getTimeNumber()[0]
+          item.product_price = item.product_unitprice * item.product_number
         }
 
         uploadExcelItAssetsData(jsonData as productItem[])
@@ -576,8 +579,6 @@ const WorkItAssetsTable: React.FC = () => {
           </Row>
 
           <Row gutter={20}>
-          
-
             {/* <Col span={8}>
               <label htmlFor="Price" className='mb-1 flex items-center font-semibold'>
                 <span className='mr-1 text-red-600 font-thin'>*</span>
@@ -716,33 +717,37 @@ const WorkItAssetsTable: React.FC = () => {
             </Col>
 
             {/* product brand */}
-            <Col span={layoutWidth}>
-              <label
-                htmlFor="Brand"
-                className='mb-1 flex items-center font-semibold'
-              >
-                <span className='mr-1 text-red-600 font-thin'>*</span>
-                设备品牌
-              </label>
-              <Select
-                style={{ width: '100%' }}
-                placeholder='设备品牌'
-                allowClear
-                onDropdownVisibleChange={onTriggerSelected}
-                value={assetsDataForm.product_brand}
-                onChange={assetsProductBrand}
-                options={typeDataBrand.map(item => {
-                  return {
-                    label:
-                      <div className='flex'>
-                        {selectOpen && <img src={item.logo_url} alt='avatar' className='mr-2 w-6' />}<span className='w-7 mt-0.5'>{item.value}</span>
-                      </div>,
-                    value: item.value
-                  }
-                })}
-              >
-              </Select>
-            </Col>
+            {productBrandShow && ( 
+              <Col span={layoutWidth}>
+                <label
+                  htmlFor="Brand"
+                  className='mb-1 flex items-center font-semibold'
+                >
+                  <span className='mr-1 text-red-600 font-thin'>*</span>
+                  设备品牌
+                </label>
+                <Select
+                  style={{ width: '100%' }}
+                  placeholder='设备品牌'
+                  allowClear
+                  onDropdownVisibleChange={onTriggerSelected}
+                  value={assetsDataForm.product_brand}
+                  onChange={assetsProductBrand}
+                  options={typeDataBrand.map(item => {
+                    return {
+                      label:
+                        <div className='flex'>
+                          {selectOpen && <img src={item.logo_url} alt='avatar' className='mr-2 w-6' />}<span className='w-7 mt-0.5'>{item.value}</span>
+                        </div>,
+                      value: item.value
+                    }
+                  })}
+                >
+                </Select>
+              </Col>
+            )}
+               
+            
 
             {/* 设备单价 */}
             <Col span={layoutWidth}>
